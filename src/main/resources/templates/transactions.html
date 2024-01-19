@@ -1,0 +1,19 @@
+<div th:fragment="content" th:with="title='取引一覧 - simplesave'">
+    <h1>取引一覧</h1>
+    <table>
+        <thead>
+            <tr>
+                <th>日付</th>
+                <th>内容</th>
+                <th>金額</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr th:each="transaction : ${transactions}">
+                <td th:text="${transaction.date}">Date</td>
+                <td th:text="${transaction.description}">Description</td>
+                <td th:text="${transaction.amount}">Amount</td>
+            </tr>
+        </tbody>
+    </table>
+</div>

@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="ja" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Compiled and minified CSS -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
+    <title th:text="${title} ?: 'simplesave'">simplesave</title>
+</head>
+<body>
+    <header>
+        <!-- 共通のヘッダー内容 -->
+        ヘッダー
+    </header>
+
+    <main>
+        <section th:replace="${content}">
+            <!-- 個別ページのコンテンツ -->
+        </section>
+    </main>
+    <footer>
+        <!-- 共通のフッター内容 -->
+    </footer>
+
+    <!-- 共通のJavaScriptファイル等 -->
+    <!-- Compiled and minified JavaScript -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+</body>
+</html>
