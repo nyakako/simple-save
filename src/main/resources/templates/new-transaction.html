@@ -1,0 +1,10 @@
+<div th:fragment="content" th:with="title='新規履歴登録 - simplesave'">
+    <h3>新しい履歴の登録</h3>
+    <form th:action="@{/transactions}" method="post">
+        <input type="date" name="date" placeholder="日付" th:value="${today}">
+        <input type="text" name="categoryId" placeholder="カテゴリ" id="">
+        <input type="text" name="description" placeholder="内容" id="">
+        <input type="number" name="amount" placeholder="金額" id="">
+        <input type="submit" value="登録">
+    </form>
+</div>
