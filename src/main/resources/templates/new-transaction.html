@@ -2,7 +2,11 @@
     <h3>新しい履歴の登録</h3>
     <form th:action="@{/transactions}" method="post">
         <input type="date" name="date" placeholder="日付" th:value="${today}">
-        <input type="text" name="categoryId" placeholder="カテゴリ" id="">
+
+        <select name="categoryId">
+            <option value="" th:each="category : ${categories}" th:value="${category.id}" th:text="${category.name}">カテゴリ名</option>
+        </select>
+
         <input type="text" name="description" placeholder="内容" id="">
         <input type="number" name="amount" placeholder="金額" id="">
         <input type="submit" value="登録">

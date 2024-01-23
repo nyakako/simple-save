@@ -13,7 +13,7 @@
         <tbody>
             <tr th:each="transaction : ${transactions}">
                 <td th:text="${transaction.date}">Date</td>
-                <td th:text="${transaction.categoryId}">Category</td>
+                <td th:text="${transaction.category.name}">Category</td>
                 <td th:text="${transaction.description}">Description</td>
                 <td th:text="${transaction.amount}">Amount</td>
             </tr>

@@ -1,3 +1,6 @@
+# 本番環境用設定ファイル
+application-prod.properties
+
 HELP.md
 target/
 !.mvn/wrapper/maven-wrapper.jar
