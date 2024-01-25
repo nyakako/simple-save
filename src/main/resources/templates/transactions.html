@@ -1,22 +1,38 @@
-<div th:fragment="content" th:with="title='入出金一覧 - simplesave'">
-    <h3>入出金明細一覧</h3>
-    <a th:href="@{/transactions/new}" class="btn">記録する</a>
-    <table>
-        <thead>
-            <tr>
-                <th>日付</th>
-                <th>カテゴリ</th>
-                <th>内容</th>
-                <th>金額</th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr th:each="transaction : ${transactions}">
-                <td th:text="${transaction.date}">Date</td>
-                <td th:text="${transaction.category.name}">Category</td>
-                <td th:text="${transaction.description}">Description</td>
-                <td th:text="${transaction.amount}">Amount</td>
-            </tr>
-        </tbody>
-    </table>
+<div class="container" th:fragment="content" th:with="title='入出金一覧 - simplesave'">
+    <section class="content-header">
+        <div class="container-fluid">
+            <div class="row mb-2">
+                <div class="col-sm-6">
+                    <h1>入出金明細一覧</h1>
+                </div>
+            </div>
+        </div>
+    </section>
+    <section class="content px-2">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-md-12">
+                    <a th:href="@{/transactions/new}" class="btn btn-success">記録する</a>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>日付</th>
+                                <th>カテゴリ</th>
+                                <th>内容</th>
+                                <th>金額</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr th:each="transaction : ${transactions}">
+                                <td th:text="${transaction.date}">Date</td>
+                                <td th:text="${transaction.category.name}">Category</td>
+                                <td th:text="${transaction.description}">Description</td>
+                                <td th:text="${transaction.amount}">Amount</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </section>
 </div>
