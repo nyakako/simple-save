@@ -1,9 +1,9 @@
-<div class="container" th:fragment="content" th:with="title='新規履歴登録 - simplesave'">
+<div class="container" th:fragment="content" th:with="title='履歴編集 - simplesave'">
     <section class="content-header">
         <div class="container-fluid">
             <div class="row mb-2">
                 <div class="col-sm-6">
-                    <h1>新しい履歴の登録</h1>
+                    <h1>履歴の編集</h1>
                 </div>
             </div>
         </div>
@@ -17,19 +17,22 @@
                             <h3 class="card-title">Quick Example <small>jQuery Validation</small></h3>
                         </div> -->
 
-                        <form id="quickForm" th:action="@{/transactions/new}" method="post">
+                        <form id="updateForm" th:action="@{/transactions/edit/{id}(id=${transaction.id})}"
+                            th:object="${transaction}" method="post">
                             <div class="card-body">
                                 <div class="form-group">
                                     <label>カテゴリタイプ</label>
                                     <div>
                                         <div class="form-check form-check-inline">
                                             <input class="form-check-input" type="radio" name="categoryType"
-                                                id="typeExpense" value="expense" checked required>
+                                                id="typeExpense" value="expense"
+                                                th:checked="${transaction.category.type == 'expense'}" required>
                                             <label class="form-check-label" for="typeExpense">支出</label>
                                         </div>
                                         <div class="form-check form-check-inline">
                                             <input class="form-check-input" type="radio" name="categoryType"
-                                                id="typeIncome" value="income">
+                                                id="typeIncome" value="income"
+                                                th:checked="${transaction.category.type == 'income'}">
                                             <label class="form-check-label" for="typeIncome">収入</label>
                                         </div>
                                     </div>
@@ -37,7 +40,7 @@
                                 <div class="form-group">
                                     <label for="date">日付</label>
                                     <input type="date" name="date" id="date" class="form-control" placeholder="日付"
-                                        th:value="${today}" required>
+                                        th:field="*{date}" required>
                                 </div>
 
                                 <div class="form-group">
@@ -51,31 +54,37 @@
 
                                 <div class="form-group">
                                     <label for="description">内容</label>
-                                    <input type="text" name="description" class="form-control" placeholder="内容"
-                                        id="description">
+                                    <input type="text" th:field="*{description}" name="description" class="form-control"
+                                        placeholder="内容" id="description">
                                 </div>
                                 <div class="form-group">
                                     <label for="amount">金額</label>
-                                    <input type="number" name="amount" class="form-control" placeholder="金額" id="amount"
-                                        required>
+                                    <input type="number" th:field="*{amount}" name="amount" class="form-control"
+                                        placeholder="金額" id="amount" required>
 
                                 </div>
                             </div>
 
                             <div class="card-footer">
-                                <input type="submit" value="登録" class="btn btn-success">
-                            </div>
+                                <input type="submit" value="更新" class="btn btn-success">
+                        </form>
+                        <form th:action="@{/transactions/delete/{id}(id=${transaction.id})}" method="post"
+                            style="display: inline-block;">
+                            <input type="submit" value="削除" class="btn btn-danger"
+                                onclick="return confirm('本当に削除しますか？')">
                         </form>
                     </div>
                 </div>
             </div>
         </div>
-    </section>
+</div>
+</section>
 </div>
 
 <script th:inline="javascript">
     /*<![CDATA[*/
     var categories = /*[[${categories}]]*/[];
+    var currentCategoryId = /*[[${transaction.category.id}]]*/'';
     /*]]>*/
 
     document.addEventListener('DOMContentLoaded', function () {
@@ -102,6 +111,9 @@
                 var option = document.createElement('option');
                 option.value = category.id;
                 option.textContent = category.name;
+                if (category.id === currentCategoryId) {
+                    option.selected = true;
+                }
                 select.appendChild(option);
             });
         }

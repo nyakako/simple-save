@@ -2,6 +2,8 @@ package com.nyakako.simplesave.model;
 
 import java.time.LocalDate;
 
+import org.springframework.format.annotation.DateTimeFormat;
+
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -20,6 +22,7 @@ public class Transaction {
     @ManyToOne
     private User user;
     
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
     private LocalDate date;
     private Double amount;
 
