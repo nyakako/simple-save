@@ -1,30 +1,65 @@
 <!DOCTYPE html>
 <html lang="ja" xmlns:th="http://www.thymeleaf.org">
+
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM" crossorigin="anonymous">
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-geWF76RCwLtnZ8qwWowPQNguL3RmwHVBC9FhGdlKrxdiJJigb/j/68SIy3Te4Bkz" crossorigin="anonymous"></script>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/admin-lte@3.1/dist/css/adminlte.min.css" />
     <title th:text="${title} ?: 'simplesave'">simplesave</title>
 </head>
-<body>
-    <header>
-        <!-- 共通のヘッダー内容 -->
-        nav-bar
-    </header>
 
-    <main>
-        <section th:replace="${content}">
-            <!-- 個別ページのコンテンツ -->
-        </section>
-    </main>
-    <footer>
-        <!-- 共通のフッター内容 -->
-        footer
-    </footer>
+<body class="layout-fixed layout-navbar-fixed sidebar-closed sidebar-collapse">
+    <div class="wrapper">
+        <!-- 共通のヘッダー内容 -->
+        <header>
+            <!-- Navbar -->
+            <nav class="main-header navbar navbar-expand navbar-light">
+                <div class="container-fluid">
+                    <a href="#" class="navbar-brand">
+                        <span class="brand-text font-weight-light">simplesave</span>
+                    </a>
+                    <!-- Left navbar links -->
+                    <ul class="navbar-nav"></ul>
+
+                    <!-- Right navbar links -->
+                    <ul class="navbar-nav ml-auto">
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown4" role="button"
+                                data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                username
+                            </a>
+                            <div class="dropdown-menu" aria-labelledby="navbarDropdown4">
+                                <a class="dropdown-item" href="#">設定</a>
+                                <div class="dropdown-divider"></div>
+                                <a class="dropdown-item" href="#">ログアウト</a>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+            </nav>
+            <!-- /.navbar -->
+        </header>
+
+        <main class="content-wrapper px-4 py-2">
+
+            <section th:replace="${content}">
+                <!-- 個別ページのコンテンツ -->
+            </section>
+        </main>
+        <footer class="main-footer">
+            <!-- 共通のフッター内容 -->
+            footer
+        </footer>
+    </div>
 
     <!-- 共通のJavaScriptファイル等 -->
-    
+    <script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.slim.min.js"
+        integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj"
+        crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-Fy6S3B9q64WdZWQUiU+q4/2Lc9npb8tCaSX9FK7E8HnRr0Jz8D6OP9dO5Vg3Q9ct"
+        crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/admin-lte@3.1/dist/js/adminlte.min.js"></script>
 </body>
+
 </html>
