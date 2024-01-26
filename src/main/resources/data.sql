@@ -1,5 +1,6 @@
 INSERT INTO category (name, type) VALUES ('食費', 'expence');
 INSERT INTO category (name, type) VALUES ('交通費', 'expence');
+INSERT INTO category (name, type) VALUES ('給与', 'income');
 
 INSERT INTO users (username, email, password) VALUES ('user1', 'user1@example.com', 'password1');
 INSERT INTO users (username, email, password) VALUES ('user2', 'user2@example.com', 'password2');
