@@ -25,6 +25,7 @@
                                         <th>カテゴリ</th>
                                         <th>内容</th>
                                         <th>金額</th>
+                                        <th>編集</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -34,6 +35,7 @@
                                         <td th:text="${transaction.category.name}">Category</td>
                                         <td th:text="${transaction.description}">Description</td>
                                         <td th:text="${transaction.amount}">Amount</td>
+                                        <td ><a th:href="@{/transactions/edit/{id}(id=${transaction.id})}" class="btn btn-success">編集</a></td>
                                     </tr>
                                 </tbody>
                             </table>
