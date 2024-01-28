@@ -15,7 +15,7 @@
             <!-- Navbar -->
             <nav class="main-header navbar navbar-expand navbar-light">
                 <div class="container-fluid">
-                    <a href="#" class="navbar-brand">
+                    <a th:href="@{/transactions}" class="navbar-brand">
                         <span class="brand-text font-weight-light">simplesave</span>
                     </a>
                     <!-- Left navbar links -->
@@ -29,7 +29,7 @@
                                 username
                             </a>
                             <div class="dropdown-menu" aria-labelledby="navbarDropdown4">
-                                <a class="dropdown-item" href="#">設定</a>
+                                <a class="dropdown-item" th:href="@{/settings/categories-expense}">設定</a>
                                 <div class="dropdown-divider"></div>
                                 <a class="dropdown-item" href="#">ログアウト</a>
                             </div>
@@ -42,7 +42,7 @@
 
         <main class="content-wrapper px-4 py-2">
 
-            <section th:replace="${content}">
+            <section th:replace="~{${content}}">
                 <!-- 個別ページのコンテンツ -->
             </section>
         </main>

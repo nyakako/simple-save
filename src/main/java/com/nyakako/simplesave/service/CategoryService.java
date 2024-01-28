@@ -25,4 +25,12 @@ public class CategoryService {
     public Optional<Category> findCategoryById(@NonNull Long id){
         return categoryRepository.findById(id);
     }
+
+    public List<Category> findCategoriesByType(String type) {
+        return categoryRepository.findByType(type);
+    }
+
+    public void saveCategoy(@NonNull Category category) {
+        categoryRepository.save(category);
+    }
 }

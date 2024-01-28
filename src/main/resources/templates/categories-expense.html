@@ -1,0 +1,43 @@
+<div class="container" th:fragment="content" th:with="title='入出金一覧 - simplesave'">
+    <section class="content-header">
+        <div class="container-fluid">
+            <div class="row mb-2">
+                <div class="col-sm-6">
+                    <h1>支出カテゴリ一覧</h1>
+                </div>
+            </div>
+        </div>
+    </section>
+    <section class="content px-2">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col text-right mb-2">
+                    <a th:href="@{/categories-expense/new}" class="btn btn-success"> 追加する</a>
+                </div>
+                <div class="col-md-12">
+                    <div class="card">
+                        <div class="card-body table-responsive p-0">
+                            <table class="table tablee-hover text-nowrap">
+                                <thead>
+                                    <tr>
+                                        <th>カテゴリタイプ</th>
+                                        <th>カテゴリ名</th>
+                                        <th>編集</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr th:each="category : ${expenseCategories}">
+                                        <td th:text="${category.type}">Category</td>
+                                        <td th:text="${category.name}">Category</td>
+                                        <!-- <td ><a th:href="@{/expencecategory/ed
+                                            it/{id}(id=${expencecategory.id})}" class="btn btn-success">編集</a></td> -->
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</div>

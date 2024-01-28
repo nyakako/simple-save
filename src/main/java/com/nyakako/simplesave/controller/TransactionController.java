@@ -6,6 +6,7 @@ import com.nyakako.simplesave.service.CategoryService;
 import com.nyakako.simplesave.service.TransactionService;
 
 import java.time.LocalDate;
+import java.util.List;
 
 import org.springframework.lang.NonNull;
 import org.springframework.stereotype.Controller;
@@ -16,16 +17,13 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
-
-
-
 @Controller
 public class TransactionController {
 
     private final TransactionService transactionService;
     private final CategoryService categoryService;
 
-    public TransactionController(TransactionService transactionService, CategoryService categoryService){
+    public TransactionController(TransactionService transactionService, CategoryService categoryService) {
         this.transactionService = transactionService;
         this.categoryService = categoryService;
     }
@@ -49,7 +47,8 @@ public class TransactionController {
     }
 
     @PostMapping("/transactions/new")
-    public String addTransaction(@NonNull @ModelAttribute Transaction transaction, @NonNull @RequestParam("categoryId") Long categoryId) {
+    public String addTransaction(@NonNull @ModelAttribute Transaction transaction,
+            @NonNull @RequestParam("categoryId") Long categoryId) {
         // categoryIdを使用してCategoryオブジェクトを取得
         Category category = categoryService.findCategoryById(categoryId).orElse(null);
 
@@ -61,7 +60,8 @@ public class TransactionController {
 
     @GetMapping("/transactions/edit/{id}")
     public String editTransaction(@PathVariable @NonNull Long id, Model model) {
-        Transaction transaction = transactionService.findTransactionById(id).orElse(null);;
+        Transaction transaction = transactionService.findTransactionById(id).orElse(null);
+        ;
         model.addAttribute("transaction", transaction);
         model.addAttribute("categories", categoryService.findAllCategories());
         model.addAttribute("title", "明細編集 - simplesave");
@@ -70,7 +70,8 @@ public class TransactionController {
     }
 
     @PostMapping("/transactions/edit/{id}")
-    public String updateTransaction(@PathVariable Long id, @NonNull @ModelAttribute Transaction transaction, @NonNull @RequestParam("categoryId") Long categoryId) {
+    public String updateTransaction(@PathVariable Long id, @NonNull @ModelAttribute Transaction transaction,
+            @NonNull @RequestParam("categoryId") Long categoryId) {
         // categoryIdを使用してCategoryオブジェクトを取得
         Category category = categoryService.findCategoryById(categoryId).orElse(null);
 
@@ -85,5 +86,34 @@ public class TransactionController {
         transactionService.deleteTransacition(id);
         return "redirect:/transactions";
     }
-    
+
+    @GetMapping("/settings/categories-expense")
+    public String showExpenseCategory(Model model) {
+        List<Category> expenseCategories = categoryService.findCategoriesByType("expense");
+        model.addAttribute("expenseCategories", expenseCategories);
+        model.addAttribute("title", "支出カテゴリ設定 - simplesave");
+        model.addAttribute("content", "categories-expense");
+        return "layout";
+    }
+
+    @GetMapping("/settings/categories-income")
+    public String showIncomeCategory(Model model) {
+        List<Category> incomeCategories = categoryService.findCategoriesByType("income");
+        model.addAttribute("expenseCategories", incomeCategories);
+        model.addAttribute("title", "収入カテゴリ設定 - simplesave");
+        model.addAttribute("content", "categories-income");
+        return "layout";
+    }
+    @GetMapping("/categories-expense/new")
+    public String newExpenseCategory(Model model) {
+        // model.addAttribute("title", "新規明細登録 - simplesave");
+        model.addAttribute("content", "new-expense-category");
+        return "layout";
+    }
+    @PostMapping("/categories-expense/new")
+    public String addExpenseCategory(@NonNull @ModelAttribute Category category) {
+        category.setType("expense");
+        categoryService.saveCategoy(category);
+        return "redirect:/settings/categories-expense";
+    }
 }
