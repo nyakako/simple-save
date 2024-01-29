@@ -104,16 +104,34 @@ public class TransactionController {
         model.addAttribute("content", "categories-income");
         return "layout";
     }
+
     @GetMapping("/categories-expense/new")
     public String newExpenseCategory(Model model) {
-        // model.addAttribute("title", "新規明細登録 - simplesave");
+        model.addAttribute("title", "支出カテゴリ登録 - simplesave");
         model.addAttribute("content", "new-expense-category");
         return "layout";
     }
+
     @PostMapping("/categories-expense/new")
     public String addExpenseCategory(@NonNull @ModelAttribute Category category) {
         category.setType("expense");
-        categoryService.saveCategoy(category);
+        categoryService.saveCategory(category);
+        return "redirect:/settings/categories-expense";
+    }
+
+    @GetMapping("/categories-expense/edit/{id}")
+    public String editExpenseCategory(@PathVariable @NonNull Long id, Model model) {
+        Category category = categoryService.findCategoryById(id).orElse(null);
+        model.addAttribute("category", category);
+        model.addAttribute("title", "支出カテゴリ編集 - simplesave");
+        model.addAttribute("content", "edit-expense-category");
+        return "layout";
+    }
+
+    @PostMapping("/categories-expense/edit/{id}")
+    public String updateExpenseCategory(@PathVariable Long id, @NonNull @ModelAttribute Category category) {
+        category.setType("expense");
+        categoryService.saveCategory(category);
         return "redirect:/settings/categories-expense";
     }
 }

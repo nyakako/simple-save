@@ -1,9 +1,9 @@
-<div class="container" th:fragment="content" th:with="title='支出カテゴリ登録 - simplesave'">
+<div class="container" th:fragment="content" th:with="title='支出カテゴリ編集 - simplesave'">
     <section class="content-header">
         <div class="container-fluid">
             <div class="row mb-2">
                 <div class="col-sm-6">
-                    <h1>支出カテゴリの登録</h1>
+                    <h1>支出カテゴリの編集</h1>
                 </div>
             </div>
         </div>
@@ -13,11 +13,12 @@
             <div class="row">
                 <div class="col-md-12">
                     <div class="card card-success">
-                        <form th:action="@{/categories-expense/new}" method="post">
+                        <form th:action="@{/categories-expense/edit/{id}(id=${category.id})}"
+                        th:object="${category}" method="post">
                             <div class="card-body">
                                 <div class="form-group">
                                     <label for="name">内容</label>
-                                    <input type="text" name="name" class="form-control" placeholder="カテゴリ名"
+                                    <input type="text" th:field="*{name}" name="name" class="form-control" placeholder="カテゴリ名"
                                         id="name" required>
                                 </div>
                                 <div class="card-footer">

@@ -20,6 +20,7 @@
                             <table class="table tablee-hover text-nowrap">
                                 <thead>
                                     <tr>
+                                        <th>カテゴリ</th>
                                         <th>カテゴリタイプ</th>
                                         <th>カテゴリ名</th>
                                         <th>編集</th>
@@ -27,10 +28,10 @@
                                 </thead>
                                 <tbody>
                                     <tr th:each="category : ${expenseCategories}">
+                                        <td th:text="${category.id}">Category</td>
                                         <td th:text="${category.type}">Category</td>
                                         <td th:text="${category.name}">Category</td>
-                                        <!-- <td ><a th:href="@{/expencecategory/ed
-                                            it/{id}(id=${expencecategory.id})}" class="btn btn-success">編集</a></td> -->
+                                        <td><a th:href="@{/categories-expense/edit/{id}(id=${category.id})}" class="btn btn-success">編集</a></td>
                                     </tr>
                                 </tbody>
                             </table>

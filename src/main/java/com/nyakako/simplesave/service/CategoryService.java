@@ -30,7 +30,7 @@ public class CategoryService {
         return categoryRepository.findByType(type);
     }
 
-    public void saveCategoy(@NonNull Category category) {
+    public void saveCategory(@NonNull Category category) {
         categoryRepository.save(category);
     }
 }

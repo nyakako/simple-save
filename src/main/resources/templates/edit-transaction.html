@@ -13,10 +13,6 @@
             <div class="row">
                 <div class="col-md-12">
                     <div class="card card-success">
-                        <!-- <div class="card-header">
-                            <h3 class="card-title">Quick Example <small>jQuery Validation</small></h3>
-                        </div> -->
-
                         <form id="updateForm" th:action="@{/transactions/edit/{id}(id=${transaction.id})}"
                             th:object="${transaction}" method="post">
                             <div class="card-body">
