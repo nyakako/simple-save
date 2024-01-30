@@ -1,0 +1,116 @@
+<div class="container" th:fragment="content">
+    <section class="content-header">
+        <div class="container-fluid">
+            <div class="row mb-2">
+                <div class="col-sm-6">
+                    <h1>定期入力の登録</h1>
+                </div>
+            </div>
+        </div>
+    </section>
+    <section class="content px-2">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="card card-success">
+                        <form id="quickForm" th:action="@{/recurring-transactions/new}" method="post">
+                            <div class="card-body">
+                                <div class="form-group">
+                                    <label>カテゴリタイプ</label>
+                                    <div>
+                                        <div class="form-check form-check-inline">
+                                            <input class="form-check-input" type="radio" name="categoryType"
+                                                id="typeExpense" value="expense" checked required>
+                                            <label class="form-check-label" for="typeExpense">支出</label>
+                                        </div>
+                                        <div class="form-check form-check-inline">
+                                            <input class="form-check-input" type="radio" name="categoryType"
+                                                id="typeIncome" value="income">
+                                            <label class="form-check-label" for="typeIncome">収入</label>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="interval">間隔</label>
+                                    <select name="interval" id="interval" class="form-control" required>
+                                        <option value="months"> 毎月</option>
+                                        <option value="years"> 毎年</option>
+                                        <option value="weeks"> 毎週</option>
+                                        <option value="days"> 毎日</option>
+                                    </select>
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="date">日付</label>
+                                    <input type="date" name="date" id="date" class="form-control" placeholder="日付"
+                                        th:value="${today}" required>
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="categoryId">カテゴリ</label>
+                                    <select name="categoryId" id="categoryId" class="form-control" required>
+                                        <option th:each="category : ${categories}" th:value="${category.id}"
+                                            th:text="${category.name}">
+                                            カテゴリ名</option>
+                                    </select>
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="description">内容</label>
+                                    <input type="text" name="description" class="form-control" placeholder="内容"
+                                        id="description">
+                                </div>
+                                <div class="form-group">
+                                    <label for="amount">金額</label>
+                                    <input type="number" name="amount" class="form-control" placeholder="金額" id="amount"
+                                        required>
+
+                                </div>
+                            </div>
+
+                            <div class="card-footer">
+                                <input type="submit" value="登録" class="btn btn-success">
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</div>
+
+<script th:inline="javascript">
+    /*<![CDATA[*/
+    var categories = /*[[${categories}]]*/[];
+    /*]]>*/
+
+    document.addEventListener('DOMContentLoaded', function () {
+        var categoryTypeRadios = document.querySelectorAll('input[name="categoryType"]');
+        var categorySelect = document.getElementById('categoryId');
+        var initialCategoryType = document.querySelector('input[name="categoryType"]:checked').value;
+
+        updateCategoryOptions(categorySelect, initialCategoryType);
+
+        categoryTypeRadios.forEach(function (radio) {
+            radio.addEventListener('change', function () {
+                updateCategoryOptions(categorySelect, this.value);
+            });
+        });
+
+        function updateCategoryOptions(select, type) {
+            var filteredCategories = categories.filter(function (category) {
+                return category.type === type;
+            });
+
+            select.innerHTML = '';
+
+            filteredCategories.forEach(function (category) {
+                var option = document.createElement('option');
+                option.value = category.id;
+                option.textContent = category.name;
+                select.appendChild(option);
+            });
+        }
+    });
+</script>
