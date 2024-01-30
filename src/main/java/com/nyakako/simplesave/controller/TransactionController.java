@@ -6,7 +6,6 @@ import com.nyakako.simplesave.service.CategoryService;
 import com.nyakako.simplesave.service.TransactionService;
 
 import java.time.LocalDate;
-import java.util.List;
 
 import org.springframework.lang.NonNull;
 import org.springframework.stereotype.Controller;
@@ -85,53 +84,5 @@ public class TransactionController {
     public String deleteTransaction(@NonNull @PathVariable Long id) {
         transactionService.deleteTransacition(id);
         return "redirect:/transactions";
-    }
-
-    @GetMapping("/settings/categories-expense")
-    public String showExpenseCategory(Model model) {
-        List<Category> expenseCategories = categoryService.findCategoriesByType("expense");
-        model.addAttribute("expenseCategories", expenseCategories);
-        model.addAttribute("title", "支出カテゴリ設定 - simplesave");
-        model.addAttribute("content", "categories-expense");
-        return "layout";
-    }
-
-    @GetMapping("/settings/categories-income")
-    public String showIncomeCategory(Model model) {
-        List<Category> incomeCategories = categoryService.findCategoriesByType("income");
-        model.addAttribute("expenseCategories", incomeCategories);
-        model.addAttribute("title", "収入カテゴリ設定 - simplesave");
-        model.addAttribute("content", "categories-income");
-        return "layout";
-    }
-
-    @GetMapping("/categories-expense/new")
-    public String newExpenseCategory(Model model) {
-        model.addAttribute("title", "支出カテゴリ登録 - simplesave");
-        model.addAttribute("content", "new-expense-category");
-        return "layout";
-    }
-
-    @PostMapping("/categories-expense/new")
-    public String addExpenseCategory(@NonNull @ModelAttribute Category category) {
-        category.setType("expense");
-        categoryService.saveCategory(category);
-        return "redirect:/settings/categories-expense";
-    }
-
-    @GetMapping("/categories-expense/edit/{id}")
-    public String editExpenseCategory(@PathVariable @NonNull Long id, Model model) {
-        Category category = categoryService.findCategoryById(id).orElse(null);
-        model.addAttribute("category", category);
-        model.addAttribute("title", "支出カテゴリ編集 - simplesave");
-        model.addAttribute("content", "edit-expense-category");
-        return "layout";
-    }
-
-    @PostMapping("/categories-expense/edit/{id}")
-    public String updateExpenseCategory(@PathVariable Long id, @NonNull @ModelAttribute Category category) {
-        category.setType("expense");
-        categoryService.saveCategory(category);
-        return "redirect:/settings/categories-expense";
     }
 }

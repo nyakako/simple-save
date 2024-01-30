@@ -17,7 +17,7 @@
                 <div class="col-md-3">
                 </div>
                 <div class="col-md-8">
-                    <h1>支出カテゴリ一覧</h1>
+                    <h1>定期入力一覧</h1>
                 </div>
             </div>
         </div>
@@ -28,10 +28,10 @@
                 <div class="col-md-3">
                     <div class="list-group">
                         <a th:href="@{/settings/categories-expense}"
-                            class="list-group-item list-group-item-action active">支出カテゴリ設定</a>
+                            class="list-group-item list-group-item-action">支出カテゴリ設定</a>
                         <a th:href="@{/settings/categories-income}"
                             class="list-group-item list-group-item-action">収入カテゴリ設定</a>
-                        <a th:href="@{/settings/recurring-transactions}" class="list-group-item list-group-item-action">定期入力設定</a>
+                        <a th:href="@{/settings/recurring-transactions}" class="list-group-item list-group-item-action active">定期入力設定</a>
                         <a href="#" class="list-group-item list-group-item-action disabled">色設定</a>
                     </div>
                 </div>
@@ -44,18 +44,22 @@
                             <table class="table tablee-hover text-nowrap">
                                 <thead>
                                     <tr>
+                                        <th>タイプ</th>
+                                        <th>間隔</th>
                                         <th>カテゴリ</th>
-                                        <th>カテゴリタイプ</th>
-                                        <th>カテゴリ名</th>
+                                        <th>金額</th>
+                                        <!-- <th>期間</th> -->
                                         <th>編集</th>
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    <tr th:each="category : ${expenseCategories}">
-                                        <td th:text="${category.id}">Category</td>
-                                        <td th:text="${category.type}">Category</td>
-                                        <td th:text="${category.name}">Category</td>
-                                        <td><a th:href="@{/categories-expense/edit/{id}(id=${category.id})}"
+                                    <tr th:each="transaction : ${transactions}">
+                                        <td th:text="${transaction.category.type}">type</td>
+                                        <td th:text="${transaction.interval}">間隔</td>
+                                        <td th:text="${transaction.category.name}">内容</td>
+                                        <td th:text="${transaction.amount}">金額</td>
+                                        <!-- <td th:text="${transaction.name}">期間</td> -->
+                                        <td><a th:href="@{/categories-expense/edit/{id}(id=${transaction.id})}"
                                                 class="btn btn-success">編集</a></td>
                                     </tr>
                                 </tbody>
