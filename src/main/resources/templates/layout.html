@@ -11,38 +11,13 @@
 <body class="layout-fixed layout-navbar-fixed sidebar-closed sidebar-collapse">
     <div class="wrapper">
         <!-- 共通のヘッダー内容 -->
-        <header>
-            <!-- Navbar -->
-            <nav class="main-header navbar navbar-expand navbar-light">
-                <div class="container-fluid">
-                    <a href="#" class="navbar-brand">
-                        <span class="brand-text font-weight-light">simplesave</span>
-                    </a>
-                    <!-- Left navbar links -->
-                    <ul class="navbar-nav"></ul>
-
-                    <!-- Right navbar links -->
-                    <ul class="navbar-nav ml-auto">
-                        <li class="nav-item dropdown">
-                            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown4" role="button"
-                                data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                username
-                            </a>
-                            <div class="dropdown-menu" aria-labelledby="navbarDropdown4">
-                                <a class="dropdown-item" href="#">設定</a>
-                                <div class="dropdown-divider"></div>
-                                <a class="dropdown-item" href="#">ログアウト</a>
-                            </div>
-                        </li>
-                    </ul>
-                </div>
-            </nav>
-            <!-- /.navbar -->
+        <header th:replace="~{header::header}">
+            <!-- 個別ページのコンテンツ -->
         </header>
 
         <main class="content-wrapper px-4 py-2">
 
-            <section th:replace="${content}">
+            <section th:replace="~{${content}}">
                 <!-- 個別ページのコンテンツ -->
             </section>
         </main>

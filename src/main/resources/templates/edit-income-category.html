@@ -1,0 +1,38 @@
+<div class="container" th:fragment="content">
+    <section class="content-header">
+        <div class="container-fluid">
+            <div class="row mb-2">
+                <div class="col-sm-6">
+                    <h1>収入カテゴリの編集</h1>
+                </div>
+            </div>
+        </div>
+    </section>
+    <section class="content px-2">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="card card-success">
+                        <form th:action="@{/categories-income/edit/{id}(id=${category.id})}" th:object="${category}"
+                            method="post">
+                            <div class="card-body">
+                                <div class="form-group">
+                                    <label for="name">内容</label>
+                                    <input type="text" th:field="*{name}" name="name" class="form-control"
+                                        placeholder="カテゴリ名" id="name" required>
+                                </div>
+                                <div class="card-footer">
+                                    <input type="submit" value="登録" class="btn btn-success">
+                        </form>
+                        <form th:action="@{/categories-income/delete/{id}(id=${category.id})}" method="post"
+                            style="display: inline-block;">
+                            <input type="submit" value="削除" class="btn btn-danger"
+                                onclick="return confirm('本当に削除しますか？')">
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    </section>
+</div>

@@ -16,16 +16,13 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
-
-
-
 @Controller
 public class TransactionController {
 
     private final TransactionService transactionService;
     private final CategoryService categoryService;
 
-    public TransactionController(TransactionService transactionService, CategoryService categoryService){
+    public TransactionController(TransactionService transactionService, CategoryService categoryService) {
         this.transactionService = transactionService;
         this.categoryService = categoryService;
     }
@@ -49,7 +46,8 @@ public class TransactionController {
     }
 
     @PostMapping("/transactions/new")
-    public String addTransaction(@NonNull @ModelAttribute Transaction transaction, @NonNull @RequestParam("categoryId") Long categoryId) {
+    public String addTransaction(@NonNull @ModelAttribute Transaction transaction,
+            @NonNull @RequestParam("categoryId") Long categoryId) {
         // categoryIdを使用してCategoryオブジェクトを取得
         Category category = categoryService.findCategoryById(categoryId).orElse(null);
 
@@ -61,7 +59,8 @@ public class TransactionController {
 
     @GetMapping("/transactions/edit/{id}")
     public String editTransaction(@PathVariable @NonNull Long id, Model model) {
-        Transaction transaction = transactionService.findTransactionById(id).orElse(null);;
+        Transaction transaction = transactionService.findTransactionById(id).orElse(null);
+        ;
         model.addAttribute("transaction", transaction);
         model.addAttribute("categories", categoryService.findAllCategories());
         model.addAttribute("title", "明細編集 - simplesave");
@@ -70,7 +69,8 @@ public class TransactionController {
     }
 
     @PostMapping("/transactions/edit/{id}")
-    public String updateTransaction(@PathVariable Long id, @NonNull @ModelAttribute Transaction transaction, @NonNull @RequestParam("categoryId") Long categoryId) {
+    public String updateTransaction(@PathVariable Long id, @NonNull @ModelAttribute Transaction transaction,
+            @NonNull @RequestParam("categoryId") Long categoryId) {
         // categoryIdを使用してCategoryオブジェクトを取得
         Category category = categoryService.findCategoryById(categoryId).orElse(null);
 
@@ -85,5 +85,4 @@ public class TransactionController {
         transactionService.deleteTransacition(id);
         return "redirect:/transactions";
     }
-    
 }
