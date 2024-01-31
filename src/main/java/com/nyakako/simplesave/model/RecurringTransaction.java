@@ -21,17 +21,17 @@ public class RecurringTransaction {
     @ManyToOne
     private User user;
 
-    private double amount;
-
     @ManyToOne
     private Category category;
-
+    
+    private String description;
+    private double amount;
+    
     @Column(name = "interval_value")
     private int interval;
     
     private String intervalUnit;
     private LocalDate startDate;
-    private LocalDate nextTransactionDate;
     private LocalDate endDate;
-    private String description;
+    private LocalDate nextTransactionDate;
 }

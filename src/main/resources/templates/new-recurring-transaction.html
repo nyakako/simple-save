@@ -32,8 +32,8 @@
                                 </div>
 
                                 <div class="form-group">
-                                    <label for="interval">間隔</label>
-                                    <select name="interval" id="interval" class="form-control" required>
+                                    <label for="intervalUnit">間隔</label>
+                                    <select name="intervalUnit" id="intervalUnit" class="form-control" required>
                                         <option value="months"> 毎月</option>
                                         <option value="years"> 毎年</option>
                                         <option value="weeks"> 毎週</option>
@@ -41,10 +41,55 @@
                                     </select>
                                 </div>
 
-                                <div class="form-group">
-                                    <label for="date">日付</label>
-                                    <input type="date" name="date" id="date" class="form-control" placeholder="日付"
-                                        th:value="${today}" required>
+                                <!-- 毎年の場合の入力フィールド -->
+                                <div id="yearlyInput" style="display: none;">
+                                    <div class="form-group">
+                                        <label for="monthOfYear">月</label>
+                                        <select name="monthOfYear" id="monthOfYear" class="form-control">
+                                            <!-- 1月から12月までのオプションを追加 -->
+                                            <th:block th:each="month : ${#numbers.sequence(1, 12)}">
+                                                <option th:value="${month}" th:text="${month} + '月'"></option>
+                                            </th:block>
+                                        </select>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="dayOfMonth">日</label>
+                                        <select name="dayOfMonth" id="dayOfMonth" class="form-control">
+                                            <!-- 1日から31日までのオプションを追加 -->
+                                            <th:block th:each="day : ${#numbers.sequence(1, 31)}">
+                                                <option th:value="${day}" th:text="${day} + '日'"></option>
+                                            </th:block>
+                                        </select>
+                                    </div>
+                                </div>
+
+                                <!-- 毎月の場合の入力フィールド -->
+                                <div id="monthlyInput" style="display: none;">
+                                    <div class="form-group">
+                                        <label for="dayOfMonthMonthly">日付</label>
+                                        <select name="dayOfMonthMonthly" id="dayOfMonthMonthly" class="form-control">
+                                            <!-- 1日から31日までのオプションを追加 -->
+                                            <th:block th:each="day : ${#numbers.sequence(1, 31)}">
+                                                <option th:value="${day}" th:text="${day} + '日'"></option>
+                                            </th:block>
+                                        </select>
+                                    </div>
+                                </div>
+
+                                <!-- 毎週の場合の入力フィールド -->
+                                <div id="weeklyInput" style="display: none;">
+                                    <div class="form-group">
+                                        <label for="dayOfWeek">曜日</label>
+                                        <select name="dayOfWeek" id="dayOfWeek" class="form-control">
+                                            <option value="monday">月曜日</option>
+                                            <option value="tuesday">火曜日</option>
+                                            <option value="tuesday">水曜日</option>
+                                            <option value="tuesday">木曜日</option>
+                                            <option value="tuesday">金曜日</option>
+                                            <option value="tuesday">土曜日</option>
+                                            <option value="tuesday">日曜日</option>
+                                        </select>
+                                    </div>
                                 </div>
 
                                 <div class="form-group">
@@ -65,8 +110,18 @@
                                     <label for="amount">金額</label>
                                     <input type="number" name="amount" class="form-control" placeholder="金額" id="amount"
                                         required>
-
                                 </div>
+                                <div class="form-group">
+                                    <label for="startDate">開始日</label>
+                                    <input type="date" name="startDate" id="startDate" class="form-control"
+                                        placeholder="開始日" th:value="${today}" required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="endDate">終了日</label>
+                                    <input type="date" name="endDate" id="endDate" class="form-control"
+                                        placeholder="終了日" th:value="${oneMonthLater}" required>
+                                </div>
+
                             </div>
 
                             <div class="card-footer">
@@ -112,5 +167,32 @@
                 select.appendChild(option);
             });
         }
+
+        var intervalUnitSelect = document.getElementById('intervalUnit');
+
+        intervalUnitSelect.addEventListener('change', function () {
+            updateInputFields(this.value);
+        });
+
+        function updateInputFields(intervalUnit) {
+            // すべての入力フィールドを非表示にする
+            document.getElementById('yearlyInput').style.display = 'none';
+            document.getElementById('monthlyInput').style.display = 'none';
+            document.getElementById('weeklyInput').style.display = 'none';
+
+            // 選択された間隔に応じて対応する入力フィールドを表示
+            if (intervalUnit === 'years') {
+                document.getElementById('yearlyInput').style.display = 'block';
+            } else if (intervalUnit === 'months') {
+                document.getElementById('monthlyInput').style.display = 'block';
+            } else if (intervalUnit === 'weeks') {
+                document.getElementById('weeklyInput').style.display = 'block';
+            } // else if (intervalUnit === 'days') {
+            // document.getElementById('dailyInput').style.display = 'block';
+            // }
+        }
+
+        // 初期表示時の入力フィールドの更新
+        updateInputFields(intervalUnitSelect.value);
     });
 </script>

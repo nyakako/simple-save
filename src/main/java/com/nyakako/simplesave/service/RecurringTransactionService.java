@@ -3,6 +3,7 @@ package com.nyakako.simplesave.service;
 import java.time.LocalDate;
 import java.util.List;
 
+import org.springframework.lang.NonNull;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
@@ -11,13 +12,17 @@ import com.nyakako.simplesave.model.Transaction;
 import com.nyakako.simplesave.repository.RecurringTransactionRepositoty;
 import com.nyakako.simplesave.repository.TransactionRepository;
 
+
+
+
 @Service
 public class RecurringTransactionService {
-    
+
     private final RecurringTransactionRepositoty recurringTransactionRepositoty;
     private final TransactionRepository transactionRepository;
-    
-    public RecurringTransactionService(RecurringTransactionRepositoty recurringTransactionRepositoty, TransactionRepository transactionRepository) {
+
+    public RecurringTransactionService(RecurringTransactionRepositoty recurringTransactionRepositoty,
+            TransactionRepository transactionRepository) {
         this.recurringTransactionRepositoty = recurringTransactionRepositoty;
         this.transactionRepository = transactionRepository;
     }
@@ -26,11 +31,16 @@ public class RecurringTransactionService {
         return recurringTransactionRepositoty.findAll();
     }
 
-    @Scheduled(cron = "0 0 1 * * ?") //毎日午前1時に実行
+    public void saveRecurringTransaction(@NonNull RecurringTransaction recurringTransaction) {
+        recurringTransactionRepositoty.save(recurringTransaction);
+    }
+
+    @Scheduled(cron = "0 0 1 * * ?") // 毎日午前1時に実行
     public void processRecurringTransactions() {
 
         LocalDate today = LocalDate.now();
-        List<RecurringTransaction> recurringTransactions = recurringTransactionRepositoty.findByNextTransactionDate(today);
+        List<RecurringTransaction> recurringTransactions = recurringTransactionRepositoty
+                .findByNextTransactionDate(today);
 
         for (RecurringTransaction rt : recurringTransactions) {
             Transaction newTransaction = new Transaction();
@@ -46,25 +56,44 @@ public class RecurringTransactionService {
         }
     }
 
-    private LocalDate calculateNextTransactionDate(RecurringTransaction rt) {
-        LocalDate nextDate = rt.getNextTransactionDate();
-        
-        switch (rt.getIntervalUnit()) {
-            case "Days":
-                nextDate = nextDate.plusDays(rt.getInterval());
-                break;
-            case "Weeks":
-                nextDate = nextDate.plusWeeks(rt.getInterval());
-                break;
-            case "Months":
-                nextDate = nextDate.plusMonths(rt.getInterval());
-                break;
-            case "Years":
-                nextDate = nextDate.plusYears(rt.getInterval());
-                break;
-            default:
-                throw new  IllegalArgumentException("間隔が正しくありません");
+    public LocalDate calculateNextTransactionDate(RecurringTransaction transaction) {
+        LocalDate baseDate; // 計算の基準日
+        if (transaction.getNextTransactionDate() == null) {
+            // 初期登録時は開始日を基準にする
+            baseDate = transaction.getStartDate();
+        } else {
+            // 更新時は既存の次回取引日を基準にする
+            baseDate = transaction.getNextTransactionDate();
         }
-        return nextDate;
+
+        LocalDate endDate = transaction.getEndDate();
+        String intervalUnit = transaction.getIntervalUnit();
+        int intervalValue = transaction.getInterval();
+
+        // 次回取引日の計算
+        LocalDate nextTransactionDate = calculateDate(baseDate, intervalUnit, intervalValue);
+
+        // 終了日を超える場合はnullをセット
+        if (nextTransactionDate != null && endDate != null && nextTransactionDate.isAfter(endDate)) {
+            return null;
+        }
+
+        return nextTransactionDate;
     }
+
+    private LocalDate calculateDate(LocalDate date, String intervalUnit, int intervalValue) {
+        switch (intervalUnit) {
+            case "days":
+                return date.plusDays(intervalValue);
+            case "weeks":
+                return date.plusWeeks(intervalValue);
+            case "months":
+                return date.plusMonths(intervalValue);
+            case "years":
+                return date.plusYears(intervalValue);
+            default:
+                return date;
+        }
+    }
+
 }
