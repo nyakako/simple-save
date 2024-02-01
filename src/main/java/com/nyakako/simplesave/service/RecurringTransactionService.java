@@ -1,5 +1,6 @@
 package com.nyakako.simplesave.service;
 
+import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.util.List;
 
@@ -11,9 +12,6 @@ import com.nyakako.simplesave.model.RecurringTransaction;
 import com.nyakako.simplesave.model.Transaction;
 import com.nyakako.simplesave.repository.RecurringTransactionRepositoty;
 import com.nyakako.simplesave.repository.TransactionRepository;
-
-
-
 
 @Service
 public class RecurringTransactionService {
@@ -69,9 +67,27 @@ public class RecurringTransactionService {
         LocalDate endDate = transaction.getEndDate();
         String intervalUnit = transaction.getIntervalUnit();
         int intervalValue = transaction.getInterval();
+        LocalDate nextTransactionDate;
 
         // 次回取引日の計算
-        LocalDate nextTransactionDate = calculateDate(baseDate, intervalUnit, intervalValue);
+        switch (intervalUnit) {
+            case "days":
+                nextTransactionDate = baseDate.plusDays(intervalValue);
+                break;
+            case "weeks":
+                nextTransactionDate = calculateNextWeekday(baseDate, transaction.getDayOfWeek());
+                break;
+            case "months":
+                nextTransactionDate = calculateNextMonthDay(baseDate, transaction.getDayOfMonthMonthly());
+                break;
+            case "years":
+                nextTransactionDate = calculateNextYearDay(baseDate, transaction.getMonthOfYear(),
+                        transaction.getDayOfMonth());
+                break;
+            default:
+                nextTransactionDate = baseDate;
+                break;
+        }
 
         // 終了日を超える場合はnullをセット
         if (nextTransactionDate != null && endDate != null && nextTransactionDate.isAfter(endDate)) {
@@ -81,19 +97,34 @@ public class RecurringTransactionService {
         return nextTransactionDate;
     }
 
-    private LocalDate calculateDate(LocalDate date, String intervalUnit, int intervalValue) {
-        switch (intervalUnit) {
-            case "days":
-                return date.plusDays(intervalValue);
-            case "weeks":
-                return date.plusWeeks(intervalValue);
-            case "months":
-                return date.plusMonths(intervalValue);
-            case "years":
-                return date.plusYears(intervalValue);
-            default:
-                return date;
+    private LocalDate calculateNextWeekday(LocalDate baseDate, DayOfWeek dayOfWeek) {
+        int intDayOfWeek = dayOfWeek.getValue();
+        int currentDayOfWeek = baseDate.getDayOfWeek().getValue();
+        int daysUntilNextDayOfWeek = (intDayOfWeek - currentDayOfWeek + 7) % 7;
+
+        if (daysUntilNextDayOfWeek == 0) {
+            daysUntilNextDayOfWeek = 7;
         }
+
+        return baseDate.plusDays(daysUntilNextDayOfWeek);
+    }
+
+    private LocalDate calculateNextMonthDay(LocalDate baseDate, int dayOfMonthMonthly) {
+        LocalDate nextDate = baseDate.withDayOfMonth(dayOfMonthMonthly);
+        if (nextDate.isBefore(baseDate) || nextDate.isEqual(baseDate)) {
+            nextDate = baseDate.plusMonths(1).withDayOfMonth(dayOfMonthMonthly);
+        }
+
+        return nextDate;
+    }
+
+    private LocalDate calculateNextYearDay(LocalDate baseDate, int monthOfYear, int dayOfMonth) {
+        LocalDate nextYearDate = LocalDate.of(baseDate.getYear(), monthOfYear, dayOfMonth);
+        if (nextYearDate.isBefore(baseDate) || nextYearDate.isEqual(baseDate)) {
+            nextYearDate = LocalDate.of(baseDate.getYear() + 1, monthOfYear, dayOfMonth);
+        }
+
+        return nextYearDate;
     }
 
 }

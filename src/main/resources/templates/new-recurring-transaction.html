@@ -66,7 +66,7 @@
                                 <!-- 毎月の場合の入力フィールド -->
                                 <div id="monthlyInput" style="display: none;">
                                     <div class="form-group">
-                                        <label for="dayOfMonthMonthly">日付</label>
+                                        <label for="dayOfMonthMonthly">日</label>
                                         <select name="dayOfMonthMonthly" id="dayOfMonthMonthly" class="form-control">
                                             <!-- 1日から31日までのオプションを追加 -->
                                             <th:block th:each="day : ${#numbers.sequence(1, 31)}">
@@ -81,13 +81,13 @@
                                     <div class="form-group">
                                         <label for="dayOfWeek">曜日</label>
                                         <select name="dayOfWeek" id="dayOfWeek" class="form-control">
-                                            <option value="monday">月曜日</option>
-                                            <option value="tuesday">火曜日</option>
-                                            <option value="tuesday">水曜日</option>
-                                            <option value="tuesday">木曜日</option>
-                                            <option value="tuesday">金曜日</option>
-                                            <option value="tuesday">土曜日</option>
-                                            <option value="tuesday">日曜日</option>
+                                            <option value=1>月曜日</option>
+                                            <option value=2>火曜日</option>
+                                            <option value=3>水曜日</option>
+                                            <option value=4>木曜日</option>
+                                            <option value=5>金曜日</option>
+                                            <option value=6>土曜日</option>
+                                            <option value=7>日曜日</option>
                                         </select>
                                     </div>
                                 </div>

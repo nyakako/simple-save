@@ -71,11 +71,9 @@ public class TransactionController {
     @PostMapping("/transactions/edit/{id}")
     public String updateTransaction(@PathVariable Long id, @NonNull @ModelAttribute Transaction transaction,
             @NonNull @RequestParam("categoryId") Long categoryId) {
-        // categoryIdを使用してCategoryオブジェクトを取得
         Category category = categoryService.findCategoryById(categoryId).orElse(null);
-
-        // TransactionオブジェクトにCategoryをセット
         transaction.setCategory(category);
+
         transactionService.saveTransaction(transaction);
         return "redirect:/transactions";
     }

@@ -1,5 +1,6 @@
 package com.nyakako.simplesave.model;
 
+import java.time.DayOfWeek;
 import java.time.LocalDate;
 
 import jakarta.persistence.Column;
@@ -31,6 +32,10 @@ public class RecurringTransaction {
     private int interval;
     
     private String intervalUnit;
+    private DayOfWeek dayOfWeek;         // intervalUnitがweeksの場合、週のどの日（例：1 = 月曜日, 2 = 火曜日, ...）
+    private Integer dayOfMonthMonthly; // intervalUnitがmonthsの場合、月のどの日（例：25日）
+    private Integer dayOfMonth;        // intervalUnitがyearsの場合、月のどの日（例：25日）
+    private Integer monthOfYear;       // intervalUnitがyearsの場合、年のどの月（例：2月）
     private LocalDate startDate;
     private LocalDate endDate;
     private LocalDate nextTransactionDate;

@@ -49,17 +49,22 @@
                                         <th>間隔</th>
                                         <th>カテゴリ</th>
                                         <th>金額</th>
-                                        <!-- <th>期間</th> -->
+                                        <th>期間</th>
                                         <th>編集</th>
                                     </tr>
                                 </thead>
                                 <tbody>
                                     <tr th:each="transaction : ${transactions}">
                                         <td th:text="${transaction.category.type}">type</td>
-                                        <td th:text="${transaction.interval}">間隔</td>
-                                        <td th:text="${transaction.category.name}">内容</td>
+                                        <td th:switch="${transaction.intervalUnit}">
+                                            <span th:case="'years'" th:text="'毎年 ' + ${transaction.monthOfYear} + '月' + ${transaction.dayOfMonth} + '日'">毎年</span>
+                                            <span th:case="'months'" th:text="'毎月 ' + ${transaction.dayOfMonth} + '日'">毎月</span>
+                                            <span th:case="'weeks'" th:text="'毎週 ' + ${#dates.dayOfWeekName(transaction.dayOfWeek)}">毎週</span>
+                                            <span th:case="'days'" th:text="'毎日'">毎日</span>
+                                        </td>
+                                        <td th:text="${transaction.category.name}">カテゴリ</td>
                                         <td th:text="${transaction.amount}">金額</td>
-                                        <!-- <td th:text="${transaction.name}">期間</td> -->
+                                        <td th:text="${transaction.startDate}">期間</td>
                                         <td><a th:href="@{/categories-expense/edit/{id}(id=${transaction.id})}"
                                                 class="btn btn-success">編集</a></td>
                                     </tr>
