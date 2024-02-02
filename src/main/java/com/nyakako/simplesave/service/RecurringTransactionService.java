@@ -3,7 +3,10 @@ package com.nyakako.simplesave.service;
 import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Optional;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.lang.NonNull;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
@@ -18,6 +21,7 @@ public class RecurringTransactionService {
 
     private final RecurringTransactionRepositoty recurringTransactionRepositoty;
     private final TransactionRepository transactionRepository;
+    private static final Logger logger = LoggerFactory.getLogger(RecurringTransactionService.class);
 
     public RecurringTransactionService(RecurringTransactionRepositoty recurringTransactionRepositoty,
             TransactionRepository transactionRepository) {
@@ -29,36 +33,62 @@ public class RecurringTransactionService {
         return recurringTransactionRepositoty.findAll();
     }
 
+    public Optional<RecurringTransaction> findRecurringTransactionById(@NonNull Long id) {
+        return recurringTransactionRepositoty.findById(id);
+    }
+
     public void saveRecurringTransaction(@NonNull RecurringTransaction recurringTransaction) {
         recurringTransactionRepositoty.save(recurringTransaction);
     }
 
-    @Scheduled(cron = "0 0 1 * * ?") // 毎日午前1時に実行
+    // @Scheduled(cron = "0 0 1 * * ?") // 毎日午前1時に実行
+    @Scheduled(fixedRate = 60000) // 60秒毎に実行
     public void processRecurringTransactions() {
+        logger.info("Starting processRecurringTransactions...");
 
-        LocalDate today = LocalDate.now();
-        List<RecurringTransaction> recurringTransactions = recurringTransactionRepositoty
-                .findByNextTransactionDate(today);
+        try {
+            LocalDate today = LocalDate.now();
+            List<RecurringTransaction> recurringTransactions = recurringTransactionRepositoty
+                    .findByNextTransactionDate(today);
 
-        for (RecurringTransaction rt : recurringTransactions) {
-            Transaction newTransaction = new Transaction();
-            newTransaction.setUser(rt.getUser());
-            newTransaction.setDate(today);
-            newTransaction.setAmount(rt.getAmount());
-            newTransaction.setCategory(rt.getCategory());
-            newTransaction.setDescription(rt.getDescription());
-            transactionRepository.save(newTransaction);
+            for (RecurringTransaction rt : recurringTransactions) {
+                Transaction newTransaction = new Transaction();
+                // newTransaction.setUser(rt.getUser());
+                newTransaction.setDate(today);
+                newTransaction.setAmount(rt.getAmount());
+                newTransaction.setCategory(rt.getCategory());
+                newTransaction.setDescription(rt.getDescription());
+                newTransaction.setScheduled(true);
+                transactionRepository.save(newTransaction);
 
-            rt.setNextTransactionDate(calculateNextTransactionDate(rt));
-            recurringTransactionRepositoty.save(rt);
+                logger.info("Created new transaction with ID: {} Category: {} Amount: {} Date: {}",
+                        newTransaction.getId(),
+                        newTransaction.getCategory().getName(),
+                        newTransaction.getAmount(),
+                        newTransaction.getDate());
+
+                rt.setNextTransactionDate(calculateNextTransactionDate(rt));
+                recurringTransactionRepositoty.save(rt);
+            }
+            logger.info("Sucessfully processed recurring transactions.");
+        } catch (Exception e) {
+            logger.error("Error processing recurring transactions", e);
         }
     }
 
     public LocalDate calculateNextTransactionDate(RecurringTransaction transaction) {
+        LocalDate today = LocalDate.now(); // 今日の日付を取得
         LocalDate baseDate; // 計算の基準日
+
         if (transaction.getNextTransactionDate() == null) {
-            // 初期登録時は開始日を基準にする
-            baseDate = transaction.getStartDate();
+            // 初期登録時
+            if (transaction.getStartDate().isBefore(today)) {
+                // 開始日が今日より前の場合、今日を基準にする
+                baseDate = today;
+            } else {
+                // そうでなければ開始日を基準にする
+                baseDate = transaction.getStartDate();
+            }
         } else {
             // 更新時は既存の次回取引日を基準にする
             baseDate = transaction.getNextTransactionDate();

@@ -29,7 +29,7 @@ public class TransactionController {
 
     @GetMapping("/transactions")
     public String showTransactions(Model model) {
-        model.addAttribute("transactions", transactionService.getAllTransactions());
+        model.addAttribute("transactions", transactionService.findAllTransactions());
         model.addAttribute("title", "取引一覧 - simplesave");
         model.addAttribute("content", "transactions");
         return "layout";

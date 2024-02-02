@@ -1,7 +1,5 @@
 package com.nyakako.simplesave.controller;
 
-import java.beans.PropertyEditorSupport;
-import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.util.List;
 
@@ -14,26 +12,15 @@ import com.nyakako.simplesave.model.RecurringTransaction;
 import com.nyakako.simplesave.service.CategoryService;
 import com.nyakako.simplesave.service.RecurringTransactionService;
 
-import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 @Controller
 public class RecurringTransactionController {
-
-    @InitBinder
-    public void initBinder(WebDataBinder binder) {
-        binder.registerCustomEditor(DayOfWeek.class, new PropertyEditorSupport() {
-            @Override
-            public void setAsText(String text) throws IllegalArgumentException {
-                int dayOfWeek = Integer.parseInt(text);
-                setValue(DayOfWeek.of(dayOfWeek));
-            }
-        });
-    }
 
     private final RecurringTransactionService recurringTransactionService;
     private final CategoryService categoryService;
@@ -98,13 +85,48 @@ public class RecurringTransactionController {
                 break;
             default:
                 // 未知の間隔単位が指定された場合のエラーハンドリング
+                break;
         }
 
+        transaction.setInterval(1);
         LocalDate nextTransactionDate = recurringTransactionService.calculateNextTransactionDate(transaction);
         transaction.setNextTransactionDate(nextTransactionDate);
-        transaction.setInterval(1);
+
         recurringTransactionService.saveRecurringTransaction(transaction);
         return "redirect:/settings/recurring-transactions";
     }
 
+    @GetMapping("/recurring-transactions/edit/{id}")
+    public String editRecurringTransaction(@PathVariable @NonNull Long id, Model model) {
+        RecurringTransaction transaction = recurringTransactionService.findRecurringTransactionById(id).orElse(null);
+        model.addAttribute("transaction", transaction);
+        model.addAttribute("categories", categoryService.findAllCategories());
+        model.addAttribute("title", "定期入力の編集 - simplesave");
+        model.addAttribute("content", "edit-recurring-transaction");
+        return "layout";
+    }
+
+    @PostMapping("/recurring-transactions/edit/{id}")
+    public String updateRecurringTransaction(@PathVariable Long id, @ModelAttribute RecurringTransaction transaction, @NonNull @RequestParam("categoryId") Long categoryId) {
+        Category category = categoryService.findCategoryById(categoryId).orElse(null);
+        transaction.setCategory(category);
+
+        transaction.setInterval(1);
+        LocalDate nextTransactionDate = recurringTransactionService.calculateNextTransactionDate(transaction);
+        transaction.setNextTransactionDate(nextTransactionDate);
+
+        recurringTransactionService.saveRecurringTransaction(transaction);
+        return "redirect:/settings/recurring-transactions";
+    }
+
+    @PostMapping("/recurring-transactions/delete/{id}")
+    public String deleteRecurringTransaction(@NonNull @PathVariable Long id, RedirectAttributes redirectAttribtes) {
+        // if (!categoryService.isCategoryUsed(id)) {
+        //     categoryService.deleteCategory(id);
+        //     redirectAttribtes.addFlashAttribute("successMessage","カテゴリが正常に削除されました" );
+        // } else {
+        //     redirectAttribtes.addFlashAttribute("errorMessage", "このカテゴリは明細で使用されているため、削除できません。");
+        // }
+        return "redirect:/settings/recurring-transactions";
+    }
 }

@@ -32,7 +32,8 @@
                             class="list-group-item list-group-item-action">支出カテゴリ設定</a>
                         <a th:href="@{/settings/categories-income}"
                             class="list-group-item list-group-item-action">収入カテゴリ設定</a>
-                        <a th:href="@{/settings/recurring-transactions}" class="list-group-item list-group-item-action active">定期入力設定</a>
+                        <a th:href="@{/settings/recurring-transactions}"
+                            class="list-group-item list-group-item-action active">定期入力設定</a>
                         <a href="#" class="list-group-item list-group-item-action disabled">色設定</a>
                     </div>
                 </div>
@@ -50,22 +51,42 @@
                                         <th>カテゴリ</th>
                                         <th>金額</th>
                                         <th>期間</th>
+                                        <th>次回</th>
                                         <th>編集</th>
                                     </tr>
                                 </thead>
                                 <tbody>
                                     <tr th:each="transaction : ${transactions}">
-                                        <td th:text="${transaction.category.type}">type</td>
+                                        <td th:switch="${transaction.category.type}">
+                                            <span th:case="'expense'"
+                                                th:text="支出">支出</span>
+                                            <span th:case="'income'"
+                                                th:text="収入">収入</span>
+                                        </td>
                                         <td th:switch="${transaction.intervalUnit}">
-                                            <span th:case="'years'" th:text="'毎年 ' + ${transaction.monthOfYear} + '月' + ${transaction.dayOfMonth} + '日'">毎年</span>
-                                            <span th:case="'months'" th:text="'毎月 ' + ${transaction.dayOfMonth} + '日'">毎月</span>
-                                            <span th:case="'weeks'" th:text="'毎週 ' + ${#dates.dayOfWeekName(transaction.dayOfWeek)}">毎週</span>
+                                            <span th:case="'years'"
+                                                th:text="'毎年 ' + ${transaction.monthOfYear} + '月' + ${transaction.dayOfMonth} + '日'">毎年</span>
+                                            <span th:case="'months'"
+                                                th:text="'毎月 ' + ${transaction.dayOfMonthMonthly} + '日'">毎月</span>
+                                            <span th:case="'weeks'">
+                                                <span th:switch="${transaction.dayOfWeek.toString()}">
+                                                    <span th:case="'MONDAY'" th:text="'毎週月曜日'">毎週月曜日</span>
+                                                    <span th:case="'TUESDAY'" th:text="'毎週火曜日'">毎週火曜日</span>
+                                                    <span th:case="'WEDNESDAY'" th:text="'毎週水曜日'">毎週水曜日</span>
+                                                    <span th:case="'THURSDAY'" th:text="'毎週木曜日'">毎週木曜日</span>
+                                                    <span th:case="'FRIDAY'" th:text="'毎週金曜日'">毎週金曜日</span>
+                                                    <span th:case="'SATURDAY'" th:text="'毎週土曜日'">毎週土曜日</span>
+                                                    <span th:case="'SUNDAY'" th:text="'毎週日曜日'">毎週日曜日</span>
+                                                </span>
+                                            </span>
+
                                             <span th:case="'days'" th:text="'毎日'">毎日</span>
                                         </td>
                                         <td th:text="${transaction.category.name}">カテゴリ</td>
-                                        <td th:text="${transaction.amount}">金額</td>
-                                        <td th:text="${transaction.startDate}">期間</td>
-                                        <td><a th:href="@{/categories-expense/edit/{id}(id=${transaction.id})}"
+                                        <td th:text="${#numbers.formatInteger(transaction.amount, 3, 'COMMA')} + '円'">金額</td>
+                                        <td th:text="${transaction.startDate} + '～' + ${transaction.endDate}">期間</td>
+                                        <td th:text="${transaction.nextTransactionDate}">次回</td>
+                                        <td><a th:href="@{/recurring-transactions/edit/{id}(id=${transaction.id})}"
                                                 class="btn btn-success">編集</a></td>
                                     </tr>
                                 </tbody>
