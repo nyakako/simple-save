@@ -5,6 +5,8 @@ import com.nyakako.simplesave.model.Transaction;
 import com.nyakako.simplesave.service.CategoryService;
 import com.nyakako.simplesave.service.TransactionService;
 
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.time.LocalDate;
 
 import org.springframework.lang.NonNull;
@@ -60,7 +62,8 @@ public class TransactionController {
     @GetMapping("/transactions/edit/{id}")
     public String editTransaction(@PathVariable @NonNull Long id, Model model) {
         Transaction transaction = transactionService.findTransactionById(id).orElse(null);
-        ;
+        BigDecimal amount = transaction.getAmount();
+        transaction.setAmount(amount.setScale(0, RoundingMode.DOWN));
         model.addAttribute("transaction", transaction);
         model.addAttribute("categories", categoryService.findAllCategories());
         model.addAttribute("title", "明細編集 - simplesave");

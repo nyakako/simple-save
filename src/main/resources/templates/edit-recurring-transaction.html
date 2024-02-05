@@ -13,8 +13,8 @@
             <div class="row">
                 <div class="col-md-12">
                     <div class="card card-success">
-                        <form th:action="@{/recurring-transactions/edit/{id}(id=${transaction.id})}" th:object="${transaction}"
-                            method="post">
+                        <form th:action="@{/recurring-transactions/edit/{id}(id=${transaction.id})}"
+                            th:object="${transaction}" method="post">
                             <div class="card-body">
                                 <div class="form-group">
                                     <label>カテゴリタイプ</label>
@@ -36,7 +36,8 @@
 
                                 <div class="form-group">
                                     <label for="intervalUnit">間隔</label>
-                                    <select th:field="*{intervalUnit}" name="intervalUnit" id="intervalUnit" class="form-control" required>
+                                    <select th:field="*{intervalUnit}" name="intervalUnit" id="intervalUnit"
+                                        class="form-control" required>
                                         <option value="months"> 毎月</option>
                                         <option value="years"> 毎年</option>
                                         <option value="weeks"> 毎週</option>
@@ -48,7 +49,8 @@
                                 <div id="yearlyInput" style="display: none;">
                                     <div class="form-group">
                                         <label for="monthOfYear">月</label>
-                                        <select th:field="*{monthOfYear}" name="monthOfYear" id="monthOfYear" class="form-control">
+                                        <select th:field="*{monthOfYear}" name="monthOfYear" id="monthOfYear"
+                                            class="form-control">
                                             <!-- 1月から12月までのオプションを追加 -->
                                             <th:block th:each="month : ${#numbers.sequence(1, 12)}">
                                                 <option th:value="${month}" th:text="${month} + '月'"></option>
@@ -57,7 +59,8 @@
                                     </div>
                                     <div class="form-group">
                                         <label for="dayOfMonth">日</label>
-                                        <select th:field="*{dayOfMonth}" name="dayOfMonth" id="dayOfMonth" class="form-control">
+                                        <select th:field="*{dayOfMonth}" name="dayOfMonth" id="dayOfMonth"
+                                            class="form-control">
                                             <!-- 1日から31日までのオプションを追加 -->
                                             <th:block th:each="day : ${#numbers.sequence(1, 31)}">
                                                 <option th:value="${day}" th:text="${day} + '日'"></option>
@@ -70,7 +73,8 @@
                                 <div id="monthlyInput" style="display: none;">
                                     <div class="form-group">
                                         <label for="dayOfMonthMonthly">日</label>
-                                        <select th:field="*{dayOfMonthMonthly}" name="dayOfMonthMonthly" id="dayOfMonthMonthly" class="form-control">
+                                        <select th:field="*{dayOfMonthMonthly}" name="dayOfMonthMonthly"
+                                            id="dayOfMonthMonthly" class="form-control">
                                             <!-- 1日から31日までのオプションを追加 -->
                                             <th:block th:each="day : ${#numbers.sequence(1, 31)}">
                                                 <option th:value="${day}" th:text="${day} + '日'"></option>
@@ -83,7 +87,8 @@
                                 <div id="weeklyInput" style="display: none;">
                                     <div class="form-group">
                                         <label for="dayOfWeek">曜日</label>
-                                        <select th:field="*{dayOfWeek}" name="dayOfWeek" id="dayOfWeek" class="form-control">
+                                        <select th:field="*{dayOfWeek}" name="dayOfWeek" id="dayOfWeek"
+                                            class="form-control">
                                             <option value="MONDAY">月曜日</option>
                                             <option value="TUESDAY">火曜日</option>
                                             <option value="WEDNESDAY">水曜日</option>
@@ -97,7 +102,7 @@
 
                                 <div class="form-group">
                                     <label for="categoryId">カテゴリ</label>
-                                    <select value="" name="categoryId" id="categoryId" class="form-control" required>
+                                    <select name="categoryId" id="categoryId" class="form-control" required>
                                         <option th:each="category : ${categories}" th:value="${category.id}"
                                             th:text="${category.name}">
                                             カテゴリ名</option>
@@ -106,36 +111,45 @@
 
                                 <div class="form-group">
                                     <label for="description">内容</label>
-                                    <input type="text"  th:field="*{description}" name="description" class="form-control" placeholder="内容"
-                                        id="description">
+                                    <input type="text" th:field="*{description}" name="description" class="form-control"
+                                        placeholder="内容" id="description">
                                 </div>
                                 <div class="form-group">
                                     <label for="amount">金額</label>
-                                    <input type="number" th:field="*{amount}" name="amount" class="form-control" placeholder="金額" id="amount"
-                                        required>
+                                    <input type="number" th:field="*{amount}" name="amount" class="form-control"
+                                        placeholder="金額" id="amount" step="1" required>
                                 </div>
                                 <div class="form-group">
-                                    <label for="startDate">開始日<span class="text-sm text-muted">&nbsp;※当日分を自動入力したい場合は開始日を前日にしてください。</span></label>
-                                    <input type="date" th:field="*{startDate}" name="startDate" id="startDate" class="form-control"
-                                        placeholder="開始日" required>
+                                    <label for="startDate">開始日
+                                        <!-- <span class="text-sm text-muted">
+                                        &nbsp;※当日分を自動入力したい場合は開始日を前日にしてください。</span> -->
+                                    </label>
+                                    <input type="date" th:field="*{startDate}" name="startDate" id="startDate"
+                                        class="form-control" placeholder="開始日" required>
                                 </div>
                                 <div class="form-group">
                                     <label for="endDate">終了日</label>
-                                    <input type="date" th:field="*{endDate}" name="endDate" id="endDate" class="form-control"
-                                        placeholder="終了日" required>
+                                    <input type="date" th:field="*{endDate}" name="endDate" id="endDate"
+                                        class="form-control" placeholder="終了日" required>
                                 </div>
 
                             </div>
 
                             <div class="card-footer">
                                 <input type="submit" value="更新" class="btn btn-success">
-                            </div>
+                        </form>
+                        <form th:action="@{/recurring-transactions/delete/{id}(id=${transaction.id})}" method="post"
+                            style="display: inline-block;">
+                            <input type="submit" value="削除" class="btn btn-danger"
+                                onclick="return confirm('本当に削除しますか？')">
                         </form>
                     </div>
+
                 </div>
             </div>
         </div>
-    </section>
+</div>
+</section>
 </div>
 
 <script th:inline="javascript">
@@ -168,6 +182,9 @@
                 var option = document.createElement('option');
                 option.value = category.id;
                 option.textContent = category.name;
+                if (category.id === currentCategoryId) {
+                    option.selected = true;
+                }
                 select.appendChild(option);
             });
         }

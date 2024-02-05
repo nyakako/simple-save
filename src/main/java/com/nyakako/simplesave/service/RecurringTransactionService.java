@@ -41,6 +41,10 @@ public class RecurringTransactionService {
         recurringTransactionRepositoty.save(recurringTransaction);
     }
 
+    public void deleteRecurringTransacition(@NonNull Long id) {
+        recurringTransactionRepositoty.deleteById(id);
+    }
+
     // @Scheduled(cron = "0 0 1 * * ?") // 毎日午前1時に実行
     @Scheduled(fixedRate = 60000) // 60秒毎に実行
     public void processRecurringTransactions() {
@@ -79,18 +83,29 @@ public class RecurringTransactionService {
     public LocalDate calculateNextTransactionDate(RecurringTransaction transaction) {
         LocalDate today = LocalDate.now(); // 今日の日付を取得
         LocalDate baseDate; // 計算の基準日
+        boolean isBaseDayTheNextTransactionDate = false; // 今日が次回取引日かどうか
 
+        // 初期登録時or設定更新時は
+        // 開始日が間隔の条件を満たす日か確認し満たせば開始日
+        // そうでなければ計算し求める
         if (transaction.getNextTransactionDate() == null) {
-            // 初期登録時
+
+            // 開始日が今日より前の場合、今日を基準にする
             if (transaction.getStartDate().isBefore(today)) {
-                // 開始日が今日より前の場合、今日を基準にする
                 baseDate = today;
             } else {
                 // そうでなければ開始日を基準にする
                 baseDate = transaction.getStartDate();
             }
+            isBaseDayTheNextTransactionDate = isBaseDayMatchingCondition(transaction, baseDate);
+
+            // 基準日が条件を満たす場合は基準日を次回取引日とする
+            if (isBaseDayTheNextTransactionDate) {
+                return baseDate;
+            }
         } else {
-            // 更新時は既存の次回取引日を基準にする
+            // スケジュール実行後は
+            // 既存の次回取引日を基準に計算する
             baseDate = transaction.getNextTransactionDate();
         }
 
@@ -155,6 +170,22 @@ public class RecurringTransactionService {
         }
 
         return nextYearDate;
+    }
+
+    private boolean isBaseDayMatchingCondition(RecurringTransaction transaction, LocalDate baseDate) {
+        switch (transaction.getIntervalUnit()) {
+            case "days":
+                return true; // 毎日が条件なので常にtrue
+            case "weeks":
+                return baseDate.getDayOfWeek() == transaction.getDayOfWeek(); // 曜日が一致するか
+            case "months":
+                return baseDate.getDayOfMonth() == transaction.getDayOfMonthMonthly(); // 日にちが一致するか
+            case "years":
+                return baseDate.getMonthValue() == transaction.getMonthOfYear()
+                        && baseDate.getDayOfMonth() == transaction.getDayOfMonth(); // 月と日にちが一致するか
+            default:
+                return false;
+        }
     }
 
 }

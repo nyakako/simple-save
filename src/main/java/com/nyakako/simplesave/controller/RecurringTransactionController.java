@@ -1,5 +1,7 @@
 package com.nyakako.simplesave.controller;
 
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.time.LocalDate;
 import java.util.List;
 
@@ -99,6 +101,8 @@ public class RecurringTransactionController {
     @GetMapping("/recurring-transactions/edit/{id}")
     public String editRecurringTransaction(@PathVariable @NonNull Long id, Model model) {
         RecurringTransaction transaction = recurringTransactionService.findRecurringTransactionById(id).orElse(null);
+        BigDecimal amount = transaction.getAmount();
+        transaction.setAmount(amount.setScale(0, RoundingMode.DOWN));
         model.addAttribute("transaction", transaction);
         model.addAttribute("categories", categoryService.findAllCategories());
         model.addAttribute("title", "定期入力の編集 - simplesave");
@@ -107,11 +111,14 @@ public class RecurringTransactionController {
     }
 
     @PostMapping("/recurring-transactions/edit/{id}")
-    public String updateRecurringTransaction(@PathVariable Long id, @ModelAttribute RecurringTransaction transaction, @NonNull @RequestParam("categoryId") Long categoryId) {
+    public String updateRecurringTransaction(@PathVariable Long id, @ModelAttribute RecurringTransaction transaction,
+            @NonNull @RequestParam("categoryId") Long categoryId) {
         Category category = categoryService.findCategoryById(categoryId).orElse(null);
         transaction.setCategory(category);
 
         transaction.setInterval(1);
+        transaction.setNextTransactionDate(null); // 更新の場合、一度次回取引日をリセット
+
         LocalDate nextTransactionDate = recurringTransactionService.calculateNextTransactionDate(transaction);
         transaction.setNextTransactionDate(nextTransactionDate);
 
@@ -121,12 +128,7 @@ public class RecurringTransactionController {
 
     @PostMapping("/recurring-transactions/delete/{id}")
     public String deleteRecurringTransaction(@NonNull @PathVariable Long id, RedirectAttributes redirectAttribtes) {
-        // if (!categoryService.isCategoryUsed(id)) {
-        //     categoryService.deleteCategory(id);
-        //     redirectAttribtes.addFlashAttribute("successMessage","カテゴリが正常に削除されました" );
-        // } else {
-        //     redirectAttribtes.addFlashAttribute("errorMessage", "このカテゴリは明細で使用されているため、削除できません。");
-        // }
+        recurringTransactionService.deleteRecurringTransacition(id);
         return "redirect:/settings/recurring-transactions";
     }
 }
