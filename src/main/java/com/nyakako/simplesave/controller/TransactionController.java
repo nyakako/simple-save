@@ -5,6 +5,8 @@ import com.nyakako.simplesave.model.Transaction;
 import com.nyakako.simplesave.service.CategoryService;
 import com.nyakako.simplesave.service.TransactionService;
 
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.time.LocalDate;
 
 import org.springframework.lang.NonNull;
@@ -29,7 +31,7 @@ public class TransactionController {
 
     @GetMapping("/transactions")
     public String showTransactions(Model model) {
-        model.addAttribute("transactions", transactionService.getAllTransactions());
+        model.addAttribute("transactions", transactionService.findAllTransactions());
         model.addAttribute("title", "取引一覧 - simplesave");
         model.addAttribute("content", "transactions");
         return "layout";
@@ -60,7 +62,8 @@ public class TransactionController {
     @GetMapping("/transactions/edit/{id}")
     public String editTransaction(@PathVariable @NonNull Long id, Model model) {
         Transaction transaction = transactionService.findTransactionById(id).orElse(null);
-        ;
+        BigDecimal amount = transaction.getAmount();
+        transaction.setAmount(amount.setScale(0, RoundingMode.DOWN));
         model.addAttribute("transaction", transaction);
         model.addAttribute("categories", categoryService.findAllCategories());
         model.addAttribute("title", "明細編集 - simplesave");
@@ -71,11 +74,9 @@ public class TransactionController {
     @PostMapping("/transactions/edit/{id}")
     public String updateTransaction(@PathVariable Long id, @NonNull @ModelAttribute Transaction transaction,
             @NonNull @RequestParam("categoryId") Long categoryId) {
-        // categoryIdを使用してCategoryオブジェクトを取得
         Category category = categoryService.findCategoryById(categoryId).orElse(null);
-
-        // TransactionオブジェクトにCategoryをセット
         transaction.setCategory(category);
+
         transactionService.saveTransaction(transaction);
         return "redirect:/transactions";
     }

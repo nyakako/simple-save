@@ -31,10 +31,15 @@
                                 <tbody>
                                     <tr th:each="transaction : ${transactions}">
                                         <td th:text="${transaction.date}">Date</td>
-                                        <td th:text="${transaction.category.type}">Category</td>
+                                        <td th:switch="${transaction.category.type}">
+                                            <span th:case="'expense'"
+                                                th:text="支出">支出</span>
+                                            <span th:case="'income'"
+                                                th:text="収入">収入</span>
+                                        </td>
                                         <td th:text="${transaction.category.name}">Category</td>
                                         <td th:text="${transaction.description}">Description</td>
-                                        <td th:text="${transaction.amount}">Amount</td>
+                                        <td th:text="${#numbers.formatInteger(transaction.amount, 3, 'COMMA')} + '円'">Amount</td>
                                         <td ><a th:href="@{/transactions/edit/{id}(id=${transaction.id})}" class="btn btn-success">編集</a></td>
                                     </tr>
                                 </tbody>

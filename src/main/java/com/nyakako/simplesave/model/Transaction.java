@@ -1,5 +1,6 @@
 package com.nyakako.simplesave.model;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 
 import org.springframework.format.annotation.DateTimeFormat;
@@ -24,11 +25,12 @@ public class Transaction {
     
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     private LocalDate date;
-    private Double amount;
+    private BigDecimal amount;
 
     @ManyToOne
     private Category category;
 
     private String description;
+    private boolean isScheduled = false; // 定期入力で追加された明細かどうか
 
 }

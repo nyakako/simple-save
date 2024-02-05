@@ -1,0 +1,202 @@
+<div class="container" th:fragment="content">
+    <section class="content-header">
+        <div class="container-fluid">
+            <div class="row mb-2">
+                <div class="col-sm-6">
+                    <h1>定期入力の登録</h1>
+                </div>
+            </div>
+        </div>
+    </section>
+    <section class="content px-2">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="card card-success">
+                        <form id="quickForm" th:action="@{/recurring-transactions/new}" method="post">
+                            <div class="card-body">
+                                <div class="form-group">
+                                    <label>カテゴリタイプ</label>
+                                    <div>
+                                        <div class="form-check form-check-inline">
+                                            <input class="form-check-input" type="radio" name="categoryType"
+                                                id="typeExpense" value="expense" checked required>
+                                            <label class="form-check-label" for="typeExpense">支出</label>
+                                        </div>
+                                        <div class="form-check form-check-inline">
+                                            <input class="form-check-input" type="radio" name="categoryType"
+                                                id="typeIncome" value="income">
+                                            <label class="form-check-label" for="typeIncome">収入</label>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="intervalUnit">間隔</label>
+                                    <select name="intervalUnit" id="intervalUnit" class="form-control" required>
+                                        <option value="months"> 毎月</option>
+                                        <option value="years"> 毎年</option>
+                                        <option value="weeks"> 毎週</option>
+                                        <option value="days"> 毎日</option>
+                                    </select>
+                                </div>
+
+                                <!-- 毎年の場合の入力フィールド -->
+                                <div id="yearlyInput" style="display: none;">
+                                    <div class="form-group">
+                                        <label for="monthOfYear">月</label>
+                                        <select name="monthOfYear" id="monthOfYear" class="form-control">
+                                            <!-- 1月から12月までのオプションを追加 -->
+                                            <th:block th:each="month : ${#numbers.sequence(1, 12)}">
+                                                <option th:value="${month}" th:text="${month} + '月'"></option>
+                                            </th:block>
+                                        </select>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="dayOfMonth">日</label>
+                                        <select name="dayOfMonth" id="dayOfMonth" class="form-control">
+                                            <!-- 1日から31日までのオプションを追加 -->
+                                            <th:block th:each="day : ${#numbers.sequence(1, 31)}">
+                                                <option th:value="${day}" th:text="${day} + '日'"></option>
+                                            </th:block>
+                                        </select>
+                                    </div>
+                                </div>
+
+                                <!-- 毎月の場合の入力フィールド -->
+                                <div id="monthlyInput" style="display: none;">
+                                    <div class="form-group">
+                                        <label for="dayOfMonthMonthly">日</label>
+                                        <select name="dayOfMonthMonthly" id="dayOfMonthMonthly" class="form-control">
+                                            <!-- 1日から31日までのオプションを追加 -->
+                                            <th:block th:each="day : ${#numbers.sequence(1, 31)}">
+                                                <option th:value="${day}" th:text="${day} + '日'"></option>
+                                            </th:block>
+                                        </select>
+                                    </div>
+                                </div>
+
+                                <!-- 毎週の場合の入力フィールド -->
+                                <div id="weeklyInput" style="display: none;">
+                                    <div class="form-group">
+                                        <label for="dayOfWeek">曜日</label>
+                                        <select name="dayOfWeek" id="dayOfWeek" class="form-control">
+                                            <option value="MONDAY">月曜日</option>
+                                            <option value="TUESDAY">火曜日</option>
+                                            <option value="WEDNESDAY">水曜日</option>
+                                            <option value="THURSDAY">木曜日</option>
+                                            <option value="FRIDAY">金曜日</option>
+                                            <option value="SATURDAY">土曜日</option>
+                                            <option value="SUNDAY">日曜日</option>
+                                        </select>
+                                    </div>
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="categoryId">カテゴリ</label>
+                                    <select name="categoryId" id="categoryId" class="form-control" required>
+                                        <option th:each="category : ${categories}" th:value="${category.id}"
+                                            th:text="${category.name}">
+                                            カテゴリ名</option>
+                                    </select>
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="description">内容</label>
+                                    <input type="text" name="description" class="form-control" placeholder="内容"
+                                        id="description">
+                                </div>
+                                <div class="form-group">
+                                    <label for="amount">金額</label>
+                                    <input type="number" name="amount" class="form-control" placeholder="金額" id="amount"
+                                        required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="startDate">開始日
+                                        <!-- <span class="text-sm text-muted">
+                                            &nbsp;※当日分を自動入力したい場合は開始日を前日にしてください。
+                                        </span> -->
+                                    </label>
+                                    <input type="date" name="startDate" id="startDate" class="form-control"
+                                        placeholder="開始日" th:value="${today}" required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="endDate">終了日</label>
+                                    <input type="date" name="endDate" id="endDate" class="form-control"
+                                        placeholder="終了日" th:value="${oneMonthLater}" required>
+                                </div>
+
+                            </div>
+
+                            <div class="card-footer">
+                                <input type="submit" value="登録" class="btn btn-success">
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</div>
+
+<script th:inline="javascript">
+    /*<![CDATA[*/
+    var categories = /*[[${categories}]]*/[];
+    /*]]>*/
+
+    document.addEventListener('DOMContentLoaded', function () {
+        var categoryTypeRadios = document.querySelectorAll('input[name="categoryType"]');
+        var categorySelect = document.getElementById('categoryId');
+        var initialCategoryType = document.querySelector('input[name="categoryType"]:checked').value;
+
+        updateCategoryOptions(categorySelect, initialCategoryType);
+
+        categoryTypeRadios.forEach(function (radio) {
+            radio.addEventListener('change', function () {
+                updateCategoryOptions(categorySelect, this.value);
+            });
+        });
+
+        function updateCategoryOptions(select, type) {
+            var filteredCategories = categories.filter(function (category) {
+                return category.type === type;
+            });
+
+            select.innerHTML = '';
+
+            filteredCategories.forEach(function (category) {
+                var option = document.createElement('option');
+                option.value = category.id;
+                option.textContent = category.name;
+                select.appendChild(option);
+            });
+        }
+
+        var intervalUnitSelect = document.getElementById('intervalUnit');
+
+        intervalUnitSelect.addEventListener('change', function () {
+            updateInputFields(this.value);
+        });
+
+        function updateInputFields(intervalUnit) {
+            // すべての入力フィールドを非表示にする
+            document.getElementById('yearlyInput').style.display = 'none';
+            document.getElementById('monthlyInput').style.display = 'none';
+            document.getElementById('weeklyInput').style.display = 'none';
+
+            // 選択された間隔に応じて対応する入力フィールドを表示
+            if (intervalUnit === 'years') {
+                document.getElementById('yearlyInput').style.display = 'block';
+            } else if (intervalUnit === 'months') {
+                document.getElementById('monthlyInput').style.display = 'block';
+            } else if (intervalUnit === 'weeks') {
+                document.getElementById('weeklyInput').style.display = 'block';
+            } // else if (intervalUnit === 'days') {
+            // document.getElementById('dailyInput').style.display = 'block';
+            // }
+        }
+
+        // 初期表示時の入力フィールドの更新
+        updateInputFields(intervalUnitSelect.value);
+    });
+</script>
