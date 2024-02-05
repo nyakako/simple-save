@@ -1,0 +1,71 @@
+<div class="container" th:fragment="content">
+  <section class="content-header">
+    <div class="container-fluid">
+      <div class="row mb-2">
+        <div class="col-sm-6">
+          <h1>ログイン</h1>
+        </div>
+      </div>
+    </div>
+  </section>
+  <section class="content px-2">
+    <div class="container-fluid">
+      <div class="row">
+        <div class="col-md-12">
+          <!-- /.login-logo -->
+          <div class="card">
+            <div class="card-body login-card-body">
+              <p class="login-box-msg">ログイン情報を入力してください</p>
+
+              <form action="/login" method="post">
+
+                <div class="input-group mb-3">
+                  <input type="email" class="form-control" placeholder="メールアドレス" name="{{ form.username.name }}"
+                    required autofocus>
+                  <div class="input-group-append">
+                    <div class="input-group-text">
+                      <span class="fas fa-envelope"></span>
+                    </div>
+                  </div>
+                </div>
+                <div class="input-group mb-3">
+                  <input type="password" class="form-control" placeholder="パスワード" name="{{ form.password.name }}"
+                    required>
+                  <div class="input-group-append">
+                    <div class="input-group-text">
+                      <span class="fas fa-lock"></span>
+                    </div>
+                  </div>
+                </div>
+                <div class="row">
+
+                  <!-- /.col -->
+                  <div class="col-12 my-1">
+                    <button type="submit" class="btn btn-primary btn-block py-2">ログイン</button>
+                  </div>
+                  <!-- /.col -->
+                </div>
+              </form>
+
+              <div class="social-auth-links text-center mb-3">
+                <p>- OR -</p>
+
+              </div>
+              <a class="btn btn-outline-secondary py-2 w-100" th:href="@{/register}">新規登録</a>
+              <!-- /.social-auth-links -->
+
+              <!-- <p class="mb-1">
+        <a href="forgot-password.html">I forgot my password</a>
+      </p> -->
+
+            </div>
+            <!-- /.login-card-body -->
+          </div>
+        </div>
+        <!-- /.login-box -->
+
+      </div>
+    </div>
+</div>
+</section>
+</div>
