@@ -46,7 +46,7 @@ public class RecurringTransactionService {
     }
 
     // @Scheduled(cron = "0 0 1 * * ?") // 毎日午前1時に実行
-    @Scheduled(fixedRate = 60000) // 60秒毎に実行
+    @Scheduled(fixedRate = 600000) // 60秒毎に実行
     public void processRecurringTransactions() {
         logger.info("Starting processRecurringTransactions...");
 

@@ -6,7 +6,7 @@ INSERT INTO category (name, type) VALUES ('給与', 'income');
 INSERT INTO category (name, type) VALUES ('年金', 'income');
 INSERT INTO category (name, type) VALUES ('臨時収入', 'income');
 
-INSERT INTO users (username, email, password) VALUES ('user1', 'user1@example.com', 'password1');
+INSERT INTO users (username, email, password) VALUES ('user1', 'user1@example.com', '$2a$08$9AZdZklnMPgydtYY9i3lyOowGU8aYzo8tBtYelr38FbM2AbLSa');
 INSERT INTO users (username, email, password) VALUES ('user2', 'user2@example.com', 'password2');
 
 INSERT INTO transaction (user_id, date, amount, category_id, description, is_scheduled) VALUES (1, '2024-01-10', 500, 1, '食料品', false);

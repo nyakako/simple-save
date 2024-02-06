@@ -1,8 +1,11 @@
 package com.nyakako.simplesave.controller;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 
 import com.nyakako.simplesave.model.User;
@@ -12,6 +15,9 @@ import com.nyakako.simplesave.service.UserService;
 public class UserController {
 
     private final UserService userService;
+
+    @Autowired
+    private PasswordEncoder passwordEncoder;
 
     public UserController(UserService userService) {
         this.userService = userService;
@@ -25,7 +31,9 @@ public class UserController {
     }
 
     @PostMapping("/register")
-    public String registerUser(User user) {
+    public String registerUser(@ModelAttribute User user) {
+        String encodedPassword = passwordEncoder.encode(user.getPassword());
+        user.setPassword(encodedPassword);
         userService.registerUser(user);
         return "redirect:/login";
     }

@@ -17,12 +17,9 @@
             <div class="card-body login-card-body">
               <p class="login-box-msg">ユーザー情報を入力してください</p>
 
-              <form method="post">
-
-
+              <form th:action="@{/register}" method="post">
                 <div class="input-group mb-3">
-                  <input type="text" name="{{ form.username.name }}" class="form-control" placeholder="ユーザー名" required
-                    autofocus />
+                  <input type="text" name="username" class="form-control" placeholder="ユーザー名" required autofocus />
                   <div class="input-group-append">
                     <div class="input-group-text">
                       <span class="fas fa-user"></span>
@@ -30,10 +27,8 @@
                   </div>
                 </div>
 
-
                 <div class="input-group mb-3">
-                  <input type="email" name="{{ form.email.name }}" class="form-control" placeholder="メールアドレス"
-                    required />
+                  <input type="email" name="email" class="form-control" placeholder="メールアドレス" required />
                   <div class="input-group-append">
                     <div class="input-group-text">
                       <span class="fas fa-envelope"></span>
@@ -41,11 +36,8 @@
                   </div>
                 </div>
 
-
-
                 <div class="input-group mb-3">
-                  <input type="password" name="{{ form.password1.name }}" class="form-control" placeholder="パスワード"
-                    required />
+                  <input type="password" name="password" class="form-control" placeholder="パスワード" required />
                   <div class="input-group-append">
                     <div class="input-group-text">
                       <span class="fas fa-lock"></span>
@@ -53,42 +45,38 @@
                   </div>
                 </div>
 
-
-                <div class="input-group mb-3">
+                <!-- <div class="input-group mb-3">
                   <input type="password" name="{{ form.password2.name }}" class="form-control" placeholder="パスワード（確認）"
                     required />
                   <div class="input-group-append">
                     <div class="input-group-text">
                       <span class="fas fa-lock"></span>
                     </div>
-                  </div>
+                  </div> -->
+            </div>
 
-                </div>
+            <button class="btn btn-primary w-100 py-2 my-2" type="submit">新規登録</button>
+            </form>
 
-
-                <button class="btn btn-primary w-100 py-2 my-2" type="submit">新規登録</button>
-              </form>
-
-
-              <div class="social-auth-links text-center mb-3">
-                <p>- OR -</p>
-
-              </div>
-              <a class="btn btn-outline-secondary w-100 py-2" th:href="@{/login}">ログイン画面へ戻る</a>
-              <!-- /.social-auth-links -->
-
-              <!-- <p class="mb-1">
-        <a href="forgot-password.html">I forgot my password</a>
-      </p> -->
+            <div class="social-auth-links text-center mb-3">
+              <p>- OR -</p>
 
             </div>
-            <!-- /.login-card-body -->
-          </div>
-        </div>
-        <!-- /.login-box -->
+            <a class="btn btn-outline-secondary w-100 py-2" th:href="@{/login}">ログイン画面へ戻る</a>
+            <!-- /.social-auth-links -->
 
+            <!-- <p class="mb-1">
+              <a href="forgot-password.html">I forgot my password</a>
+            </p> -->
+
+          </div>
+          <!-- /.login-card-body -->
+        </div>
       </div>
+      <!-- /.login-box -->
+
     </div>
+</div>
 </div>
 </section>
 </div>

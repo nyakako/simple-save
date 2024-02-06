@@ -17,10 +17,19 @@
             <div class="card-body login-card-body">
               <p class="login-box-msg">ログイン情報を入力してください</p>
 
-              <form action="/login" method="post">
+              <form th:action="@{/login}" method="post">
 
-                <div class="input-group mb-3">
+                <!-- <div class="input-group mb-3">
                   <input type="email" class="form-control" placeholder="メールアドレス" name="{{ form.username.name }}"
+                    required autofocus>
+                  <div class="input-group-append">
+                    <div class="input-group-text">
+                      <span class="fas fa-envelope"></span>
+                    </div>
+                  </div>
+                </div> -->
+                <div class="input-group mb-3">
+                  <input type="text" class="form-control" placeholder="ユーザー名" name="username"
                     required autofocus>
                   <div class="input-group-append">
                     <div class="input-group-text">
@@ -29,7 +38,7 @@
                   </div>
                 </div>
                 <div class="input-group mb-3">
-                  <input type="password" class="form-control" placeholder="パスワード" name="{{ form.password.name }}"
+                  <input type="password" class="form-control" placeholder="パスワード" name="password"
                     required>
                   <div class="input-group-append">
                     <div class="input-group-text">
