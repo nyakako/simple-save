@@ -2,14 +2,18 @@ package com.nyakako.simplesave.controller;
 
 import com.nyakako.simplesave.model.Category;
 import com.nyakako.simplesave.model.Transaction;
+import com.nyakako.simplesave.model.User;
+import com.nyakako.simplesave.security.CustomUserDetails;
 import com.nyakako.simplesave.service.CategoryService;
 import com.nyakako.simplesave.service.TransactionService;
+import com.nyakako.simplesave.service.UserService;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.time.LocalDate;
 
 import org.springframework.lang.NonNull;
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -23,15 +27,25 @@ public class TransactionController {
 
     private final TransactionService transactionService;
     private final CategoryService categoryService;
+    private final UserService userService;
 
-    public TransactionController(TransactionService transactionService, CategoryService categoryService) {
+    public TransactionController(TransactionService transactionService, CategoryService categoryService,
+            UserService userService) {
         this.transactionService = transactionService;
         this.categoryService = categoryService;
+        this.userService = userService;
     }
 
     @GetMapping("/transactions")
-    public String showTransactions(Model model) {
-        model.addAttribute("transactions", transactionService.findAllTransactions());
+    public String showTransactions(Model model, Authentication authentication) {
+        // ログインユーザーの明細取得
+        CustomUserDetails userDetails = (CustomUserDetails) authentication.getPrincipal();
+        Long userId = userDetails.getUserId(); // ユーザーIDの取得
+        Iterable<Transaction> transactions = transactionService.findTransactionsByUserId(userId);
+
+        // 全明細取得
+        // List<Transaction> transactions = transactionService.findAllTransactions();
+        model.addAttribute("transactions", transactions);
         model.addAttribute("title", "取引一覧 - simplesave");
         model.addAttribute("content", "transactions");
         return "layout";
@@ -49,12 +63,21 @@ public class TransactionController {
 
     @PostMapping("/transactions/new")
     public String addTransaction(@NonNull @ModelAttribute Transaction transaction,
-            @NonNull @RequestParam("categoryId") Long categoryId) {
+            @NonNull @RequestParam("categoryId") Long categoryId, Authentication authentication) {
+
+        CustomUserDetails userDetails = (CustomUserDetails) authentication.getPrincipal();
+        Long userId = userDetails.getUserId(); // ユーザーIDの取得
+        if (userId != null) {
+            User user = userService.findUserById(userId).orElse(null);
+            transaction.setUser(user);
+        }
+
         // categoryIdを使用してCategoryオブジェクトを取得
         Category category = categoryService.findCategoryById(categoryId).orElse(null);
 
         // TransactionオブジェクトにCategoryをセット
         transaction.setCategory(category);
+
         transactionService.saveTransaction(transaction);
         return "redirect:/transactions";
     }

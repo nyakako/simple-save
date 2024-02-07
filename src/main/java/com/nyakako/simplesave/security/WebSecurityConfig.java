@@ -1,4 +1,4 @@
-package com.nyakako.simplesave.config;
+package com.nyakako.simplesave.security;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

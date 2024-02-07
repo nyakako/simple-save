@@ -9,11 +9,11 @@
             <ul class="navbar-nav"></ul>
 
             <!-- Right navbar links -->
-            <ul class="navbar-nav ml-auto">
+            <ul class="navbar-nav ml-auto" sec:authorize="isAuthenticated()">
                 <li class="nav-item dropdown">
                     <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown4" role="button"
                         data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                        username
+                        <span sec:authentication="name">username</span>
                     </a>
                     <div class="dropdown-menu" aria-labelledby="navbarDropdown4">
                         <a class="dropdown-item" th:href="@{/settings/categories-expense}">設定</a>
