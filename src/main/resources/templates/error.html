@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="ja" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/admin-lte@3.1/dist/css/adminlte.min.css" />
+  <link rel="stylesheet" href="/css/style.css" />
+  <title th:text="${title} ?: 'simplesave'">simplesave</title>
+</head>
+
+<body class="layout-fixed layout-navbar-fixed sidebar-closed sidebar-collapse">
+  <div class="wrapper">
+    <!-- 共通のヘッダー内容 -->
+    <header th:replace="~{header::header}">
+      <!-- 個別ページのコンテンツ -->
+    </header>
+
+    <main class="content-wrapper px-4 py-2">
+
+      <!-- Main content -->
+      <section class="content">
+        <div class="error-page">
+          <h2 class="headline text-warning"> error</h2>
+
+          <div class="error-content">
+            <h3><i class="fas fa-exclamation-triangle text-warning"></i> アクセス権限がありません</h3>
+
+            <p>
+              申し訳ありませんが、このページへのアクセス権限がありません。
+              ハンドリング外エラー
+            </p>
+          </div>
+          <!-- /.error-content -->
+        </div>
+        <!-- /.error-page -->
+      </section>
+      <!-- /.content -->
+    </main>
+    <footer class="main-footer">
+      <!-- 共通のフッター内容 -->
+      footer
+    </footer>
+  </div>
+
+  <!-- 共通のJavaScriptファイル等 -->
+  <script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.slim.min.js"
+    integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj"
+    crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.bundle.min.js"
+    integrity="sha384-Fy6S3B9q64WdZWQUiU+q4/2Lc9npb8tCaSX9FK7E8HnRr0Jz8D6OP9dO5Vg3Q9ct"
+    crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/admin-lte@3.1/dist/js/adminlte.min.js"></script>
+</body>
+
+</html><!DOCTYPE html>
+<html lang="ja" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/admin-lte@3.1/dist/css/adminlte.min.css" />
+  <link rel="stylesheet" href="/css/style.css" />
+  <title th:text="${title} ?: 'simplesave'">simplesave</title>
+</head>
+
+<body class="layout-fixed layout-navbar-fixed sidebar-closed sidebar-collapse">
+  <div class="wrapper">
+    <!-- 共通のヘッダー内容 -->
+    <header th:replace="~{header::header}">
+      <!-- 個別ページのコンテンツ -->
+    </header>
+
+    <main class="content-wrapper px-4 py-2">
+
+      <!-- Main content -->
+      <section class="content">
+        <div class="error-page">
+          <h2 class="headline text-warning"> 403</h2>
+
+          <div class="error-content">
+            <h3><i class="fas fa-exclamation-triangle text-warning"></i> アクセス権限がありません</h3>
+
+            <p>
+              申し訳ありませんが、このページへのアクセス権限がありません。
+            </p>
+          </div>
+          <!-- /.error-content -->
+        </div>
+        <!-- /.error-page -->
+      </section>
+      <!-- /.content -->
+    </main>
+    <footer class="main-footer">
+      <!-- 共通のフッター内容 -->
+      footer
+    </footer>
+  </div>
+
+  <!-- 共通のJavaScriptファイル等 -->
+  <script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.slim.min.js"
+    integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj"
+    crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.bundle.min.js"
+    integrity="sha384-Fy6S3B9q64WdZWQUiU+q4/2Lc9npb8tCaSX9FK7E8HnRr0Jz8D6OP9dO5Vg3Q9ct"
+    crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/admin-lte@3.1/dist/js/adminlte.min.js"></script>
+</body>
+
+</html>

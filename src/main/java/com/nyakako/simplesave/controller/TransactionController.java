@@ -13,6 +13,7 @@ import java.math.RoundingMode;
 import java.time.LocalDate;
 
 import org.springframework.lang.NonNull;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -52,10 +53,12 @@ public class TransactionController {
     }
 
     @GetMapping("/transactions/new")
-    public String newTransaction(Model model) {
+    public String newTransaction(Model model, Authentication authentication) {
         LocalDate today = LocalDate.now();
+        CustomUserDetails userDetails = (CustomUserDetails) authentication.getPrincipal();
+        Long userId = userDetails.getUserId(); // ユーザーIDの取得
         model.addAttribute("today", today);
-        model.addAttribute("categories", categoryService.findAllCategories());
+        model.addAttribute("categories", categoryService.findCategoriesByUserId(userId));
         model.addAttribute("title", "新規明細登録 - simplesave");
         model.addAttribute("content", "new-transaction");
         return "layout";
@@ -83,20 +86,42 @@ public class TransactionController {
     }
 
     @GetMapping("/transactions/edit/{id}")
-    public String editTransaction(@PathVariable @NonNull Long id, Model model) {
+    public String editTransaction(@PathVariable @NonNull Long id, Model model, Authentication authentication) {
+        CustomUserDetails userDetails = (CustomUserDetails) authentication.getPrincipal();
+        Long userId = userDetails.getUserId(); // ユーザーIDの取得
+
         Transaction transaction = transactionService.findTransactionById(id).orElse(null);
+        // 対象が存在しない、または対象の所有者がログインユーザーでない場合はアクセス制限
+        if (transaction == null || !transaction.getUser().getId().equals(userId)) {
+            // アクセス拒否の処理
+            throw new AccessDeniedException("このページにアクセスする権限がありません。");
+        }
+
         BigDecimal amount = transaction.getAmount();
         transaction.setAmount(amount.setScale(0, RoundingMode.DOWN));
         model.addAttribute("transaction", transaction);
-        model.addAttribute("categories", categoryService.findAllCategories());
+        model.addAttribute("categories", categoryService.findCategoriesByUserId(userId));
         model.addAttribute("title", "明細編集 - simplesave");
         model.addAttribute("content", "edit-transaction");
         return "layout";
     }
 
     @PostMapping("/transactions/edit/{id}")
-    public String updateTransaction(@PathVariable Long id, @NonNull @ModelAttribute Transaction transaction,
-            @NonNull @RequestParam("categoryId") Long categoryId) {
+    public String updateTransaction(@PathVariable @NonNull Long id, @NonNull @ModelAttribute Transaction transaction,
+            @NonNull @RequestParam("categoryId") Long categoryId, Authentication authentication) {
+        CustomUserDetails userDetails = (CustomUserDetails) authentication.getPrincipal();
+        Long userId = userDetails.getUserId(); // ユーザーIDの取得
+        if (userId != null) {
+            User user = userService.findUserById(userId).orElse(null);
+            transaction.setUser(user);
+        }
+
+        Transaction transactionForConfirm = transactionService.findTransactionById(id).orElse(null);
+        // 対象の所有者がログインユーザーでない場合はアクセス制限
+        if (!transactionForConfirm.getUser().getId().equals(userId)) {
+            // アクセス拒否の処理
+            throw new AccessDeniedException("このページにアクセスする権限がありません。");
+        }
         Category category = categoryService.findCategoryById(categoryId).orElse(null);
         transaction.setCategory(category);
 
@@ -105,7 +130,16 @@ public class TransactionController {
     }
 
     @PostMapping("/transactions/delete/{id}")
-    public String deleteTransaction(@NonNull @PathVariable Long id) {
+    public String deleteTransaction(@NonNull @PathVariable Long id, Authentication authentication) {
+        CustomUserDetails userDetails = (CustomUserDetails) authentication.getPrincipal();
+        Long userId = userDetails.getUserId(); // ユーザーIDの取得
+
+        Transaction transaction = transactionService.findTransactionById(id).orElse(null);
+        // 対象が存在しない、または対象の所有者がログインユーザーでない場合はアクセス制限
+        if (transaction == null || !transaction.getUser().getId().equals(userId)) {
+            // アクセス拒否の処理
+            throw new AccessDeniedException("このページにアクセスする権限がありません。");
+        }
         transactionService.deleteTransacition(id);
         return "redirect:/transactions";
     }
