@@ -12,7 +12,7 @@ import com.nyakako.simplesave.repository.TransactionRepository;
 public class TransactionService {
     private final TransactionRepository transactionRepository;
 
-    public TransactionService(TransactionRepository transactionRepository){
+    public TransactionService(TransactionRepository transactionRepository) {
         this.transactionRepository = transactionRepository;
     }
 
@@ -20,7 +20,11 @@ public class TransactionService {
         return transactionRepository.findAll();
     }
 
-    public Optional<Transaction> findTransactionById(@NonNull Long id){
+    public Iterable<Transaction> findTransactionsByUserId(Long userId) {
+        return transactionRepository.findByUserId(userId);
+    }
+
+    public Optional<Transaction> findTransactionById(@NonNull Long id) {
         return transactionRepository.findById(id);
     }
 
@@ -31,6 +35,5 @@ public class TransactionService {
     public void deleteTransacition(@NonNull Long id) {
         transactionRepository.deleteById(id);
     }
-
 
 }

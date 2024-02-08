@@ -1,4 +1,4 @@
-package com.nyakako.simplesave.config;
+package com.nyakako.simplesave.security;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -16,7 +16,8 @@ public class WebSecurityConfig {
                 http
                                 // Permit access to H2 console, login, and register pages
                                 .authorizeHttpRequests(authz -> authz
-                                                .requestMatchers("/h2-console/**", "/register", "/login").permitAll()
+                                                .requestMatchers("/h2-console/**", "/register", "/login", "/css/**")
+                                                .permitAll()
                                                 .anyRequest().authenticated())
                                 // Configure form login
                                 .formLogin(form -> form
@@ -26,17 +27,18 @@ public class WebSecurityConfig {
                                                 .permitAll())
                                 // Configure logout
                                 .logout(logout -> logout
-                                                .logoutUrl("/logout")  // ログアウトを実行するURL
-                                                .logoutSuccessUrl("/login?logout")  // ログアウト成功後にリダイレクトするURL
-                                                .invalidateHttpSession(true)  // HTTPセッションを無効化する
-                                                .deleteCookies("JSESSIONID")  // JSESSIONIDクッキーを削除する
+                                                .logoutUrl("/logout") // ログアウトを実行するURL
+                                                .logoutSuccessUrl("/login?logout") // ログアウト成功後にリダイレクトするURL
+                                                .invalidateHttpSession(true) // HTTPセッションを無効化する
+                                                .deleteCookies("JSESSIONID") // JSESSIONIDクッキーを削除する
                                                 .permitAll())
                                 // Disable CSRF protection for the H2 console
                                 .csrf(csrf -> csrf
                                                 .ignoringRequestMatchers("/h2-console/**"))
                                 // Allow frames for H2 console
                                 .headers(headers -> headers.frameOptions(
-                                                frame -> frame.sameOrigin()));
+                                                frame -> frame.sameOrigin()))
+                                .exceptionHandling(eh -> eh.accessDeniedPage("/403error"));
 
                 return http.build();
         }

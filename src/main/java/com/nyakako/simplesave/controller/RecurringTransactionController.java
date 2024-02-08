@@ -6,13 +6,18 @@ import java.time.LocalDate;
 import java.util.List;
 
 import org.springframework.lang.NonNull;
+import org.springframework.security.access.AccessDeniedException;
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 
 import com.nyakako.simplesave.model.Category;
 import com.nyakako.simplesave.model.RecurringTransaction;
+import com.nyakako.simplesave.model.User;
+import com.nyakako.simplesave.security.CustomUserDetails;
 import com.nyakako.simplesave.service.CategoryService;
 import com.nyakako.simplesave.service.RecurringTransactionService;
+import com.nyakako.simplesave.service.UserService;
 
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -26,16 +31,20 @@ public class RecurringTransactionController {
 
     private final RecurringTransactionService recurringTransactionService;
     private final CategoryService categoryService;
+    private final UserService userService;
 
     public RecurringTransactionController(RecurringTransactionService recurringTransactionService,
-            CategoryService categoryService) {
+            CategoryService categoryService, UserService userService) {
         this.recurringTransactionService = recurringTransactionService;
         this.categoryService = categoryService;
+        this.userService = userService;
     }
 
     @GetMapping("/settings/recurring-transactions")
-    public String showRecurringTransactions(Model model) {
-        List<RecurringTransaction> transactions = recurringTransactionService.findAllRecurringTransaction();
+    public String showRecurringTransactions(Model model, Authentication authentication) {
+        CustomUserDetails userDetails = (CustomUserDetails) authentication.getPrincipal();
+        Long userId = userDetails.getUserId(); // ユーザーIDの取得
+        List<RecurringTransaction> transactions = recurringTransactionService.findRecurringTransactionsByUserId(userId);
         model.addAttribute("transactions", transactions);
         model.addAttribute("title", "定期取引一覧 - simplesave");
         model.addAttribute("content", "recurring-transactions");
@@ -43,12 +52,14 @@ public class RecurringTransactionController {
     }
 
     @GetMapping("/recurring-transactions/new")
-    public String newRecurringTransaction(Model model) {
+    public String newRecurringTransaction(Model model, Authentication authentication) {
         LocalDate today = LocalDate.now();
         LocalDate oneMonthLater = today.plusMonths(1);
+        CustomUserDetails userDetails = (CustomUserDetails) authentication.getPrincipal();
+        Long userId = userDetails.getUserId(); // ユーザーIDの取得
         model.addAttribute("today", today);
         model.addAttribute("oneMonthLater", oneMonthLater);
-        model.addAttribute("categories", categoryService.findAllCategories());
+        model.addAttribute("categories", categoryService.findCategoriesByUserId(userId));
         model.addAttribute("title", "新規明細登録 - simplesave");
         model.addAttribute("content", "new-recurring-transaction");
         return "layout";
@@ -56,7 +67,15 @@ public class RecurringTransactionController {
 
     @PostMapping("/recurring-transactions/new")
     public String addRecurringTransaction(@ModelAttribute RecurringTransaction transaction,
-            @NonNull @RequestParam("categoryId") Long categoryId) {
+            @NonNull @RequestParam("categoryId") Long categoryId, Authentication authentication) {
+
+        CustomUserDetails userDetails = (CustomUserDetails) authentication.getPrincipal();
+        Long userId = userDetails.getUserId(); // ユーザーIDの取得
+        if (userId != null) {
+            User user = userService.findUserById(userId).orElse(null);
+            transaction.setUser(user);
+        }
+
         // categoryIdを使用してCategoryオブジェクトを取得
         Category category = categoryService.findCategoryById(categoryId).orElse(null);
 
@@ -99,20 +118,42 @@ public class RecurringTransactionController {
     }
 
     @GetMapping("/recurring-transactions/edit/{id}")
-    public String editRecurringTransaction(@PathVariable @NonNull Long id, Model model) {
+    public String editRecurringTransaction(@PathVariable @NonNull Long id, Model model, Authentication authentication) {
+        CustomUserDetails userDetails = (CustomUserDetails) authentication.getPrincipal();
+        Long userId = userDetails.getUserId(); // ユーザーIDの取得
         RecurringTransaction transaction = recurringTransactionService.findRecurringTransactionById(id).orElse(null);
+
+        // 対象が存在しない、または対象の所有者がログインユーザーでない場合はアクセス制限
+        if (transaction == null || !transaction.getUser().getId().equals(userId)) {
+            // アクセス拒否の処理
+            throw new AccessDeniedException("このページにアクセスする権限がありません。");
+        }
         BigDecimal amount = transaction.getAmount();
         transaction.setAmount(amount.setScale(0, RoundingMode.DOWN));
         model.addAttribute("transaction", transaction);
-        model.addAttribute("categories", categoryService.findAllCategories());
+        model.addAttribute("categories", categoryService.findCategoriesByUserId(userId));
         model.addAttribute("title", "定期入力の編集 - simplesave");
         model.addAttribute("content", "edit-recurring-transaction");
         return "layout";
     }
 
     @PostMapping("/recurring-transactions/edit/{id}")
-    public String updateRecurringTransaction(@PathVariable Long id, @ModelAttribute RecurringTransaction transaction,
-            @NonNull @RequestParam("categoryId") Long categoryId) {
+    public String updateRecurringTransaction(@PathVariable @NonNull Long id,
+            @ModelAttribute RecurringTransaction transaction,
+            @NonNull @RequestParam("categoryId") Long categoryId, Authentication authentication) {
+        CustomUserDetails userDetails = (CustomUserDetails) authentication.getPrincipal();
+        Long userId = userDetails.getUserId(); // ユーザーIDの取得
+        if (userId != null) {
+            User user = userService.findUserById(userId).orElse(null);
+            transaction.setUser(user);
+        }
+
+        RecurringTransaction transactionForConfirm = recurringTransactionService.findRecurringTransactionById(id)
+                .orElse(null);
+        // 対象の所有者がログインユーザーでない場合はアクセス制限
+        if (!transactionForConfirm.getUser().getId().equals(userId)) {
+            throw new AccessDeniedException("このページにアクセスする権限がありません。");
+        }
         Category category = categoryService.findCategoryById(categoryId).orElse(null);
         transaction.setCategory(category);
 
@@ -127,7 +168,17 @@ public class RecurringTransactionController {
     }
 
     @PostMapping("/recurring-transactions/delete/{id}")
-    public String deleteRecurringTransaction(@NonNull @PathVariable Long id, RedirectAttributes redirectAttribtes) {
+    public String deleteRecurringTransaction(@NonNull @PathVariable Long id, RedirectAttributes redirectAttribtes,
+            Authentication authentication) {
+        CustomUserDetails userDetails = (CustomUserDetails) authentication.getPrincipal();
+        Long userId = userDetails.getUserId(); // ユーザーIDの取得
+
+        RecurringTransaction transaction = recurringTransactionService.findRecurringTransactionById(id).orElse(null);
+
+        // 対象が存在しない、または対象の所有者がログインユーザーでない場合はアクセス制限
+        if (transaction == null || !transaction.getUser().getId().equals(userId)) {
+            throw new AccessDeniedException("このページにアクセスする権限がありません。");
+        }
         recurringTransactionService.deleteRecurringTransacition(id);
         return "redirect:/settings/recurring-transactions";
     }

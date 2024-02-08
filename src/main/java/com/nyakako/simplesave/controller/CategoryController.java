@@ -1,11 +1,16 @@
 package com.nyakako.simplesave.controller;
 
 import com.nyakako.simplesave.model.Category;
+import com.nyakako.simplesave.model.User;
+import com.nyakako.simplesave.security.CustomUserDetails;
 import com.nyakako.simplesave.service.CategoryService;
+import com.nyakako.simplesave.service.UserService;
 
 import java.util.List;
 
 import org.springframework.lang.NonNull;
+import org.springframework.security.access.AccessDeniedException;
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -18,14 +23,18 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 public class CategoryController {
 
     private final CategoryService categoryService;
+    private final UserService userService;
 
-    public CategoryController(CategoryService categoryService) {
+    public CategoryController(CategoryService categoryService, UserService userService) {
         this.categoryService = categoryService;
+        this.userService = userService;
     }
 
     @GetMapping("/settings/categories-expense")
-    public String showExpenseCategory(Model model) {
-        List<Category> expenseCategories = categoryService.findCategoriesByType("expense");
+    public String showExpenseCategory(Model model, Authentication authentication) {
+        CustomUserDetails userDetails = (CustomUserDetails) authentication.getPrincipal();
+        Long userId = userDetails.getUserId(); // ユーザーIDの取得
+        List<Category> expenseCategories = categoryService.findCategoriesByTypeAndUserId("expense", userId);
         model.addAttribute("expenseCategories", expenseCategories);
         model.addAttribute("title", "支出カテゴリ設定 - simplesave");
         model.addAttribute("content", "categories-expense");
@@ -40,15 +49,30 @@ public class CategoryController {
     }
 
     @PostMapping("/categories-expense/new")
-    public String addExpenseCategory(@NonNull @ModelAttribute Category category) {
+    public String addExpenseCategory(@NonNull @ModelAttribute Category category, Authentication authentication) {
+        CustomUserDetails userDetails = (CustomUserDetails) authentication.getPrincipal();
+        Long userId = userDetails.getUserId(); // ユーザーIDの取得
+        if (userId != null) {
+            User user = userService.findUserById(userId).orElse(null);
+            category.setUser(user);
+        }
+
         category.setType("expense");
         categoryService.saveCategory(category);
         return "redirect:/settings/categories-expense";
     }
 
     @GetMapping("/categories-expense/edit/{id}")
-    public String editExpenseCategory(@PathVariable @NonNull Long id, Model model) {
+    public String editExpenseCategory(@PathVariable @NonNull Long id, Model model, Authentication authentication) {
+        CustomUserDetails userDetails = (CustomUserDetails) authentication.getPrincipal();
+        Long userId = userDetails.getUserId(); // ログインユーザーのIDを取得
+
         Category category = categoryService.findCategoryById(id).orElse(null);
+        // カテゴリが存在しない、またはカテゴリの所有者がログインユーザーでない場合はアクセス制限
+        if (category == null || !category.getUser().getId().equals(userId)) {
+            // アクセス拒否の処理
+            throw new AccessDeniedException("このページにアクセスする権限がありません。");
+        }
         model.addAttribute("category", category);
         model.addAttribute("title", "支出カテゴリ編集 - simplesave");
         model.addAttribute("content", "edit-expense-category");
@@ -56,17 +80,40 @@ public class CategoryController {
     }
 
     @PostMapping("/categories-expense/edit/{id}")
-    public String updateExpenseCategory(@PathVariable Long id, @NonNull @ModelAttribute Category category) {
+    public String updateExpenseCategory(@PathVariable @NonNull Long id, @NonNull @ModelAttribute Category category,
+            Authentication authentication) {
+        CustomUserDetails userDetails = (CustomUserDetails) authentication.getPrincipal();
+        Long userId = userDetails.getUserId(); // ログインユーザーのIDを取得
+        if (userId != null) {
+            User user = userService.findUserById(userId).orElse(null);
+            category.setUser(user);
+        }
+        Category categoryForConfirm = categoryService.findCategoryById(id).orElse(null);
+        // 対象の所有者がログインユーザーでない場合はアクセス制限
+        if (!categoryForConfirm.getUser().getId().equals(userId)) {
+            // アクセス拒否の処理
+            throw new AccessDeniedException("このページにアクセスする権限がありません。");
+        }
+
         category.setType("expense");
         categoryService.saveCategory(category);
         return "redirect:/settings/categories-expense";
     }
 
     @PostMapping("/categories-expense/delete/{id}")
-    public String deleteExpenseCategory(@NonNull @PathVariable Long id, RedirectAttributes redirectAttribtes) {
+    public String deleteExpenseCategory(@NonNull @PathVariable Long id, RedirectAttributes redirectAttribtes,
+            Authentication authentication) {
+        CustomUserDetails userDetails = (CustomUserDetails) authentication.getPrincipal();
+        Long userId = userDetails.getUserId(); // ログインユーザーのIDを取得
+        Category category = categoryService.findCategoryById(id).orElse(null);
+        // カテゴリの所有者がログインユーザーでない場合はアクセス制限
+        if (!category.getUser().getId().equals(userId)) {
+            // アクセス拒否の処理
+            throw new AccessDeniedException("このページにアクセスする権限がありません。");
+        }
         if (!categoryService.isCategoryUsed(id)) {
             categoryService.deleteCategory(id);
-            redirectAttribtes.addFlashAttribute("successMessage","カテゴリが正常に削除されました" );
+            redirectAttribtes.addFlashAttribute("successMessage", "カテゴリが正常に削除されました");
         } else {
             redirectAttribtes.addFlashAttribute("errorMessage", "このカテゴリは明細で使用されているため、削除できません。");
         }
@@ -74,8 +121,10 @@ public class CategoryController {
     }
 
     @GetMapping("/settings/categories-income")
-    public String showIncomeCategory(Model model) {
-        List<Category> incomeCategories = categoryService.findCategoriesByType("income");
+    public String showIncomeCategory(Model model, Authentication authentication) {
+        CustomUserDetails userDetails = (CustomUserDetails) authentication.getPrincipal();
+        Long userId = userDetails.getUserId(); // ユーザーIDの取得
+        List<Category> incomeCategories = categoryService.findCategoriesByTypeAndUserId("income", userId);
         model.addAttribute("incomeCategories", incomeCategories);
         model.addAttribute("title", "収入カテゴリ設定 - simplesave");
         model.addAttribute("content", "categories-income");
@@ -90,15 +139,30 @@ public class CategoryController {
     }
 
     @PostMapping("/categories-income/new")
-    public String addIncomeCategory(@NonNull @ModelAttribute Category category) {
+    public String addIncomeCategory(@NonNull @ModelAttribute Category category, Authentication authentication) {
+        CustomUserDetails userDetails = (CustomUserDetails) authentication.getPrincipal();
+        Long userId = userDetails.getUserId(); // ユーザーIDの取得
+        if (userId != null) {
+            User user = userService.findUserById(userId).orElse(null);
+            category.setUser(user);
+        }
         category.setType("income");
         categoryService.saveCategory(category);
         return "redirect:/settings/categories-income";
     }
 
     @GetMapping("/categories-income/edit/{id}")
-    public String editIncomeCategory(@PathVariable @NonNull Long id, Model model) {
+    public String editIncomeCategory(@PathVariable @NonNull Long id, Model model, Authentication authentication) {
+        CustomUserDetails userDetails = (CustomUserDetails) authentication.getPrincipal();
+        Long userId = userDetails.getUserId(); // ログインユーザーのIDを取得
+
         Category category = categoryService.findCategoryById(id).orElse(null);
+        
+        // またはカテゴリの所有者がログインユーザーでない場合はアクセス制限
+        if (category == null || !category.getUser().getId().equals(userId)) {
+            // アクセス拒否の処理
+            throw new AccessDeniedException("このページにアクセスする権限がありません。");
+        }
         model.addAttribute("category", category);
         model.addAttribute("title", "収入カテゴリ編集 - simplesave");
         model.addAttribute("content", "edit-income-category");
@@ -106,17 +170,40 @@ public class CategoryController {
     }
 
     @PostMapping("/categories-income/edit/{id}")
-    public String updateIncomeCategory(@PathVariable Long id, @NonNull @ModelAttribute Category category) {
+    public String updateIncomeCategory(@PathVariable @NonNull Long id, @NonNull @ModelAttribute Category category,
+            Authentication authentication) {
+        CustomUserDetails userDetails = (CustomUserDetails) authentication.getPrincipal();
+        Long userId = userDetails.getUserId(); // ログインユーザーのIDを取得
+        if (userId != null) {
+            User user = userService.findUserById(userId).orElse(null);
+            category.setUser(user);
+        }
+        Category categoryForConfirm = categoryService.findCategoryById(id).orElse(null);
+        // 対象の所有者がログインユーザーでない場合はアクセス制限
+        if (!categoryForConfirm.getUser().getId().equals(userId)) {
+            // アクセス拒否の処理
+            throw new AccessDeniedException("このページにアクセスする権限がありません。");
+        }
         category.setType("income");
         categoryService.saveCategory(category);
         return "redirect:/settings/categories-income";
     }
 
     @PostMapping("/categories-income/delete/{id}")
-    public String deleteIncomeCategory(@NonNull @PathVariable Long id, RedirectAttributes redirectAttribtes) {
+    public String deleteIncomeCategory(@NonNull @PathVariable Long id, RedirectAttributes redirectAttribtes,
+            Authentication authentication) {
+        CustomUserDetails userDetails = (CustomUserDetails) authentication.getPrincipal();
+        Long userId = userDetails.getUserId(); // ログインユーザーのIDを取得
+
+        Category category = categoryService.findCategoryById(id).orElse(null);
+        // またはカテゴリの所有者がログインユーザーでない場合はアクセス制限
+        if (!category.getUser().getId().equals(userId)) {
+            // アクセス拒否の処理
+            throw new AccessDeniedException("このページにアクセスする権限がありません。");
+        }
         if (!categoryService.isCategoryUsed(id)) {
             categoryService.deleteCategory(id);
-            redirectAttribtes.addFlashAttribute("successMessage","カテゴリが正常に削除されました" );
+            redirectAttribtes.addFlashAttribute("successMessage", "カテゴリが正常に削除されました");
         } else {
             redirectAttribtes.addFlashAttribute("errorMessage", "このカテゴリは明細で使用されているため、削除できません。");
         }

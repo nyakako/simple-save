@@ -1,4 +1,4 @@
-package com.nyakako.simplesave.service;
+package com.nyakako.simplesave.security;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -14,11 +14,11 @@ import com.nyakako.simplesave.model.User;
 import com.nyakako.simplesave.repository.UserRepository;
 
 @Service
-public class CustumUserDetailsService implements UserDetailsService {
+public class CustomUserDetailsService implements UserDetailsService {
 
     private final UserRepository userRepository;
 
-    public CustumUserDetailsService(UserRepository userRepository) {
+    public CustomUserDetailsService(UserRepository userRepository) {
         this.userRepository = userRepository;
     }
 
@@ -30,7 +30,11 @@ public class CustumUserDetailsService implements UserDetailsService {
         List<GrantedAuthority> authorities = new ArrayList<>();
         authorities.add(new SimpleGrantedAuthority("ROLE_USER"));
 
-        return new org.springframework.security.core.userdetails.User(user.getUsername(), user.getPassword(),
-                authorities);
+        return new CustomUserDetails(
+                new org.springframework.security.core.userdetails.User(
+                        user.getUsername(),
+                        user.getPassword(),
+                        new ArrayList<>()),
+                user.getId());
     }
 }
