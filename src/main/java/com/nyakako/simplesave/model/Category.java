@@ -24,7 +24,7 @@ public class Category {
     public Category() {
     }
 
-    // 明示的に必要なコンストラクタを追加
+    // ユーザー登録時の自動カテゴリ追加のために必要なコンストラクタ
     public Category(String name, String type, User user) {
         this.name = name;
         this.type = type;
