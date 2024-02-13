@@ -11,12 +11,19 @@ import org.springframework.security.web.SecurityFilterChain;
 @EnableWebSecurity
 public class WebSecurityConfig {
 
+        private final CustomUserDetailsService userDetailsService;
+
+        public WebSecurityConfig(CustomUserDetailsService userDetailsService) {
+                this.userDetailsService = userDetailsService;
+        }
+
         @Bean
         public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
                 http
+                                .userDetailsService(userDetailsService)
                                 // Permit access to H2 console, login, and register pages
                                 .authorizeHttpRequests(authz -> authz
-                                                .requestMatchers("/h2-console/**", "/register", "/login", "/css/**")
+                                                .requestMatchers("/h2-console/**", "/register", "/login", "/css/**", "/js/**")
                                                 .permitAll()
                                                 .anyRequest().authenticated())
                                 // Configure form login
@@ -24,6 +31,7 @@ public class WebSecurityConfig {
                                                 .loginPage("/login")
                                                 .loginProcessingUrl("/login")
                                                 .defaultSuccessUrl("/transactions", true)
+                                                .usernameParameter("email") 
                                                 .permitAll())
                                 // Configure logout
                                 .logout(logout -> logout

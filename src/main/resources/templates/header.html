@@ -13,7 +13,7 @@
                 <li class="nav-item dropdown">
                     <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown4" role="button"
                         data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                        <span sec:authentication="name">username</span>
+                        <span sec:authentication="principal.actualUsername">username</span>
                     </a>
                     <div class="dropdown-menu" aria-labelledby="navbarDropdown4">
                         <a class="dropdown-item" th:href="@{/settings/categories-expense}">設定</a>

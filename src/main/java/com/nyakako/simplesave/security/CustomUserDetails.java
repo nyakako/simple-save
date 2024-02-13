@@ -8,15 +8,21 @@ import org.springframework.security.core.userdetails.UserDetails;
 
 public class CustomUserDetails implements UserDetails {
     private final UserDetails delegate; // デフォルトのUserDetailsの実装
-    private final Long userId; // カスタムフィールド
-
-    public CustomUserDetails(UserDetails delegate, Long userId) {
+    private final Long userId;
+    private final String username;
+    
+    public CustomUserDetails(UserDetails delegate, Long userId, String username) {
         this.delegate = delegate;
         this.userId = userId;
+        this.username = username;
     }
 
     public Long getUserId() {
         return userId;
+    }
+
+    public String getActualUsername() {
+        return username;
     }
 
     // UserDetailsのメソッドをデリゲートから直接呼び出す
