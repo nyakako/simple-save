@@ -7,6 +7,7 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.nyakako.simplesave.model.User;
@@ -46,9 +47,6 @@ public class UserController {
             redirectAttributes.addFlashAttribute("org.springframework.validation.BindingResult.user", result);
             redirectAttributes.addFlashAttribute("user", user);
             return "redirect:/register";
-            // model.addAttribute("title", "新規ユーザー登録 - simplesave");
-            // model.addAttribute("content", "registration");
-            // return "layout";
         }
 
         userService.registerUser(user);
@@ -56,7 +54,11 @@ public class UserController {
     }
 
     @GetMapping("/login")
-    public String showLoginForm(Model model) {
+    public String showLoginForm(@RequestParam(value = "error", required = false) String error, Model model) {
+        if(error != null) {
+            model.addAttribute("loginError", "メールアドレスまたはパスワードが無効です");
+        }
+
         model.addAttribute("title", "ログイン - simplesave");
         model.addAttribute("content", "login");
         return "layout";

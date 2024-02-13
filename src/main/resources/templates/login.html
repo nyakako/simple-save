@@ -20,35 +20,34 @@
               </div> -->
               <div class="card-body login-card-body">
                 <p class="login-box-msg">ログイン情報を入力してください</p>
+                <div th:if="${loginError}" >
+                  <p class="error text-danger small mt-1" th:text="${loginError}">エラーメッセージ</p>
+                </div>
 
-                <form th:action="@{/login}" method="post">
+                <form th:action="@{/login}" method="post" class="needs-validation" novalidate>
                   <input type="hidden" name="_csrf" value="${_csrf.token}" />
-                  <!-- <div class="input-group mb-3">
-                  <input type="email" class="form-control" placeholder="メールアドレス" name="{{ form.username.name }}"
+                  <div class="mb-3">
+                  <input type="email" class="form-control" placeholder="メールアドレス" name="email" autocomplete="email"
                     required autofocus>
-                  <div class="input-group-append">
-                    <div class="input-group-text">
-                      <span class="fas fa-envelope"></span>
+                    <div class="invalid-feedback">
+                      メールアドレスを正しく入力してください
                     </div>
-                  </div>
-                </div> -->
-                  <div class="input-group mb-3">
+                    
+                </div>
+                  <!-- <div class="mb-3">
                     <input type="text" class="form-control" placeholder="ユーザー名" name="username" autocomplete="username"
                       required autofocus>
-                    <div class="input-group-append">
-                      <div class="input-group-text">
-                        <span class="fas fa-envelope"></span>
-                      </div>
+                    <div class="invalid-feedback">
+                      ユーザー名を入力してください
                     </div>
-                  </div>
-                  <div class="input-group mb-3">
-                    <input type="password" class="form-control" placeholder="パスワード" name="password"
+                  </div> -->
+                  <div class="mb-3">
+                    <input type="password" class="form-control" placeholder="パスワード" minlength="8" name="password"
                       autocomplete="current-password" required>
-                    <div class="input-group-append">
-                      <div class="input-group-text">
-                        <span class="fas fa-lock"></span>
-                      </div>
+                    <div class="invalid-feedback">
+                      パスワードを入力してください(8桁以上)
                     </div>
+                    
                   </div>
                   <div class="row">
 
@@ -83,3 +82,5 @@
   </section>
 </div>
 </div>
+
+<script src="/js/form-validation.js"></script>
