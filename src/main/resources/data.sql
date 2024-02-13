@@ -15,6 +15,10 @@ INSERT INTO category (name, type, user_id) VALUES ('ユーザー2の収入カテ
 
 INSERT INTO transaction (user_id, date, amount, category_id, description, is_scheduled) VALUES (1, '2024-01-10', 500, 1, 'user1 食料品', false);
 INSERT INTO transaction (user_id, date, amount, category_id, description, is_scheduled) VALUES (1, '2024-01-15', 200, 2, 'user1 バス代', false);
+INSERT INTO transaction (user_id, date, amount, category_id, description, is_scheduled) VALUES (1, '2024-02-10', 500, 1, 'user1 食料品', false);
+INSERT INTO transaction (user_id, date, amount, category_id, description, is_scheduled) VALUES (1, '2024-02-15', 200, 2, 'user1 バス代', false);
+INSERT INTO transaction (user_id, date, amount, category_id, description, is_scheduled) VALUES (1, '2024-02-10', 500, 1, 'user1 食料品', false);
+INSERT INTO transaction (user_id, date, amount, category_id, description, is_scheduled) VALUES (1, '2024-02-15', 200, 2, 'user1 バス代', false);
 INSERT INTO transaction (user_id, date, amount, category_id, description, is_scheduled) VALUES (2, '2024-01-15', 200, 2, 'user2 バス代', false);
 INSERT INTO transaction (user_id, date, amount, category_id, description, is_scheduled) VALUES (2, '2024-01-15', 200, 2, 'user2 バス代', false);
 

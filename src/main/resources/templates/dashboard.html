@@ -1,0 +1,133 @@
+<div class="container" th:fragment="content">
+    <section class="content-header">
+        <div class="container-fluid">
+            <div th:if="${errorMessage}" class="alert alert-danger alert-dismissible fade show" role="alert">
+                <span th:text="${errorMessage}"></span>
+                <button type="button" class="close text-white" data-dismiss="alert" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div th:if="${successMessage}" class="alert alert-success alert-dismissible fade show" role="alert">
+                <span th:text="${successMessage}"></span>
+                <button type="button" class="close text-white" data-dismiss="alert" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="row mb-2">
+                <div class="col-md-3">
+                </div>
+                <div class="col-md-8">
+                    <h1>ダッシュボード</h1>
+                </div>
+            </div>
+        </div>
+    </section>
+    <section class="content px-2">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-md-3">
+                    <!-- <div class="list-group">
+                        <li class="list-group-item list-group-item-dark">設定</li>
+                        <a th:href="@{/settings/categories-expense}"
+                            class="list-group-item list-group-item-action active">支出カテゴリ設定</a>
+                        <a th:href="@{/settings/categories-income}"
+                            class="list-group-item list-group-item-action">収入カテゴリ設定</a>
+                        <a th:href="@{/settings/recurring-transactions}" class="list-group-item list-group-item-action">定期入力設定</a>
+                        <a href="#" class="list-group-item list-group-item-action disabled">色設定</a>
+                    </div> -->
+                </div>
+                <div class="col-md-8">
+                    <div class="card card-info">
+                        <div class="card-header">
+                            <h3 class="card-title">今月の収支</h3>
+                        </div>
+                        <div class="card-body table-responsive p-0">
+                            <table class="table text-nowrap">
+                                <thead>
+                                    <tr>
+                                        <th>収入-支出</th>
+                                        <th>収入</th>
+                                        <th>支出</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td th:text="${#numbers.formatInteger(summary.netIncome, 3, 'COMMA')} + '円'">
+                                            Category</td>
+                                        <td th:text="${#numbers.formatInteger(summary.incomeTotal, 3, 'COMMA')} + '円'">
+                                            Category</td>
+                                        <td th:text="${#numbers.formatInteger(summary.expenseTotal, 3, 'COMMA')} + '円'">
+                                            Category</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                    <div class="card card-danger">
+                        <div class="card-header">
+                            <h3 class="card-title">支出の内訳</h3>
+                        </div>
+                        <div class="card-body p-0">
+                            <canvas id="expensesChart" width="400" height="400"></canvas>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2.0.0"></script>
+
+<script th:inline="javascript">
+    /*<![CDATA[*/
+    var categoryExpenses = /*[[${categoryExpenses}]]*/[];
+    /*]]>*/
+
+    document.addEventListener('DOMContentLoaded', function () {
+        const ctx = document.getElementById('expensesChart').getContext('2d');
+
+        const labels = categoryExpenses.map(expense => expense.categoryName);
+        const data = categoryExpenses.map(expense => expense.totalAmount);
+
+        const chart = new Chart(ctx, {
+            type: 'doughnut',
+            data: {
+                labels: labels,
+                datasets: [{
+                    label: 'カテゴリ別支出',
+                    data: data,
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                responsive: true,
+                plugins: {
+                    legend: {
+                        position: 'top',
+                    },
+                    title: {
+                        display: true,
+                        text: 'カテゴリ別支出 (当月)'
+                    },
+                    tooltip: {
+                        enabled: true
+                    },
+                    datalabels: {
+                        font: {
+                            size: 18
+                        },
+                        formatter: function (value, context) {
+                            return value.toString() + '円';
+                        }
+                    }
+                },
+
+            },
+            plugins: [
+                ChartDataLabels,
+            ],
+        });
+    });
+</script>
