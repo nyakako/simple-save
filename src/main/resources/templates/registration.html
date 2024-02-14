@@ -1,57 +1,56 @@
-<div class="container" th:fragment="content">
+<div class="register-page" th:fragment="content">
   <section class="content-header">
     <div class="container-fluid">
       <div class="row mb-2">
-        <div class="col-sm-6">
+        <div class="col-sm">
           <h1>新規登録</h1>
         </div>
       </div>
     </div>
   </section>
-  <section class="content px-2">
-    <div class="container">
-      <div class="row">
-        <div class="col-md-12">
-          <!-- /.login-logo -->
-          <div class="card">
-            <div class="card-body login-card-body">
-              <p class="login-box-msg">ユーザー情報を入力してください</p>
 
-              <form th:action="@{/register}" th:object="${user}" method="post" class="needs-validation" novalidate>
-                <div class="mb-3">
-                  <input type="text" name="username" th:field="*{username}" class="form-control" placeholder="ユーザー名"
-                    autocomplete="username" required autofocus />
-                  <div class="invalid-feedback">
-                    ユーザー名を入力してください
-                  </div>
-                  <div th:if="${#fields.hasErrors('username')}">
-                    <p class="error text-danger small mt-1" th:errors="*{username}">Username Error</p>
-                  </div>
-                </div>
+  <div class="register-box">
 
-                <div class="mb-3">
-                  <input type="email" name="email" th:field="*{email}" class="form-control" placeholder="メールアドレス"
-                    autocomplete="email" required />
-                    <div class="invalid-feedback">
-                      メールアドレスを正しく入力してください
-                    </div>
-                  <div th:if="${#fields.hasErrors('email')}">
-                    <p class="error text-danger small" th:errors="*{email}">Email Error</p>
-                  </div>
-                </div>
+    <!-- /.login-logo -->
+    <div class="card">
+      <div class="card-body register-card-body">
+        <p class="login-box-msg">ユーザー情報を入力してください</p>
 
-                <div class="mb-3">
-                  <input type="password" name="password" th:field="*{password}" class="form-control" placeholder="パスワード" minlength="8"
-                    autocomplete="new-password" required />
-                    <div class="invalid-feedback">
-                      パスワードを入力してください(8文字以上)
-                    </div>
-                  <div th:if="${#fields.hasErrors('password')}">
-                    <p class="error text-danger small" th:errors="*{password}">Password Error</p>
-                  </div>
-                </div>
+        <form th:action="@{/register}" th:object="${user}" method="post" class="needs-validation" novalidate>
+          <div class="mb-3">
+            <input type="text" name="username" th:field="*{username}" class="form-control" placeholder="ユーザー名"
+              autocomplete="username" required autofocus />
+            <div class="invalid-feedback">
+              ユーザー名を入力してください
+            </div>
+            <div th:if="${#fields.hasErrors('username')}">
+              <p class="error text-danger small mt-1" th:errors="*{username}">Username Error</p>
+            </div>
+          </div>
 
-                <!-- <div class="input-group mb-3">
+          <div class="mb-3">
+            <input type="email" name="email" th:field="*{email}" class="form-control" placeholder="メールアドレス"
+              autocomplete="email" required />
+            <div class="invalid-feedback">
+              メールアドレスを正しく入力してください
+            </div>
+            <div th:if="${#fields.hasErrors('email')}">
+              <p class="error text-danger small" th:errors="*{email}">Email Error</p>
+            </div>
+          </div>
+
+          <div class="mb-3">
+            <input type="password" name="password" th:field="*{password}" class="form-control" placeholder="パスワード"
+              minlength="8" autocomplete="new-password" required />
+            <div class="invalid-feedback">
+              パスワードを入力してください(8文字以上)
+            </div>
+            <div th:if="${#fields.hasErrors('password')}">
+              <p class="error text-danger small" th:errors="*{password}">Password Error</p>
+            </div>
+          </div>
+
+          <!-- <div class="input-group mb-3">
                   <input type="password" name="{{ form.password2.name }}" class="form-control" placeholder="パスワード（確認）"
                     required />
                   <div class="input-group-append">
@@ -59,32 +58,35 @@
                       <span class="fas fa-lock"></span>
                     </div>
                   </div> -->
+          <div class="row">
+            <div class="col-12 my-1">
+              <button class="btn btn-primary w-100 py-2 my-2" type="submit">新規登録</button>
             </div>
-
-            <button class="btn btn-primary w-100 py-2 my-2" type="submit">新規登録</button>
-            </form>
-
-            <div class="social-auth-links text-center mb-3">
-              <p>- OR -</p>
-
-            </div>
-            <a class="btn btn-outline-secondary w-100 py-2" th:href="@{/login}">ログイン画面へ戻る</a>
-            <!-- /.social-auth-links -->
-
-            <!-- <p class="mb-1">
-              <a href="forgot-password.html">I forgot my password</a>
-            </p> -->
-
           </div>
-          <!-- /.login-card-body -->
-        </div>
-      </div>
-      <!-- /.login-box -->
+        </form>
 
+        <div class="social-auth-links text-center mb-3">
+          <p>- OR -</p>
+
+        </div>
+        <a class="btn btn-outline-secondary w-100 py-2" th:href="@{/login}">ログイン画面へ戻る</a>
+        <!-- /.social-auth-links -->
+
+        <!-- <p class="mb-1">
+                  <a href="forgot-password.html">I forgot my password</a>
+                </p> -->
+
+      </div>
     </div>
+    <!-- /.login-card-body -->
+
+
+    <!-- /.login-box -->
+
+  </div>
 </div>
 </div>
-</section>
+
 </div>
 
 <script src="/js/form-validation.js"></script>

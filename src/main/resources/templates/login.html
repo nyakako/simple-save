@@ -1,86 +1,80 @@
-<div class="container-fluid" th:fragment="content">
-  <div>
-    <section class="content-header">
-      <div class="container-fluid">
-        <div class="row mb-2">
-          <div class="col-sm-6">
-            <h1>ログイン</h1>
-          </div>
+<div class="login-page" th:fragment="content">
+  <section class="content-header">
+    <div class="container-fluid">
+      <div class="row mb-2">
+        <div class="col-sm">
+          <h1>ログイン</h1>
         </div>
       </div>
-    </section>
-    <section class="content px-2">
-      <div class="container-fluid">
-        <div class="row">
-          <div class="col-md-12">
-            <!-- /.login-logo -->
-            <div class="card">
-              <!-- <div class="card-header">
+    </div>
+  </section>
+  <div class="login-box">
+    <!-- /.login-logo -->
+    <div class="card">
+      <!-- <div class="card-header">
                 login
               </div> -->
-              <div class="card-body login-card-body">
-                <p class="login-box-msg">ログイン情報を入力してください</p>
-                <div th:if="${loginError}" >
-                  <p class="error text-danger small mt-1" th:text="${loginError}">エラーメッセージ</p>
-                </div>
+      <div class="card-body login-card-body">
+        <p class="login-box-msg">ログイン情報を入力してください</p>
+        <div th:if="${loginError}">
+          <p class="error text-danger small mt-1" th:text="${loginError}">エラーメッセージ</p>
+        </div>
 
-                <form th:action="@{/login}" method="post" class="needs-validation" novalidate>
-                  <input type="hidden" name="_csrf" value="${_csrf.token}" />
-                  <div class="mb-3">
-                  <input type="email" class="form-control" placeholder="メールアドレス" name="email" autocomplete="email"
-                    required autofocus>
-                    <div class="invalid-feedback">
-                      メールアドレスを正しく入力してください
-                    </div>
-                    
-                </div>
-                  <!-- <div class="mb-3">
+        <form th:action="@{/login}" method="post" class="needs-validation" novalidate>
+          <input type="hidden" name="_csrf" value="${_csrf.token}" />
+          <div class="mb-3">
+            <input type="email" class="form-control" placeholder="メールアドレス" name="email" autocomplete="email" required
+              autofocus>
+            <div class="invalid-feedback">
+              メールアドレスを正しく入力してください
+            </div>
+
+          </div>
+          <!-- <div class="mb-3">
                     <input type="text" class="form-control" placeholder="ユーザー名" name="username" autocomplete="username"
                       required autofocus>
                     <div class="invalid-feedback">
                       ユーザー名を入力してください
                     </div>
                   </div> -->
-                  <div class="mb-3">
-                    <input type="password" class="form-control" placeholder="パスワード" minlength="8" name="password"
-                      autocomplete="current-password" required>
-                    <div class="invalid-feedback">
-                      パスワードを入力してください(8桁以上)
-                    </div>
-                    
-                  </div>
-                  <div class="row">
+          <div class="mb-3">
+            <input type="password" class="form-control" placeholder="パスワード" minlength="8" name="password"
+              autocomplete="current-password" required>
+            <div class="invalid-feedback">
+              パスワードを入力してください(8桁以上)
+            </div>
 
-                    <!-- /.col -->
-                    <div class="col-12 my-1">
-                      <button type="submit" class="btn btn-primary btn-block py-2">ログイン</button>
-                    </div>
-                    <!-- /.col -->
-                  </div>
-                </form>
+          </div>
+          <div class="row">
 
-                <div class="social-auth-links text-center mb-3">
-                  <p>- OR -</p>
+            <!-- /.col -->
+            <div class="col-12 my-1">
+              <button type="submit" class="btn btn-primary btn-block py-2">ログイン</button>
+            </div>
+            <!-- /.col -->
+          </div>
+        </form>
 
-                </div>
-                <a class="btn btn-outline-secondary py-2 w-100" th:href="@{/register}">新規登録</a>
-                <!-- /.social-auth-links -->
+        <div class="social-auth-links text-center mb-3">
+          <p>- OR -</p>
 
-                <!-- <p class="mb-1">
+        </div>
+        <a class="btn btn-outline-secondary py-2 w-100" th:href="@{/register}">新規登録</a>
+        <!-- /.social-auth-links -->
+
+        <!-- <p class="mb-1">
         <a href="forgot-password.html">I forgot my password</a>
       </p> -->
 
-              </div>
-              <!-- /.login-card-body -->
-            </div>
-          </div>
-          <!-- /.login-box -->
-
-        </div>
       </div>
+      <!-- /.login-card-body -->
+    </div>
+
+    <!-- /.login-box -->
+
+
   </div>
-  </section>
-</div>
+
 </div>
 
 <script src="/js/form-validation.js"></script>

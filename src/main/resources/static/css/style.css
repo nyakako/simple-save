@@ -1,9 +1,24 @@
-.login-page {
+.login-page,
+.register-page {
     align-items: center;
+    display: flex;
+    flex-direction: column;
+    height: 493px;
+    justify-content: center;
 }
 
-.login-box {
-    max-width: 360px;
+.login-box,
+.register-box {
+    width: 360px;
+
+    @media (max-width: 576px) {
+        margin-top: .5rem;
+        width: 90%;
+    }
+
+    .card {
+        margin-bottom: 0;
+    }
 }
 
 /* カテゴリタイプのラジオボタン */
