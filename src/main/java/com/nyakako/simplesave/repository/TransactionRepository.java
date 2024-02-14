@@ -4,6 +4,7 @@ import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.List;
 
+import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -13,7 +14,7 @@ import com.nyakako.simplesave.model.Transaction;
 public interface TransactionRepository extends JpaRepository<Transaction, Long> {
         boolean existsByCategoryId(Long categoryId);
 
-        Iterable<Transaction> findByUserId(Long userId);
+        List<Transaction> findByUserId(Long userId, Sort sort);
 
         @Query("SELECT SUM(t.amount) FROM Transaction t WHERE t.user.id = :userId AND t.category.type = :type AND t.date BETWEEN :startDate AND :endDate")
         BigDecimal sumAmountByTypeAndDateRange(@Param("userId") Long userId, @Param("type") String type,
@@ -26,7 +27,7 @@ public interface TransactionRepository extends JpaRepository<Transaction, Long> 
                         "AND t.date BETWEEN :startDate AND :endDate " +
                         "GROUP BY t.category.name " +
                         "ORDER BY totalAmount DESC")
-        List<CategorySum> findExpensesByCategoryForCurrentUser(@Param("userId") Long userId,
+        List<CategorySum> findTotalAmountByCategoryForCurrentUser(@Param("userId") Long userId,
                         @Param("type") String type,
                         @Param("startDate") LocalDate startDate,
                         @Param("endDate") LocalDate endDate);
@@ -36,4 +37,10 @@ public interface TransactionRepository extends JpaRepository<Transaction, Long> 
 
                 BigDecimal getTotalAmount();
         }
+
+        @Query("SELECT t FROM Transaction t WHERE t.user.id = :userId AND t.date BETWEEN :startDate AND :endDate ORDER BY t.date DESC")
+        List<Transaction> findTransactionsForCurrentUserInCurrentMonth(
+                        @Param("userId") Long userId,
+                        @Param("startDate") LocalDate startDate,
+                        @Param("endDate") LocalDate endDate);
 }

@@ -58,10 +58,8 @@
                                 <tbody>
                                     <tr th:each="transaction : ${transactions}">
                                         <td th:switch="${transaction.category.type}">
-                                            <span th:case="'expense'"
-                                                th:text="支出">支出</span>
-                                            <span th:case="'income'"
-                                                th:text="収入">収入</span>
+                                            <span th:case="'expense'" th:text="支出">支出</span>
+                                            <span th:case="'income'" th:text="収入">収入</span>
                                         </td>
                                         <td th:switch="${transaction.intervalUnit}">
                                             <span th:case="'years'"
@@ -83,11 +81,13 @@
                                             <span th:case="'days'" th:text="'毎日'">毎日</span>
                                         </td>
                                         <td th:text="${transaction.category.name}">カテゴリ</td>
-                                        <td th:text="${#numbers.formatInteger(transaction.amount, 3, 'COMMA')} + '円'">金額</td>
+                                        <td th:text="${#numbers.formatInteger(transaction.amount, 3, 'COMMA')} + '円'">金額
+                                        </td>
                                         <td th:text="${transaction.startDate} + '～' + ${transaction.endDate}">期間</td>
                                         <td th:text="${transaction.nextTransactionDate}">次回</td>
                                         <td><a th:href="@{/recurring-transactions/edit/{id}(id=${transaction.id})}"
-                                                class="btn btn-success">編集</a></td>
+                                                style="color: #212529;"><i class="fa-solid fa-pen-to-square"></i></a>
+                                        </td>
                                     </tr>
                                 </tbody>
                             </table>

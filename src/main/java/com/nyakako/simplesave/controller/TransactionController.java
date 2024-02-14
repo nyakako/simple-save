@@ -44,7 +44,7 @@ public class TransactionController {
         Long userId = userDetails.getUserId(); // ユーザーIDの取得
         Iterable<Transaction> transactions = transactionService.findTransactionsByUserId(userId);
 
-        // 全明細取得
+        // 全ユーザー明細取得（デバック用）
         // List<Transaction> transactions = transactionService.findAllTransactions();
         model.addAttribute("transactions", transactions);
         model.addAttribute("title", "取引一覧 - simplesave");

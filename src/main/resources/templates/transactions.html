@@ -40,7 +40,8 @@
                                         <td th:text="${transaction.category.name}">Category</td>
                                         <td th:text="${transaction.description}">Description</td>
                                         <td th:text="${#numbers.formatInteger(transaction.amount, 3, 'COMMA')} + '円'">Amount</td>
-                                        <td ><a th:href="@{/transactions/edit/{id}(id=${transaction.id})}" class="btn btn-success">編集</a></td>
+                                        <td ><a th:href="@{/transactions/edit/{id}(id=${transaction.id})}"
+                                            style="color: #212529;"><i class="fa-solid fa-pen-to-square"></i></a></td>
                                     </tr>
                                 </tbody>
                             </table>

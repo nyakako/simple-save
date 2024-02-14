@@ -15,19 +15,16 @@
                     <div class="card card-success">
                         <form id="quickForm" th:action="@{/recurring-transactions/new}" method="post">
                             <div class="card-body">
+
                                 <div class="form-group">
                                     <label>カテゴリタイプ</label>
-                                    <div>
-                                        <div class="form-check form-check-inline">
-                                            <input class="form-check-input" type="radio" name="categoryType"
-                                                id="typeExpense" value="expense" checked required>
-                                            <label class="form-check-label" for="typeExpense">支出</label>
-                                        </div>
-                                        <div class="form-check form-check-inline">
-                                            <input class="form-check-input" type="radio" name="categoryType"
-                                                id="typeIncome" value="income">
-                                            <label class="form-check-label" for="typeIncome">収入</label>
-                                        </div>
+                                    <div class="category-type-radio">
+                                        <input class="form-check-input" type="radio" name="categoryType"
+                                            id="typeExpense" value="expense" checked required>
+                                        <label class="form-check-label labelExpense" for="typeExpense">支出</label>
+                                        <input class="form-check-input" type="radio" name="categoryType" id="typeIncome"
+                                            value="income">
+                                        <label class="form-check-label labelIncome" for="typeIncome">収入</label>
                                     </div>
                                 </div>
 

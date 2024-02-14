@@ -30,7 +30,7 @@ public class WebSecurityConfig {
                                 .formLogin(form -> form
                                                 .loginPage("/login")
                                                 .loginProcessingUrl("/login")
-                                                .defaultSuccessUrl("/transactions", true)
+                                                .defaultSuccessUrl("/dashboard", true)
                                                 .usernameParameter("email") 
                                                 .permitAll())
                                 // Configure logout

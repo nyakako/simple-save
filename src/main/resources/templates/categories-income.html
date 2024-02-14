@@ -29,10 +29,11 @@
                     <div class="list-group">
                         <li class="list-group-item list-group-item-dark">設定</li>
                         <a th:href="@{/settings/categories-expense}"
-                        class="list-group-item list-group-item-action">支出カテゴリ設定</a>
+                            class="list-group-item list-group-item-action">支出カテゴリ設定</a>
                         <a th:href="@{/settings/categories-income}"
-                        class="list-group-item list-group-item-action active">収入カテゴリ設定</a>
-                        <a th:href="@{/settings/recurring-transactions}" class="list-group-item list-group-item-action">定期入力設定</a>
+                            class="list-group-item list-group-item-action active">収入カテゴリ設定</a>
+                        <a th:href="@{/settings/recurring-transactions}"
+                            class="list-group-item list-group-item-action">定期入力設定</a>
                         <a href="#" class="list-group-item list-group-item-action disabled">色設定</a>
                     </div>
                 </div>
@@ -55,14 +56,13 @@
                                     <tr th:each="category : ${incomeCategories}">
                                         <td th:text="${category.id}">Category</td>
                                         <td th:switch="${category.type}">
-                                            <span th:case="'expense'"
-                                                th:text="支出">支出</span>
-                                            <span th:case="'income'"
-                                                th:text="収入">収入</span>
+                                            <span th:case="'expense'" th:text="支出">支出</span>
+                                            <span th:case="'income'" th:text="収入">収入</span>
                                         </td>
                                         <td th:text="${category.name}">Category</td>
                                         <td><a th:href="@{/categories-income/edit/{id}(id=${category.id})}"
-                                                class="btn btn-success">編集</a></td>
+                                                style="color: #212529;"><i class="fa-solid fa-pen-to-square"></i></a>
+                                        </td>
                                     </tr>
                                 </tbody>
                             </table>
