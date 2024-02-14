@@ -9,6 +9,7 @@ import java.util.Map;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.nyakako.simplesave.model.Transaction;
 import com.nyakako.simplesave.repository.TransactionRepository;
 import com.nyakako.simplesave.repository.TransactionRepository.CategorySum;
 
@@ -51,7 +52,22 @@ public class DashboardService {
         LocalDate now = LocalDate.now();
         LocalDate startOfMonth = now.withDayOfMonth(1);
         LocalDate endOfMonth = now.withDayOfMonth(now.lengthOfMonth());
-        return transactionRepository.findExpensesByCategoryForCurrentUser(userId, "expense", startOfMonth, endOfMonth);
+        return transactionRepository.findTotalAmountByCategoryForCurrentUser(userId, "expense", startOfMonth, endOfMonth);
+    }
+
+    @Transactional(readOnly = true)
+    public List<CategorySum> getMonthlyIncomesByCategory(Long userId) {
+        LocalDate now = LocalDate.now();
+        LocalDate startOfMonth = now.withDayOfMonth(1);
+        LocalDate endOfMonth = now.withDayOfMonth(now.lengthOfMonth());
+        return transactionRepository.findTotalAmountByCategoryForCurrentUser(userId, "income", startOfMonth, endOfMonth);
+    }
+
+    public List<Transaction> getCurrentMonthTransactionsForUser(Long userId) {
+        LocalDate now = LocalDate.now();
+        LocalDate startOfMonth = now.withDayOfMonth(1);
+        LocalDate endOfMonth = now.withDayOfMonth(now.lengthOfMonth());
+        return transactionRepository.findTransactionsForCurrentUserInCurrentMonth(userId, startOfMonth, endOfMonth);
     }
 
 }

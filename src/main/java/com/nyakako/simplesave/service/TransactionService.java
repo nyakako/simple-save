@@ -2,6 +2,7 @@ package com.nyakako.simplesave.service;
 
 import java.util.Optional;
 
+import org.springframework.data.domain.Sort;
 import org.springframework.lang.NonNull;
 import org.springframework.stereotype.Service;
 
@@ -17,11 +18,13 @@ public class TransactionService {
     }
 
     public Iterable<Transaction> findAllTransactions() {
-        return transactionRepository.findAll();
+        Sort sort = Sort.by(Sort.Direction.DESC, "date");
+        return transactionRepository.findAll(sort);
     }
 
     public Iterable<Transaction> findTransactionsByUserId(Long userId) {
-        return transactionRepository.findByUserId(userId);
+        Sort sort = Sort.by(Sort.Direction.DESC, "date");
+        return transactionRepository.findByUserId(userId, sort);
     }
 
     public Optional<Transaction> findTransactionById(@NonNull Long id) {

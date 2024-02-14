@@ -5,3 +5,44 @@
 .login-box {
     max-width: 360px;
 }
+
+/* カテゴリタイプのラジオボタン */
+.category-type-radio {
+    float: left;
+    width: 100%;
+    margin: 0 0 20px 0;
+}
+
+.category-type-radio input {
+    display: none;
+}
+
+.category-type-radio label {
+    display: block;
+    float: left;
+    cursor: pointer;
+    width: 50%;
+    margin: 1px 0 1px 0;
+    padding: 10px 0;
+    border-right: 1px solid #d7d7d7;
+    background: #e5e5e5;
+    color: #555e64;
+    font-size: 16px;
+    text-align: center;
+    line-height: 1;
+    transition: .2s;
+}
+
+.category-type-radio label:last-of-type {
+    border-right: 0px;
+}
+
+.category-type-radio input[type="radio"]:checked+.labelExpense {
+    background-color: #dc3545;
+    color: #fff;
+}
+
+.category-type-radio input[type="radio"]:checked+.labelIncome {
+    background-color: #28a745;
+    color: #fff;
+}
