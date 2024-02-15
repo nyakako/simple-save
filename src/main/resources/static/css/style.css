@@ -61,3 +61,44 @@
     background-color: #28a745;
     color: #fff;
 }
+
+/* 色設定のラジオボタン */
+.color-setting-radio {
+    float: left;
+    width: 100%;
+    margin: 0 0 20px 0;
+}
+
+.color-setting-radio input {
+    display: none;
+}
+
+.color-setting-radio label {
+    display: block;
+    float: left;
+    cursor: pointer;
+    width: 50%;
+    margin: 1px 0 1px 0;
+    padding: 10px 0;
+    border-right: 1px solid #d7d7d7;
+    background: #e5e5e5;
+    color: #555e64;
+    font-size: 16px;
+    text-align: center;
+    line-height: 1;
+    transition: .2s;
+}
+
+.color-setting-radio label:last-of-type {
+    border-right: 0px;
+}
+
+.color-setting-radio input[type="radio"]:checked+.labelRed {
+    background-color: #dc3545;
+    color: #fff;
+}
+
+.color-setting-radio input[type="radio"]:checked+.labelGreen {
+    background-color: #28a745;
+    color: #fff;
+}

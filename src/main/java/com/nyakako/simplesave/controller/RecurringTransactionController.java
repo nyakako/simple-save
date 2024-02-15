@@ -3,7 +3,6 @@ package com.nyakako.simplesave.controller;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.time.LocalDate;
-import java.util.List;
 
 import org.springframework.lang.NonNull;
 import org.springframework.security.access.AccessDeniedException;
@@ -38,17 +37,6 @@ public class RecurringTransactionController {
         this.recurringTransactionService = recurringTransactionService;
         this.categoryService = categoryService;
         this.userService = userService;
-    }
-
-    @GetMapping("/settings/recurring-transactions")
-    public String showRecurringTransactions(Model model, Authentication authentication) {
-        CustomUserDetails userDetails = (CustomUserDetails) authentication.getPrincipal();
-        Long userId = userDetails.getUserId(); // ユーザーIDの取得
-        List<RecurringTransaction> transactions = recurringTransactionService.findRecurringTransactionsByUserId(userId);
-        model.addAttribute("transactions", transactions);
-        model.addAttribute("title", "定期取引一覧 - simplesave");
-        model.addAttribute("content", "recurring-transactions");
-        return "layout";
     }
 
     @GetMapping("/recurring-transactions/new")

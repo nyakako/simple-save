@@ -5,12 +5,11 @@ import java.util.Collection;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
-
 public class CustomUserDetails implements UserDetails {
     private final UserDetails delegate; // デフォルトのUserDetailsの実装
     private final Long userId;
     private final String username;
-    
+
     public CustomUserDetails(UserDetails delegate, Long userId, String username) {
         this.delegate = delegate;
         this.userId = userId;
