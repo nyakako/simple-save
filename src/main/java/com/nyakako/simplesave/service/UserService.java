@@ -5,6 +5,7 @@ import java.util.Optional;
 import org.springframework.lang.NonNull;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.nyakako.simplesave.model.User;
 import com.nyakako.simplesave.repository.UserRepository;
@@ -16,7 +17,8 @@ public class UserService {
     private final CategoryService categoryService;
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
 
-    public UserService(UserRepository userRepository, CategoryService categoryService, BCryptPasswordEncoder bCryptPasswordEncoder) {
+    public UserService(UserRepository userRepository, CategoryService categoryService,
+            BCryptPasswordEncoder bCryptPasswordEncoder) {
         this.userRepository = userRepository;
         this.categoryService = categoryService;
         this.bCryptPasswordEncoder = bCryptPasswordEncoder;
@@ -43,4 +45,15 @@ public class UserService {
         return userRepository.findByEmail(email).isPresent();
     }
 
+    public String getColorPreference(@NonNull Long userId) {
+        return userRepository.findById(userId).map(User::getColorPreference).orElse("greenPositive"); // デフォルトを"greenPositive"とする
+    }
+
+    @Transactional
+    public void updateColorPreference(@NonNull Long userId, String colorPreference) {
+        userRepository.findById(userId).ifPresent(user -> {
+            user.setColorPreference(colorPreference);
+            userRepository.save(user);
+        });
+    }
 }

@@ -6,8 +6,6 @@ import com.nyakako.simplesave.security.CustomUserDetails;
 import com.nyakako.simplesave.service.CategoryService;
 import com.nyakako.simplesave.service.UserService;
 
-import java.util.List;
-
 import org.springframework.lang.NonNull;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.core.Authentication;
@@ -28,17 +26,6 @@ public class CategoryController {
     public CategoryController(CategoryService categoryService, UserService userService) {
         this.categoryService = categoryService;
         this.userService = userService;
-    }
-
-    @GetMapping("/settings/categories-expense")
-    public String showExpenseCategory(Model model, Authentication authentication) {
-        CustomUserDetails userDetails = (CustomUserDetails) authentication.getPrincipal();
-        Long userId = userDetails.getUserId(); // ユーザーIDの取得
-        List<Category> expenseCategories = categoryService.findCategoriesByTypeAndUserId("expense", userId);
-        model.addAttribute("expenseCategories", expenseCategories);
-        model.addAttribute("title", "支出カテゴリ設定 - simplesave");
-        model.addAttribute("content", "categories-expense");
-        return "layout";
     }
 
     @GetMapping("/categories-expense/new")
@@ -120,17 +107,6 @@ public class CategoryController {
         return "redirect:/settings/categories-expense";
     }
 
-    @GetMapping("/settings/categories-income")
-    public String showIncomeCategory(Model model, Authentication authentication) {
-        CustomUserDetails userDetails = (CustomUserDetails) authentication.getPrincipal();
-        Long userId = userDetails.getUserId(); // ユーザーIDの取得
-        List<Category> incomeCategories = categoryService.findCategoriesByTypeAndUserId("income", userId);
-        model.addAttribute("incomeCategories", incomeCategories);
-        model.addAttribute("title", "収入カテゴリ設定 - simplesave");
-        model.addAttribute("content", "categories-income");
-        return "layout";
-    }
-
     @GetMapping("/categories-income/new")
     public String newIncomeCategory(Model model) {
         model.addAttribute("title", "収入カテゴリ登録 - simplesave");
@@ -157,7 +133,7 @@ public class CategoryController {
         Long userId = userDetails.getUserId(); // ログインユーザーのIDを取得
 
         Category category = categoryService.findCategoryById(id).orElse(null);
-        
+
         // またはカテゴリの所有者がログインユーザーでない場合はアクセス制限
         if (category == null || !category.getUser().getId().equals(userId)) {
             // アクセス拒否の処理

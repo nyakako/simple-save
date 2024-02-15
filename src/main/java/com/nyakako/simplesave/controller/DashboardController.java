@@ -13,20 +13,29 @@ import com.nyakako.simplesave.model.Transaction;
 import com.nyakako.simplesave.repository.TransactionRepository.CategorySum;
 import com.nyakako.simplesave.security.CustomUserDetails;
 import com.nyakako.simplesave.service.DashboardService;
+import com.nyakako.simplesave.service.UserService;
 
 @Controller
 public class DashboardController {
 
     private final DashboardService dashboardService;
+    private final UserService userService;
 
-    public DashboardController(DashboardService dashboardService) {
+    public DashboardController(DashboardService dashboardService, UserService userService) {
         this.dashboardService = dashboardService;
+        this.userService = userService;
     }
 
     @GetMapping("/dashboard")
     public String showDashboard(Model model, Authentication authentication) {
+        String colorPreference = "greenPositive";
         CustomUserDetails userDetails = (CustomUserDetails) authentication.getPrincipal();
-        Long userId = userDetails.getUserId(); // ユーザーIDの取得
+        Long userId = userDetails.getUserId();
+        if (userId != null) {
+            colorPreference = userService.getColorPreference(userId);
+        }
+
+        model.addAttribute("colorPreference", colorPreference);
 
         Map<String, BigDecimal> summary = dashboardService.calculateMonthlySummary(userId);
         List<CategorySum> dataExpenseCategory = dashboardService.getMonthlyExpensesByCategory(userId);
@@ -40,6 +49,7 @@ public class DashboardController {
 
         model.addAttribute("title", "ダッシュボード - simplesave");
         model.addAttribute("content", "dashboard");
+        model.addAttribute("colorPreference", colorPreference);
         model.addAttribute("summary", summary);
         model.addAttribute("categoryExpenses", dataExpenseCategory);
         model.addAttribute("categoryIncomes", dataIncomeCategory);
