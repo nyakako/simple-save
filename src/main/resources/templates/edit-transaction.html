@@ -35,12 +35,16 @@
                                 </div>
 
                                 <div class="form-group">
+
                                     <label for="categoryId">カテゴリ</label>
-                                    <select name="categoryId" id="categoryId" class="form-control" required>
-                                        <option value="" th:each="category : ${categories}" th:value="${category.id}"
-                                            th:text="${category.name}">
-                                            カテゴリ名</option>
-                                    </select>
+                                    <div class="form-row">
+                                        <select name="categoryId" id="categoryId" class="form-control col-6" required>
+                                            <option value="" th:each="category : ${categories}"
+                                                th:value="${category.id}" th:text="${category.name}">
+                                                カテゴリ名</option>
+                                        </select>
+                                        <a id="addCategoryButton" href="" class="btn btn-success ml-2 col-2"> 追加</a>
+                                    </div>
                                 </div>
 
                                 <div class="form-group">
@@ -99,18 +103,23 @@
     /*<![CDATA[*/
     var categories = /*[[${categories}]]*/[];
     var currentCategoryId = /*[[${transaction.category.id}]]*/'';
+    var expenseCategoryUrl = /*[[@{/categories-expense/new}]]*/'';
+    var incomeCategoryUrl = /*[[@{/categories-income/new}]]*/'';
     /*]]>*/
 
     document.addEventListener('DOMContentLoaded', function () {
         var categoryTypeRadios = document.querySelectorAll('input[name="categoryType"]');
         var categorySelect = document.getElementById('categoryId');
         var initialCategoryType = document.querySelector('input[name="categoryType"]:checked').value;
+        var addCategoryButton = document.getElementById('addCategoryButton');
 
         updateCategoryOptions(categorySelect, initialCategoryType);
+        updateAddCategoryButton(initialCategoryType);
 
         categoryTypeRadios.forEach(function (radio) {
             radio.addEventListener('change', function () {
                 updateCategoryOptions(categorySelect, this.value);
+                updateAddCategoryButton(this.value);
             });
         });
 
@@ -130,6 +139,11 @@
                 }
                 select.appendChild(option);
             });
+        }
+
+        function updateAddCategoryButton(type) {
+            var href = type === 'expense' ? expenseCategoryUrl : incomeCategoryUrl;
+            addCategoryButton.setAttribute('href', href);
         }
     });
 </script>

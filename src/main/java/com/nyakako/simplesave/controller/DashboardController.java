@@ -18,6 +18,8 @@ import com.nyakako.simplesave.security.CustomUserDetails;
 import com.nyakako.simplesave.service.DashboardService;
 import com.nyakako.simplesave.service.UserService;
 
+import jakarta.servlet.http.HttpSession;
+
 @Controller
 public class DashboardController {
 
@@ -30,7 +32,7 @@ public class DashboardController {
     }
 
     @GetMapping("/dashboard")
-    public String showDashboard(Model model, Authentication authentication,
+    public String showDashboard(Model model, Authentication authentication, HttpSession session,
             @RequestParam(name = "yearMonth", required = false) String yearMonth) {
         String colorPreference = "greenPositive";
         CustomUserDetails userDetails = (CustomUserDetails) authentication.getPrincipal();

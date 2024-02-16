@@ -6,6 +6,9 @@ import com.nyakako.simplesave.security.CustomUserDetails;
 import com.nyakako.simplesave.service.CategoryService;
 import com.nyakako.simplesave.service.UserService;
 
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpSession;
+
 import org.springframework.lang.NonNull;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.core.Authentication;
@@ -29,14 +32,19 @@ public class CategoryController {
     }
 
     @GetMapping("/categories-expense/new")
-    public String newExpenseCategory(Model model) {
+    public String newExpenseCategory(Model model,
+            HttpServletRequest request,
+            HttpSession session) {
         model.addAttribute("title", "支出カテゴリ登録 - simplesave");
         model.addAttribute("content", "new-expense-category");
+        String referrer = request.getHeader("Referer");
+        session.setAttribute("redirectUrlCategory", referrer);
         return "layout";
     }
 
     @PostMapping("/categories-expense/new")
-    public String addExpenseCategory(@NonNull @ModelAttribute Category category, Authentication authentication) {
+    public String addExpenseCategory(@NonNull @ModelAttribute Category category, Authentication authentication,
+            HttpSession session) {
         CustomUserDetails userDetails = (CustomUserDetails) authentication.getPrincipal();
         Long userId = userDetails.getUserId(); // ユーザーIDの取得
         if (userId != null) {
@@ -46,7 +54,10 @@ public class CategoryController {
 
         category.setType("expense");
         categoryService.saveCategory(category);
-        return "redirect:/settings/categories-expense";
+        String redirectUrlCategory = (String) session.getAttribute("redirectUrlCategory");
+        session.removeAttribute("redirectUrlCategory");
+
+        return "redirect:" + (redirectUrlCategory != null ? redirectUrlCategory : "/settings/categories-expense");
     }
 
     @GetMapping("/categories-expense/edit/{id}")
@@ -108,14 +119,18 @@ public class CategoryController {
     }
 
     @GetMapping("/categories-income/new")
-    public String newIncomeCategory(Model model) {
+    public String newIncomeCategory(Model model, HttpServletRequest request,
+            HttpSession session) {
         model.addAttribute("title", "収入カテゴリ登録 - simplesave");
         model.addAttribute("content", "new-income-category");
+        String referrer = request.getHeader("Referer");
+        session.setAttribute("redirectUrlCategory", referrer);
         return "layout";
     }
 
     @PostMapping("/categories-income/new")
-    public String addIncomeCategory(@NonNull @ModelAttribute Category category, Authentication authentication) {
+    public String addIncomeCategory(@NonNull @ModelAttribute Category category, Authentication authentication,
+            HttpSession session) {
         CustomUserDetails userDetails = (CustomUserDetails) authentication.getPrincipal();
         Long userId = userDetails.getUserId(); // ユーザーIDの取得
         if (userId != null) {
@@ -124,7 +139,10 @@ public class CategoryController {
         }
         category.setType("income");
         categoryService.saveCategory(category);
-        return "redirect:/settings/categories-income";
+        String redirectUrlCategory = (String) session.getAttribute("redirectUrlCategory");
+        session.removeAttribute("redirectUrlCategory");
+
+        return "redirect:" + (redirectUrlCategory != null ? redirectUrlCategory : "/settings/categories-income");
     }
 
     @GetMapping("/categories-income/edit/{id}")

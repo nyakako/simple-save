@@ -8,6 +8,9 @@ import com.nyakako.simplesave.service.CategoryService;
 import com.nyakako.simplesave.service.TransactionService;
 import com.nyakako.simplesave.service.UserService;
 
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpSession;
+
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.time.LocalDate;
@@ -53,7 +56,8 @@ public class TransactionController {
     }
 
     @GetMapping("/transactions/new")
-    public String newTransaction(Model model, Authentication authentication) {
+    public String newTransaction(Model model, Authentication authentication, HttpServletRequest request,
+            HttpSession session) {
         LocalDate today = LocalDate.now();
         CustomUserDetails userDetails = (CustomUserDetails) authentication.getPrincipal();
         Long userId = userDetails.getUserId(); // ユーザーIDの取得
@@ -61,12 +65,19 @@ public class TransactionController {
         model.addAttribute("categories", categoryService.findCategoriesByUserId(userId));
         model.addAttribute("title", "新規明細登録 - simplesave");
         model.addAttribute("content", "new-transaction");
+
+        String returnUrl = (String) session.getAttribute("redirectUrlTransaction");
+        if (returnUrl == null) {
+            String referrer = request.getHeader("Referer");
+            session.setAttribute("redirectUrlTransaction", referrer);
+        }
+
         return "layout";
     }
 
     @PostMapping("/transactions/new")
     public String addTransaction(@NonNull @ModelAttribute Transaction transaction,
-            @NonNull @RequestParam("categoryId") Long categoryId, Authentication authentication) {
+            @NonNull @RequestParam("categoryId") Long categoryId, Authentication authentication, HttpSession session) {
 
         CustomUserDetails userDetails = (CustomUserDetails) authentication.getPrincipal();
         Long userId = userDetails.getUserId(); // ユーザーIDの取得
@@ -82,11 +93,16 @@ public class TransactionController {
         transaction.setCategory(category);
 
         transactionService.saveTransaction(transaction);
-        return "redirect:/transactions";
+        String redirectUrlTransaction = (String) session.getAttribute("redirectUrlTransaction");
+        session.removeAttribute("redirectUrlTransaction");
+
+        return "redirect:" + (redirectUrlTransaction != null ? redirectUrlTransaction : "/transactions");
     }
 
     @GetMapping("/transactions/edit/{id}")
-    public String editTransaction(@PathVariable @NonNull Long id, Model model, Authentication authentication) {
+    public String editTransaction(@PathVariable @NonNull Long id, Model model, Authentication authentication,
+            HttpServletRequest request,
+            HttpSession session) {
         CustomUserDetails userDetails = (CustomUserDetails) authentication.getPrincipal();
         Long userId = userDetails.getUserId(); // ユーザーIDの取得
 
@@ -103,12 +119,19 @@ public class TransactionController {
         model.addAttribute("categories", categoryService.findCategoriesByUserId(userId));
         model.addAttribute("title", "明細編集 - simplesave");
         model.addAttribute("content", "edit-transaction");
+
+        String returnUrl = (String) session.getAttribute("redirectUrlTransaction");
+        if (returnUrl == null) {
+            String referrer = request.getHeader("Referer");
+            session.setAttribute("redirectUrlTransaction", referrer);
+        }
+
         return "layout";
     }
 
     @PostMapping("/transactions/edit/{id}")
     public String updateTransaction(@PathVariable @NonNull Long id, @NonNull @ModelAttribute Transaction transaction,
-            @NonNull @RequestParam("categoryId") Long categoryId, Authentication authentication) {
+            @NonNull @RequestParam("categoryId") Long categoryId, Authentication authentication, HttpSession session) {
         CustomUserDetails userDetails = (CustomUserDetails) authentication.getPrincipal();
         Long userId = userDetails.getUserId(); // ユーザーIDの取得
         if (userId != null) {
@@ -126,11 +149,15 @@ public class TransactionController {
         transaction.setCategory(category);
 
         transactionService.saveTransaction(transaction);
-        return "redirect:/transactions";
+        String redirectUrlTransaction = (String) session.getAttribute("redirectUrlTransaction");
+        session.removeAttribute("redirectUrlTransaction");
+
+        return "redirect:" + (redirectUrlTransaction != null ? redirectUrlTransaction : "/transactions");
     }
 
     @PostMapping("/transactions/delete/{id}")
-    public String deleteTransaction(@NonNull @PathVariable Long id, Authentication authentication) {
+    public String deleteTransaction(@NonNull @PathVariable Long id, Authentication authentication,
+            HttpSession session) {
         CustomUserDetails userDetails = (CustomUserDetails) authentication.getPrincipal();
         Long userId = userDetails.getUserId(); // ユーザーIDの取得
 
@@ -141,6 +168,9 @@ public class TransactionController {
             throw new AccessDeniedException("このページにアクセスする権限がありません。");
         }
         transactionService.deleteTransacition(id);
-        return "redirect:/transactions";
+        String redirectUrlTransaction = (String) session.getAttribute("redirectUrlTransaction");
+        session.removeAttribute("redirectUrlTransaction");
+
+        return "redirect:" + (redirectUrlTransaction != null ? redirectUrlTransaction : "/transactions");
     }
 }
