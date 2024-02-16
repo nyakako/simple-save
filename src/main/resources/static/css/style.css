@@ -1,3 +1,7 @@
+.navbar-brand{
+    padding-top: 0;
+}
+
 .login-logo , .register-logo  {
     color: #495057;
 }
@@ -86,4 +90,7 @@
 .color-setting-radio input[type="radio"]:checked+.labelGreen {
     background-color: #28a745;
     color: #fff;
+}
+.card-btn-header::after {
+    content: none;
 }
