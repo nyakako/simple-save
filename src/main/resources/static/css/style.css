@@ -1,8 +1,9 @@
-.navbar-brand{
+.navbar-brand {
     padding-top: 0;
 }
 
-.login-logo , .register-logo  {
+.login-logo,
+.register-logo {
     color: #495057;
 }
 
@@ -91,6 +92,11 @@
     background-color: #28a745;
     color: #fff;
 }
+
 .card-btn-header::after {
     content: none;
+}
+
+.form-row {
+    margin-left: 0px;
 }

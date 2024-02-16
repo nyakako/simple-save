@@ -1,4 +1,4 @@
-INSERT INTO users (username, email, password, color_preference) VALUES ('nakamura', 'user1@example.com', '$2a$10$Zl/07QcsTq8G5ufATO3vlua7bI9ePdEZ0Cv21d4DwTFY5heM34thy','redPositive');
+INSERT INTO users (username, email, password, color_preference) VALUES ('nakamura', 'user1@example.com', '$2a$10$Zl/07QcsTq8G5ufATO3vlua7bI9ePdEZ0Cv21d4DwTFY5heM34thy','greenPositive');
 INSERT INTO users (username, email, password, color_preference) VALUES ('user2', 'user2@example.com', '$2a$10$K5.Hovf3Lvywj50uiOnp5uX7f/iFjTq2lD2bWweg1XQIN1G5UAz7u','greenPositive');
 
 INSERT INTO category (name, type, user_id) VALUES ('食費', 'expense', 1);
