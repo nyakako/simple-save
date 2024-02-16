@@ -13,7 +13,6 @@ import com.nyakako.simplesave.model.Transaction;
 import com.nyakako.simplesave.repository.TransactionRepository;
 import com.nyakako.simplesave.repository.TransactionRepository.CategorySum;
 
-
 @Service
 public class DashboardService {
 
@@ -23,10 +22,9 @@ public class DashboardService {
         this.transactionRepository = transactionRepository;
     }
 
-    public Map<String, BigDecimal> calculateMonthlySummary(Long userId) {
-        LocalDate now = LocalDate.now();
-        LocalDate startOfMonth = now.withDayOfMonth(1);
-        LocalDate endOfMonth = now.withDayOfMonth(now.lengthOfMonth());
+    public Map<String, BigDecimal> calculateMonthlySummary(Long userId, LocalDate currentDate) {
+        LocalDate startOfMonth = currentDate.withDayOfMonth(1);
+        LocalDate endOfMonth = currentDate.withDayOfMonth(currentDate.lengthOfMonth());
 
         BigDecimal incomeTotal = transactionRepository.sumAmountByTypeAndDateRange(userId, "income", startOfMonth,
                 endOfMonth);
@@ -48,25 +46,24 @@ public class DashboardService {
     }
 
     @Transactional(readOnly = true)
-    public List<CategorySum> getMonthlyExpensesByCategory(Long userId) {
-        LocalDate now = LocalDate.now();
-        LocalDate startOfMonth = now.withDayOfMonth(1);
-        LocalDate endOfMonth = now.withDayOfMonth(now.lengthOfMonth());
-        return transactionRepository.findTotalAmountByCategoryForCurrentUser(userId, "expense", startOfMonth, endOfMonth);
+    public List<CategorySum> getMonthlyExpensesByCategory(Long userId, LocalDate currentDate) {
+        LocalDate startOfMonth = currentDate.withDayOfMonth(1);
+        LocalDate endOfMonth = currentDate.withDayOfMonth(currentDate.lengthOfMonth());
+        return transactionRepository.findTotalAmountByCategoryForCurrentUser(userId, "expense", startOfMonth,
+                endOfMonth);
     }
 
     @Transactional(readOnly = true)
-    public List<CategorySum> getMonthlyIncomesByCategory(Long userId) {
-        LocalDate now = LocalDate.now();
-        LocalDate startOfMonth = now.withDayOfMonth(1);
-        LocalDate endOfMonth = now.withDayOfMonth(now.lengthOfMonth());
-        return transactionRepository.findTotalAmountByCategoryForCurrentUser(userId, "income", startOfMonth, endOfMonth);
+    public List<CategorySum> getMonthlyIncomesByCategory(Long userId, LocalDate currentDate) {
+        LocalDate startOfMonth = currentDate.withDayOfMonth(1);
+        LocalDate endOfMonth = currentDate.withDayOfMonth(currentDate.lengthOfMonth());
+        return transactionRepository.findTotalAmountByCategoryForCurrentUser(userId, "income", startOfMonth,
+                endOfMonth);
     }
 
-    public List<Transaction> getCurrentMonthTransactionsForUser(Long userId) {
-        LocalDate now = LocalDate.now();
-        LocalDate startOfMonth = now.withDayOfMonth(1);
-        LocalDate endOfMonth = now.withDayOfMonth(now.lengthOfMonth());
+    public List<Transaction> getCurrentMonthTransactionsForUser(Long userId, LocalDate currentDate) {
+        LocalDate startOfMonth = currentDate.withDayOfMonth(1);
+        LocalDate endOfMonth = currentDate.withDayOfMonth(currentDate.lengthOfMonth());
         return transactionRepository.findTransactionsForCurrentUserInCurrentMonth(userId, startOfMonth, endOfMonth);
     }
 

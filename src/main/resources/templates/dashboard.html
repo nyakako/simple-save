@@ -24,8 +24,10 @@
             <div class="row mb-5">
                 <div class="col-md">
                     <div class="card card-info">
-                        <div class="card-header">
-                            <h3 class="card-title">今月の収支</h3>
+                        <div class="card-header card-btn-header d-flex justify-content-between align-items-center">
+                            <a th:href="@{/dashboard(yearMonth=${previousMonth})}" class="btn btn-secondary">前の月へ</a>
+                            <span class="h3 card-title" th:text="${currentDate} + の収支">当月の収支</span>
+                            <a th:href="@{/dashboard(yearMonth=${nextMonth})}" class="btn btn-secondary">次の月へ</a>
                         </div>
                         <div class="card-body table-responsive p-0">
                             <table class="table text-nowrap">
@@ -40,21 +42,21 @@
                                     <tr>
                                         <td th:switch="${colorPreference}" class="h4">
                                             <span th:case="'greenPositive'"
-                                                th:text="${#numbers.formatInteger(summary.netIncome, 3, 'COMMA')} + '円'"
+                                                th:text="${summary.netIncome == 0 ? '0円' : #numbers.formatInteger(summary.netIncome, 3, 'COMMA') + '円'}"
                                                 th:classappend="${summary.netIncome >= 0 ? 'text-success' : 'text-danger'}">
                                                 収入-支出</span>
                                             <span th:case="'redPositive'"
-                                                th:text="${#numbers.formatInteger(summary.netIncome, 3, 'COMMA')} + '円'"
+                                                th:text="${summary.netIncome == 0 ? '0円' : #numbers.formatInteger(summary.netIncome, 3, 'COMMA') + '円'}"
                                                 th:classappend="${summary.netIncome >= 0 ? 'text-danger' : 'text-success'}">
                                                 収入-支出</span>
                                         </td>
                                         <td class="h4"
                                             th:classappend="${colorPreference == 'greenPositive'} ? 'text-success' : 'text-danger'"
-                                            th:text="${#numbers.formatInteger(summary.incomeTotal, 3, 'COMMA')} + '円'">
+                                            th:text="${summary.incomeTotal == 0 ? '0円' : #numbers.formatInteger(summary.incomeTotal, 3, 'COMMA') + '円'}">
                                             収入</td>
                                         <td class="h4"
                                             th:classappend="${colorPreference == 'greenPositive'} ? 'text-danger' : 'text-success'"
-                                            th:text="${#numbers.formatInteger(summary.expenseTotal, 3, 'COMMA')} + '円'">
+                                            th:text="${summary.expenseTotal == 0 ? '0円' : #numbers.formatInteger(summary.expenseTotal, 3, 'COMMA') + '円'}">
                                             支出</td>
                                     </tr>
                                 </tbody>
@@ -92,7 +94,7 @@
                     </div>
                     <div class="card card-info">
                         <div class="card-header">
-                            <h3 class="card-title">今月の明細</h3>
+                            <h3 class="card-title" th:text="${currentDate} + の明細">今月の明細</h3>
                         </div>
                         <div class="card-body table-responsive p-0">
                             <table class="table text-nowrap">
@@ -149,6 +151,7 @@
     /*<![CDATA[*/
     var categoryExpenses = /*[[${categoryExpenses}]]*/[];
     var categoryIncomes = /*[[${categoryIncomes}]]*/[];
+    var currentDate = /*[[${currentDate}]]*/[];
     /*]]>*/
 
     document.addEventListener('DOMContentLoaded', function () {
@@ -179,7 +182,7 @@
                     },
                     title: {
                         display: true,
-                        text: 'カテゴリ別支出 (当月)'
+                        text: 'カテゴリ別支出 (' + currentDate + ')'
                     },
                     tooltip: {
                         enabled: true
@@ -218,7 +221,7 @@
                     },
                     title: {
                         display: true,
-                        text: 'カテゴリ別収入 (当月)'
+                        text: 'カテゴリ別収入(' + currentDate + ')'
                     },
                     tooltip: {
                         enabled: true
