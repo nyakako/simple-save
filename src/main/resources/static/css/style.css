@@ -1,24 +1,9 @@
-.login-page,
-.register-page {
-    align-items: center;
-    display: flex;
-    flex-direction: column;
-    height: 493px;
-    justify-content: center;
+.login-logo , .register-logo  {
+    color: #495057;
 }
 
-.login-box,
-.register-box {
-    width: 360px;
-
-    @media (max-width: 576px) {
-        margin-top: .5rem;
-        width: 90%;
-    }
-
-    .card {
-        margin-bottom: 0;
-    }
+.register-box-msg {
+    padding: 0 10px 20px;
 }
 
 /* カテゴリタイプのラジオボタン */

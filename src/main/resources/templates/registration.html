@@ -1,20 +1,25 @@
-<div class="register-page" th:fragment="content">
-  <section class="content-header">
-    <div class="container-fluid">
-      <div class="row mb-2">
-        <div class="col-sm">
-          <h1>新規登録</h1>
-        </div>
-      </div>
-    </div>
-  </section>
+<!DOCTYPE html>
+<html lang="ja">
 
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/admin-lte@3.1/dist/css/adminlte.min.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  <link rel="stylesheet" href="/css/style.css" />
+  <title>新規ユーザー登録 - simplesave</title>
+</head>
+
+<body class="register-page">
   <div class="register-box">
-
     <!-- /.login-logo -->
+    <div class="register-logo">
+      simplesave
+    </div>
     <div class="card">
+
       <div class="card-body register-card-body">
-        <p class="login-box-msg">ユーザー情報を入力してください</p>
+        <p class="register-box-msg">登録ユーザーの情報を入力してください</p>
 
         <form th:action="@{/register}" th:object="${user}" method="post" class="needs-validation" novalidate>
           <div class="mb-3">
@@ -84,9 +89,12 @@
     <!-- /.login-box -->
 
   </div>
-</div>
-</div>
+  </div>
+  </div>
 
-</div>
+  </div>
 
-<script src="/js/form-validation.js"></script>
+  <script src="/js/form-validation.js"></script>
+</body>
+
+</html>

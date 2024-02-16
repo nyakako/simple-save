@@ -27,9 +27,7 @@ public class UserController {
         if (!model.containsAttribute("user")) {
             model.addAttribute("user", new User());
         }
-        model.addAttribute("title", "新規ユーザー登録 - simplesave");
-        model.addAttribute("content", "registration");
-        return "layout";
+        return "registration";
     }
 
     @PostMapping("/register")
@@ -58,9 +56,6 @@ public class UserController {
         if(error != null) {
             model.addAttribute("loginError", "メールアドレスまたはパスワードが無効です");
         }
-
-        model.addAttribute("title", "ログイン - simplesave");
-        model.addAttribute("content", "login");
-        return "layout";
+        return "login";
     }
 }
