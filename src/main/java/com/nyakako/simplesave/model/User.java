@@ -26,7 +26,7 @@ public class User {
     @NotBlank(message = "メールアドレスは必須です")
     @Email(message = "メールアドレスの形式が無効です")
     private String email;
-    
+
     @NotBlank(message = "パスワードは必須です")
     @Size(min = 8, message = "パスワードは8文字以上で入力してください")
     private String password;
