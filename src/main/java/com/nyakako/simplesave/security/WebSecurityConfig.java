@@ -23,7 +23,8 @@ public class WebSecurityConfig {
                                 .userDetailsService(userDetailsService)
                                 // Permit access to H2 console, login, and register pages
                                 .authorizeHttpRequests(authz -> authz
-                                                .requestMatchers("/h2-console/**", "/register", "/login", "/css/**", "/js/**")
+                                                .requestMatchers("/h2-console/**", "/register", "/login", "/css/**",
+                                                                "/js/**")
                                                 .permitAll()
                                                 .anyRequest().authenticated())
                                 // Configure form login
@@ -31,7 +32,7 @@ public class WebSecurityConfig {
                                                 .loginPage("/login")
                                                 .loginProcessingUrl("/login")
                                                 .defaultSuccessUrl("/dashboard", true)
-                                                .usernameParameter("email") 
+                                                .usernameParameter("email")
                                                 .permitAll())
                                 // Configure logout
                                 .logout(logout -> logout
