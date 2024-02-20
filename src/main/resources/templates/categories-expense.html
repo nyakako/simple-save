@@ -46,19 +46,21 @@
                             <table class="table tablee-hover text-nowrap">
                                 <thead>
                                     <tr>
-                                        <th>カテゴリ</th>
-                                        <th>カテゴリタイプ</th>
+                                        <!-- デバック用 -->
+                                        <!-- <th>カテゴリ</th> -->
+                                        <!-- <th>カテゴリタイプ</th> -->
                                         <th>カテゴリ名</th>
                                         <th>編集</th>
                                     </tr>
                                 </thead>
                                 <tbody>
                                     <tr th:each="category : ${expenseCategories}">
-                                        <td th:text="${category.id}">Category</td>
-                                        <td th:switch="${category.type}">
+                                        <!-- デバック用 -->
+                                        <!-- <td th:text="${category.id}">Category</td> -->
+                                        <!-- <td th:switch="${category.type}">
                                             <span th:case="'expense'" th:text="支出">支出</span>
                                             <span th:case="'income'" th:text="収入">収入</span>
-                                        </td>
+                                        </td> -->
                                         <td th:text="${category.name}">Category</td>
                                         <td><a th:href="@{/categories-expense/edit/{id}(id=${category.id})}"
                                                 style="color: #212529;"><i class="fa-solid fa-pen-to-square"></i></a>

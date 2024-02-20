@@ -54,11 +54,27 @@ public class CategoryService {
     public void createDefaultCategoriesForUser(User user) {
         List<Category> defaultCategories = Arrays.asList(
                 new Category("食費", "expense", user),
+                new Category("日用品", "expense", user),
+                new Category("趣味、娯楽", "expense", user),
+                new Category("交際費", "expense", user),
                 new Category("交通費", "expense", user),
-                new Category("デフォルト", "expense", user),
+                new Category("衣服、美容", "expense", user),
+                new Category("健康、医療", "expense", user),
+                new Category("教養、教育", "expense", user),
+                new Category("水道、光熱費", "expense", user),
+                new Category("通信費", "expense", user),
+                new Category("税金", "expense", user),
+                new Category("保険", "expense", user),
+                new Category("大型出費", "expense", user),
+                new Category("その他", "expense", user),
                 new Category("給与", "income", user),
-                new Category("賞与", "income", user),
-                new Category("デフォルト", "income", user)
+                new Category("仕送り、お小遣い", "income", user),
+                new Category("事業、副業", "income", user),
+                new Category("年金", "income", user),
+                new Category("配当所得", "income", user),
+                new Category("不動産所得", "income", user),
+                new Category("臨時収入", "income", user),
+                new Category("その他", "income", user)
         );
 
         for (Category category : defaultCategories) {
