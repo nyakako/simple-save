@@ -37,7 +37,6 @@ public class RecurringTransactionService {
         return recurringTransactionRepositoty.findByUserId(userId);
     }
 
-
     public Optional<RecurringTransaction> findRecurringTransactionById(@NonNull Long id) {
         return recurringTransactionRepositoty.findById(id);
     }
