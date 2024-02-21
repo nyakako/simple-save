@@ -7,7 +7,7 @@ import java.util.List;
 import java.time.LocalDate;
 
 
-public interface RecurringTransactionRepositoty extends JpaRepository<RecurringTransaction, Long>{
+public interface RecurringTransactionRepository extends JpaRepository<RecurringTransaction, Long>{
     List<RecurringTransaction> findByNextTransactionDate(LocalDate date);
     List<RecurringTransaction> findByUserId(Long userId);
 }

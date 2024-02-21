@@ -156,7 +156,7 @@ public class RecurringTransactionController {
     }
 
     @PostMapping("/recurring-transactions/delete/{id}")
-    public String deleteRecurringTransaction(@NonNull @PathVariable Long id, RedirectAttributes redirectAttribtes,
+    public String deleteRecurringTransaction(@NonNull @PathVariable Long id, RedirectAttributes redirectAttributes,
             Authentication authentication) {
         CustomUserDetails userDetails = (CustomUserDetails) authentication.getPrincipal();
         Long userId = userDetails.getUserId(); // ユーザーIDの取得
@@ -167,7 +167,7 @@ public class RecurringTransactionController {
         if (transaction == null || !transaction.getUser().getId().equals(userId)) {
             throw new AccessDeniedException("このページにアクセスする権限がありません。");
         }
-        recurringTransactionService.deleteRecurringTransacition(id);
+        recurringTransactionService.deleteRecurringTransaction(id);
         return "redirect:/settings/recurring-transactions";
     }
 }

@@ -13,40 +13,40 @@ import org.springframework.stereotype.Service;
 
 import com.nyakako.simplesave.model.RecurringTransaction;
 import com.nyakako.simplesave.model.Transaction;
-import com.nyakako.simplesave.repository.RecurringTransactionRepositoty;
+import com.nyakako.simplesave.repository.RecurringTransactionRepository;
 import com.nyakako.simplesave.repository.TransactionRepository;
 
 @Service
 public class RecurringTransactionService {
 
-    private final RecurringTransactionRepositoty recurringTransactionRepositoty;
+    private final RecurringTransactionRepository recurringTransactionRepository;
     private final TransactionRepository transactionRepository;
     private static final Logger logger = LoggerFactory.getLogger(RecurringTransactionService.class);
 
-    public RecurringTransactionService(RecurringTransactionRepositoty recurringTransactionRepositoty,
+    public RecurringTransactionService(RecurringTransactionRepository recurringTransactionRepository,
             TransactionRepository transactionRepository) {
-        this.recurringTransactionRepositoty = recurringTransactionRepositoty;
+        this.recurringTransactionRepository = recurringTransactionRepository;
         this.transactionRepository = transactionRepository;
     }
 
     public List<RecurringTransaction> findAllRecurringTransaction() {
-        return recurringTransactionRepositoty.findAll();
+        return recurringTransactionRepository.findAll();
     }
 
     public List<RecurringTransaction> findRecurringTransactionsByUserId(Long userId) {
-        return recurringTransactionRepositoty.findByUserId(userId);
+        return recurringTransactionRepository.findByUserId(userId);
     }
 
     public Optional<RecurringTransaction> findRecurringTransactionById(@NonNull Long id) {
-        return recurringTransactionRepositoty.findById(id);
+        return recurringTransactionRepository.findById(id);
     }
 
     public void saveRecurringTransaction(@NonNull RecurringTransaction recurringTransaction) {
-        recurringTransactionRepositoty.save(recurringTransaction);
+        recurringTransactionRepository.save(recurringTransaction);
     }
 
-    public void deleteRecurringTransacition(@NonNull Long id) {
-        recurringTransactionRepositoty.deleteById(id);
+    public void deleteRecurringTransaction(@NonNull Long id) {
+        recurringTransactionRepository.deleteById(id);
     }
 
     // @Scheduled(cron = "0 0 1 * * ?") // 毎日午前1時に実行
@@ -56,12 +56,12 @@ public class RecurringTransactionService {
 
         try {
             LocalDate today = LocalDate.now();
-            List<RecurringTransaction> recurringTransactions = recurringTransactionRepositoty
+            List<RecurringTransaction> recurringTransactions = recurringTransactionRepository
                     .findByNextTransactionDate(today);
 
             for (RecurringTransaction rt : recurringTransactions) {
                 Transaction newTransaction = new Transaction();
-                // newTransaction.setUser(rt.getUser());
+                newTransaction.setUser(rt.getUser());
                 newTransaction.setDate(today);
                 newTransaction.setAmount(rt.getAmount());
                 newTransaction.setCategory(rt.getCategory());
@@ -76,9 +76,9 @@ public class RecurringTransactionService {
                         newTransaction.getDate());
 
                 rt.setNextTransactionDate(calculateNextTransactionDate(rt));
-                recurringTransactionRepositoty.save(rt);
+                recurringTransactionRepository.save(rt);
             }
-            logger.info("Sucessfully processed recurring transactions.");
+            logger.info("Successfully processed recurring transactions.");
         } catch (Exception e) {
             logger.error("Error processing recurring transactions", e);
         }
