@@ -15,5 +15,5 @@ ARG DEPENDENCY=target/dependency
 COPY --from=build ${DEPENDENCY}/BOOT-INF/lib /app/lib
 COPY --from=build ${DEPENDENCY}/META-INF /app/META-INF
 COPY --from=build ${DEPENDENCY}/BOOT-INF/classes /app
-# エントリーポイントを設定
-ENTRYPOINT ["java","-cp","app:app/lib/*","com.nyakako.simplesave.SimplesaveApplication"]
+# エントリーポイントを設定し、JVMオプションを適用
+ENTRYPOINT ["java", "-Xms256m", "-Xmx256m", "-cp", "app:app/lib/*", "com.nyakako.simplesave.SimplesaveApplication"]
