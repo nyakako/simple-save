@@ -1,8 +1,19 @@
+# ビルドステージ
 FROM maven:3-eclipse-temurin-21 AS build
 COPY . .
+# Mavenを使ってパッケージをビルド
 RUN mvn clean package -Dmaven.test.skip=true
+# JARファイルを展開
+RUN mkdir -p target/dependency && (cd target/dependency; jar -xf ../*.jar)
 
+
+# 実行ステージ
 FROM eclipse-temurin:21-alpine
-COPY --from=build /target/simplesave-0.0.1-SNAPSHOT.jar simplesave.jar
-EXPOSE 8080
-ENTRYPOINT ["java", "-XX:+UseContainerSupport", "-Xms256m", "-Xmx512m", "-jar", "simplesave.jar"]
+VOLUME /tmp
+# ビルドステージからファイルをコピー
+ARG DEPENDENCY=target/dependency
+COPY --from=build ${DEPENDENCY}/BOOT-INF/lib /app/lib
+COPY --from=build ${DEPENDENCY}/META-INF /app/META-INF
+COPY --from=build ${DEPENDENCY}/BOOT-INF/classes /app
+# エントリーポイントを設定
+ENTRYPOINT ["java","-cp","app:app/lib/*","com.nyakako.simplesave.SimplesaveApplication"]
