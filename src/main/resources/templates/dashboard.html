@@ -67,27 +67,27 @@
             </div>
             <div class="row mb-5">
                 <div class="col-md">
-                    <div class="card card-success">
+                    <div class="card" th:classappend="${colorPreference == 'greenPositive'} ? 'card-success' : 'card-danger'">
                         <div class="card-header">
                             <h3 class="card-title">収入の内訳</h3>
                         </div>
-                        <div class="card-body p-0" style="display: flex; justify-content: center; align-items: center;">
+                        <div class="card-body p-1" style="display: flex; justify-content: center; align-items: center;">
                             <canvas id="incomesChart"></canvas>
                         </div>
                     </div>
                 </div>
                 <div class="col-md">
-                    <div class="card card-danger">
+                    <div class="card" th:classappend="${colorPreference == 'greenPositive'} ? 'card-danger' : 'card-success'">
                         <div class="card-header">
                             <h3 class="card-title">支出の内訳</h3>
                         </div>
-                        <div class="card-body p-0" style="display: flex; justify-content: center; align-items: center;">
+                        <div class="card-body p-1" style="display: flex; justify-content: center; align-items: center;">
                             <canvas id="expensesChart"></canvas>
                         </div>
                     </div>
                 </div>
             </div>
-            <div class="row mb-5">
+            <div class="row">
                 <div class="col-md-12">
                     <div class="col text-right mb-2">
                         <a th:href="@{/transactions/new}" class="btn btn-success">記録する</a>
@@ -99,7 +99,7 @@
                         <div class="card-body table-responsive p-0">
                             <table class="table text-nowrap">
                                 <thead>
-                                    <tr>
+                                    <tr class="ml-2">
                                         <th>日付</th>
                                         <th>タイプ</th>
                                         <th>カテゴリ</th>
@@ -148,37 +148,44 @@
 <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2.0.0"></script>
 
 <script th:inline="javascript">
-    /*<![CDATA[*/
-    var categoryExpenses = /*[[${categoryExpenses}]]*/[];
-    var categoryIncomes = /*[[${categoryIncomes}]]*/[];
-    var currentDate = /*[[${currentDate}]]*/[];
-    /*]]>*/
-
     document.addEventListener('DOMContentLoaded', function () {
         const ctxExpense = document.getElementById('expensesChart').getContext('2d');
         const ctxIncome = document.getElementById('incomesChart').getContext('2d');
 
+        const categoryExpenses = /*[[${categoryExpenses}]]*/[];
+        const categoryIncomes = /*[[${categoryIncomes}]]*/[];
+        const currentDate = /*[[${currentDate}]]*/[];
+
         const labelsExpense = categoryExpenses.map(expense => expense.categoryName);
         const dataExpense = categoryExpenses.map(expense => expense.totalAmount);
 
+        const totalExpense = dataExpense.reduce((acc, val) => acc + val, 0);
+
         const labelsIncome = categoryIncomes.map(income => income.categoryName);
         const dataIncome = categoryIncomes.map(income => income.totalAmount);
+
+        const totalIncome = dataIncome.reduce((acc, val) => acc + val, 0);
 
         const chartExpense = new Chart(ctxExpense, {
             type: 'doughnut',
             data: {
                 labels: labelsExpense,
                 datasets: [{
-                    label: 'カテゴリ別支出',
+                    label: '支出',
                     data: dataExpense,
                     borderWidth: 1
-                }]
+                }],
             },
+
             options: {
                 responsive: true,
+                layout: {
+                    padding: 30
+                },
+
                 plugins: {
                     legend: {
-                        position: 'top',
+                        display: false,
                     },
                     title: {
                         display: true,
@@ -188,59 +195,118 @@
                         enabled: true
                     },
                     datalabels: {
-                        color: 'white',
-                        font: {
-                            size: 18
+                        display: function (ctxExpense) {
+                            return ctxExpense.dataset.data[ctxExpense.dataIndex] / totalExpense > 0.05;
                         },
-                        formatter: function (value, context) {
-                            return value.toString() + '円';
+                        offset: 0,
+                        // padding: 0,
+                        labels: {
+                            name: {
+                                align: 'center',
+                                color: 'white',
+                                font: { size: 13 },
+                                formatter: function (value, ctx) {
+                                    return ctx.chart.data.labels[ctx.dataIndex];
+                                },
+                            },
+                            value: {
+                                align: 'end',
+                                anchor: 'end',
+                                color: 'white',
+                                backgroundColor: function (context) {
+                                    return context.dataset.backgroundColor;
+                                },
+                                borderColor: 'white',
+                                borderWidth: 1,
+                                borderRadius: 2,
+                                font: {
+                                    size: 11
+                                },
+                                formatter: function (value, context) {
+                                    const percentage = ((value / totalExpense) * 100).toFixed(2) + '%';
+                                    return percentage;
+                                },
+                                padding:4,
+                            },
                         }
-                    }
+                    },
                 },
-
             },
             plugins: [
                 ChartDataLabels,
             ],
         });
+
         const chartIncome = new Chart(ctxIncome, {
             type: 'doughnut',
             data: {
                 labels: labelsIncome,
                 datasets: [{
-                    label: 'カテゴリ別収入',
+                    label: '収入',
                     data: dataIncome,
                     borderWidth: 1
-                }]
+                }],
             },
+
             options: {
                 responsive: true,
+                layout: {
+                    padding: 30
+                },
+
                 plugins: {
                     legend: {
-                        position: 'top',
+                        display: false,
                     },
                     title: {
                         display: true,
-                        text: 'カテゴリ別収入(' + currentDate + ')'
+                        text: 'カテゴリ別収入 (' + currentDate + ')'
                     },
                     tooltip: {
                         enabled: true
                     },
                     datalabels: {
-                        color: 'white',
-                        font: {
-                            size: 18
+                        display: function (ctxIncome) {
+                            return ctxIncome.dataset.data[ctxIncome.dataIndex] / totalIncome > 0.1;
                         },
-                        formatter: function (value, context) {
-                            return value.toString() + '円';
+                        offset: 0,
+                        // padding: 0,
+                        labels: {
+                            name: {
+                                align: 'center',
+                                color: 'white',
+                                font: { size: 13 },
+                                formatter: function (value, ctx) {
+                                    return ctx.chart.data.labels[ctx.dataIndex];
+                                },
+                            },
+                            value: {
+                                align: 'end',
+                                anchor: 'end',
+                                color: 'white',
+                                backgroundColor: function (context) {
+                                    return context.dataset.backgroundColor;
+                                },
+                                borderColor: 'white',
+                                borderWidth: 1,
+                                borderRadius: 2,
+                                font: {
+                                    size: 11
+                                },
+                                formatter: function (value, context) {
+                                    const percentage = ((value / totalIncome) * 100).toFixed(2) + '%';
+                                    return percentage;
+                                },
+                                padding:4,
+                            },
                         }
-                    }
+                    },
                 },
-
             },
             plugins: [
                 ChartDataLabels,
             ],
         });
     });
+
 </script>
