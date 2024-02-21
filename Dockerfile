@@ -15,5 +15,6 @@ ARG DEPENDENCY=target/dependency
 COPY --from=build ${DEPENDENCY}/BOOT-INF/lib /app/lib
 COPY --from=build ${DEPENDENCY}/META-INF /app/META-INF
 COPY --from=build ${DEPENDENCY}/BOOT-INF/classes /app
-# エントリーポイントを設定し、JVMオプションを適用
-ENTRYPOINT ["java", "-Xms256m", "-Xmx256m", "-Dspring.backgroundpreinitializer.ignore=true", "-cp", "app:app/lib/*", "com.nyakako.simplesave.SimplesaveApplication"]
+ENTRYPOINT ["java", "-Dspring.backgroundpreinitializer.ignore=true", "-cp", "app:app/lib/*", "com.nyakako.simplesave.SimplesaveApplication"]
+# ↓JVMオプションを適用(速度低下の為、中止)
+# ENTRYPOINT ["java", "-Xms256m", "-Xmx256m", "-Dspring.backgroundpreinitializer.ignore=true", "-cp", "app:app/lib/*", "com.nyakako.simplesave.SimplesaveApplication"]
