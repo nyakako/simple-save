@@ -61,6 +61,7 @@ public class CategoryService {
                 new Category("衣服、美容", "expense", user),
                 new Category("健康、医療", "expense", user),
                 new Category("教養、教育", "expense", user),
+                new Category("住居、家賃", "expense", user),
                 new Category("水道、光熱費", "expense", user),
                 new Category("通信費", "expense", user),
                 new Category("税金", "expense", user),
