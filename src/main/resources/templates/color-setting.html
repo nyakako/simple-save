@@ -25,7 +25,7 @@
     <section class="content px-2">
         <div class="container-fluid">
             <div class="row">
-                <div class="col-md-3">
+                <div class="col-md-3 mb-4">
                     <div class="list-group">
                         <li class="list-group-item list-group-item-dark">設定</li>
                         <a th:href="@{/settings/categories-expense}"
@@ -43,15 +43,15 @@
                         <form th:action="@{/color-setting/edit}" method="post">
                             <div class="card-body">
                                 <div class="form-group">
-                                    <label>文字色の設定</label>
+                                    <label>色の設定（収入、収支が＋の色）</label>
                                     <div class="color-setting-radio">
                                         <input class="form-check-input" type="radio" name="colorSetting"
                                             id="greenPositive" value="greenPositive" th:checked="${colorPreference == 'greenPositive'}">
                                         <label class="form-check-label labelGreen"
-                                            for="greenPositive">収入、収支プラスを緑</label>
+                                            for="greenPositive">緑（デフォルト）</label>
                                         <input class="form-check-input" type="radio" name="colorSetting"
                                             id="redPositive" value="redPositive" th:checked="${colorPreference == 'redPositive'}" required>
-                                        <label class="form-check-label labelRed" for="redPositive">収入、収支プラスを赤</label>
+                                        <label class="form-check-label labelRed" for="redPositive">赤</label>
                                     </div>
                                 </div>
                                 <div class="card-footer">

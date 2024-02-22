@@ -1,15 +1,15 @@
 <div class="container" th:fragment="content" th:with="title='履歴編集 - simplesave'">
     <section class="content-header">
-        <div class="container-fluid">
+        <div class="container form-container">
             <div class="row mb-2">
-                <div class="col-sm-6">
+                <div class="col">
                     <h1>履歴の編集</h1>
                 </div>
             </div>
         </div>
     </section>
     <section class="content px-2">
-        <div class="container-fluid">
+        <div class="container form-container">
             <div class="row">
                 <div class="col-md-12">
                     <div class="card card-success">
@@ -38,12 +38,12 @@
 
                                     <label for="categoryId">カテゴリ</label>
                                     <div class="form-row">
-                                        <select name="categoryId" id="categoryId" class="form-control col-6" required>
+                                        <select name="categoryId" id="categoryId" class="form-control col-8" required>
                                             <option value="" th:each="category : ${categories}"
                                                 th:value="${category.id}" th:text="${category.name}">
                                                 カテゴリ名</option>
                                         </select>
-                                        <a id="addCategoryButton" href="" class="btn btn-success ml-2 col-2"> 追加</a>
+                                        <a id="addCategoryButton" href="" class="btn btn-outline-dark ml-2 col-3"> 追加</a>
                                     </div>
                                 </div>
 

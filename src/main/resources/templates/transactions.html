@@ -2,7 +2,7 @@
     <section class="content-header">
         <div class="container-fluid">
             <div class="row mb-2">
-                <div class="col-sm-6">
+                <div class="col">
                     <h1>入出金明細一覧</h1>
                 </div>
             </div>
@@ -20,18 +20,18 @@
                             <table class="table tablee-hover text-nowrap">
                                 <thead>
                                     <tr>
-                                        <th>日付</th>
-                                        <th>タイプ</th>
+                                        <th class="text-center">日付</th>
+                                        <th class="text-center">タイプ</th>
                                         <th>カテゴリ</th>
                                         <th>内容</th>
-                                        <th>金額</th>
-                                        <th>編集</th>
+                                        <th class="text-right">金額</th>
+                                        <th class="text-center">編集</th>
                                     </tr>
                                 </thead>
                                 <tbody>
                                     <tr th:each="transaction : ${transactions}">
-                                        <td th:text="${transaction.date}">Date</td>
-                                        <td th:switch="${transaction.category.type}">
+                                        <td class="text-center" th:text="${transaction.date}">Date</td>
+                                        <td class="text-center" th:switch="${transaction.category.type}">
                                             <span th:case="'expense'"
                                                 th:text="支出">支出</span>
                                             <span th:case="'income'"
@@ -39,8 +39,17 @@
                                         </td>
                                         <td th:text="${transaction.category.name}">Category</td>
                                         <td th:text="${transaction.description}">Description</td>
-                                        <td th:text="${#numbers.formatInteger(transaction.amount, 3, 'COMMA')} + '円'">Amount</td>
-                                        <td ><a th:href="@{/transactions/edit/{id}(id=${transaction.id})}"
+                                        <td class="text-right" th:switch="${transaction.category.type}">
+                                            <span th:case="'expense'"
+                                                th:classappend="${colorPreference == 'greenPositive'} ? 'text-danger' : 'text-success'"
+                                                th:text="${#numbers.formatInteger(transaction.amount, 3, 'COMMA')} + '円'">
+                                                Amount</span>
+                                            <span th:case="'income'"
+                                                th:classappend="${colorPreference == 'greenPositive'} ? 'text-success' : 'text-danger'"
+                                                th:text="${#numbers.formatInteger(transaction.amount, 3, 'COMMA')} + '円'">
+                                                Amount</span>
+                                        </td>
+                                        <td class="text-center"><a th:href="@{/transactions/edit/{id}(id=${transaction.id})}"
                                             style="color: #212529;"><i class="fa-solid fa-pen-to-square"></i></a></td>
                                     </tr>
                                 </tbody>

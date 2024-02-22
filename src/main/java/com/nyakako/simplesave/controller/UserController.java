@@ -13,6 +13,8 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import com.nyakako.simplesave.model.User;
 import com.nyakako.simplesave.service.UserService;
 
+import jakarta.servlet.http.HttpServletRequest;
+
 @Controller
 public class UserController {
 
@@ -31,7 +33,8 @@ public class UserController {
     }
 
     @PostMapping("/register")
-    public String registerUser(@ModelAttribute("user") @Validated User user, BindingResult result, RedirectAttributes redirectAttributes) {
+    public String registerUser(@ModelAttribute("user") @Validated User user, BindingResult result,
+            RedirectAttributes redirectAttributes) {
         // ユーザー名とメールアドレスの存在チェック
         if (userService.isUsernameExists(user.getUsername())) {
             result.rejectValue("username", "error.user", "このユーザー名は使用できません");
@@ -52,9 +55,12 @@ public class UserController {
     }
 
     @GetMapping("/login")
-    public String showLoginForm(@RequestParam(value = "error", required = false) String error, Model model) {
-        if(error != null) {
+    public String showLoginForm(@RequestParam(value = "error", required = false) String error, Model model,
+            HttpServletRequest request) {
+        if (error != null) {
             model.addAttribute("loginError", "メールアドレスまたはパスワードが無効です");
+            String email = (String) request.getSession().getAttribute("email");
+            model.addAttribute("email", email);
         }
         return "login";
     }
