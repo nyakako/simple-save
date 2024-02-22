@@ -93,10 +93,33 @@
     color: #fff;
 }
 
+.card-btn-header {
+    padding: 0.75rem 0.75rem;
+}
 .card-btn-header::after {
     content: none;
 }
 
 .form-row {
     margin-left: 0px;
+}
+
+#dashboard-top-table .table-sm td, #dashboard-top-table .table-sm th {
+    padding: 0.75rem 0.3rem!important;
+}
+.card-footer{
+    text-align: center;
+}
+.btn-success{
+    width: 100px;
+}
+.btn-danger{
+    width: 100px;
+}
+.card-footer .btn-danger{
+    margin-left: 2.5rem;
+}
+
+.container.form-container {
+    max-width: 700px;
 }
