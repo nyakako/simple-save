@@ -35,7 +35,7 @@ public class TransactionService {
         return transactionRepository.save(transaction);
     }
 
-    public void deleteTransacition(@NonNull Long id) {
+    public void deleteTransaction(@NonNull Long id) {
         transactionRepository.deleteById(id);
     }
 

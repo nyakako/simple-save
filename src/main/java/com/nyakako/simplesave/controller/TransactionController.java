@@ -172,7 +172,7 @@ public class TransactionController {
             // アクセス拒否の処理
             throw new AccessDeniedException("このページにアクセスする権限がありません。");
         }
-        transactionService.deleteTransacition(id);
+        transactionService.deleteTransaction(id);
         String redirectUrlTransaction = (String) session.getAttribute("redirectUrlTransaction");
         session.removeAttribute("redirectUrlTransaction");
 

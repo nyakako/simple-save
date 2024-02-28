@@ -116,7 +116,7 @@
                                 </thead>
                                 <tbody>
                                     <tr th:each="transaction : ${transactions}">
-                                        <td  class="text-center" th:text="${transaction.date}">Date</td>
+                                        <td class="text-center" th:text="${transaction.date}">Date</td>
                                         <td class="text-center" th:switch="${transaction.category.type}">
                                             <span th:case="'expense'" th:text="支出">支出</span>
                                             <span th:case="'income'" th:text="収入">収入</span>
@@ -163,10 +163,21 @@
         const categoryIncomes = /*[[${categoryIncomes}]]*/[];
         const currentDate = /*[[${currentDate}]]*/[];
 
+        const colorPalette = [
+            "#a6cee3", "#1f78b4", "#a6d96a", "#33a02c",
+            "#fb9a99", "#e31a1c", "#fdbf6f", "#ff7f00",
+            "#cab2d6", "#6a3d9a", "#ffd92f", "#b15928"
+        ];
+
         // 支出グラフを描画する処理。ctxExpense が null でない場合のみ実行。
         if (ctxExpense && categoryExpenses.length > 0) {
             const labelsExpense = categoryExpenses.map(expense => expense.categoryName);
             const dataExpense = categoryExpenses.map(expense => expense.totalAmount);
+            // カテゴリ名に基づいて背景色を割り当てる
+            // const backgroundColorsExpense = categoryExpenses.map(expense => colorPalette[hashCode(expense.categoryName) % colorPalette.length]);
+            const backgroundColorsExpense = categoryExpenses.map(expense => colorPalette[expense.categoryId % colorPalette.length]);
+
+
             const totalExpense = dataExpense.reduce((acc, val) => acc + val, 0);
 
             new Chart(ctxExpense.getContext('2d'), {
@@ -176,7 +187,8 @@
                     datasets: [{
                         label: '支出',
                         data: dataExpense,
-                        borderWidth: 1
+                        borderWidth: 1,
+                        backgroundColor: backgroundColorsExpense
                     }],
                 },
 
@@ -251,6 +263,10 @@
         if (ctxIncome && categoryIncomes.length > 0) {
             const labelsIncome = categoryIncomes.map(income => income.categoryName);
             const dataIncome = categoryIncomes.map(income => income.totalAmount);
+            // カテゴリ名に基づいて背景色を割り当てる
+            // const backgroundColorsIncome = categoryIncomes.map(income => colorPalette[hashCode(income.categoryName) % colorPalette.length]);
+            const backgroundColorsIncome = categoryIncomes.map(income => colorPalette[income.categoryId % colorPalette.length]);
+
             const totalIncome = dataIncome.reduce((acc, val) => acc + val, 0);
             new Chart(ctxIncome.getContext('2d'), {
                 type: 'doughnut',
@@ -259,7 +275,8 @@
                     datasets: [{
                         label: '収入',
                         data: dataIncome,
-                        borderWidth: 1
+                        borderWidth: 1,
+                        backgroundColor: backgroundColorsIncome
                     }],
                 },
 
