@@ -174,7 +174,6 @@
             const labelsExpense = categoryExpenses.map(expense => expense.categoryName);
             const dataExpense = categoryExpenses.map(expense => expense.totalAmount);
             // カテゴリ名に基づいて背景色を割り当てる
-            // const backgroundColorsExpense = categoryExpenses.map(expense => colorPalette[hashCode(expense.categoryName) % colorPalette.length]);
             const backgroundColorsExpense = categoryExpenses.map(expense => colorPalette[expense.categoryId % colorPalette.length]);
 
 
@@ -264,7 +263,6 @@
             const labelsIncome = categoryIncomes.map(income => income.categoryName);
             const dataIncome = categoryIncomes.map(income => income.totalAmount);
             // カテゴリ名に基づいて背景色を割り当てる
-            // const backgroundColorsIncome = categoryIncomes.map(income => colorPalette[hashCode(income.categoryName) % colorPalette.length]);
             const backgroundColorsIncome = categoryIncomes.map(income => colorPalette[income.categoryId % colorPalette.length]);
 
             const totalIncome = dataIncome.reduce((acc, val) => acc + val, 0);
