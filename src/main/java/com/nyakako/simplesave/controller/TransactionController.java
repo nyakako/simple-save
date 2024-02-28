@@ -42,15 +42,20 @@ public class TransactionController {
 
     @GetMapping("/transactions")
     public String showTransactions(Model model, Authentication authentication) {
+        String colorPreference = "greenPositive";
         // ログインユーザーの明細取得
         CustomUserDetails userDetails = (CustomUserDetails) authentication.getPrincipal();
         Long userId = userDetails.getUserId(); // ユーザーIDの取得
+        if (userId != null) {
+            colorPreference = userService.getColorPreference(userId);
+        }
         Iterable<Transaction> transactions = transactionService.findTransactionsByUserId(userId);
 
         // 全ユーザー明細取得（デバック用）
         // List<Transaction> transactions = transactionService.findAllTransactions();
         model.addAttribute("transactions", transactions);
         model.addAttribute("title", "取引一覧 - simplesave");
+        model.addAttribute("colorPreference", colorPreference);
         model.addAttribute("content", "transactions");
         return "layout";
     }

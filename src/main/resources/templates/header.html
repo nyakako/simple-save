@@ -2,16 +2,19 @@
     <!-- Navbar -->
     <nav class="main-header navbar navbar-expand-md navbar-light">
         <div class="container">
-            <a th:href="@{/dashboard}" class="navbar-brand order-1 order-md-1">
+            <a th:href="@{/dashboard}" class="navbar-brand">
                 <span class="brand-text font-weight-light">simplesave</span>
             </a>
-            <button class="navbar-toggler mr-2" type="button" data-toggle="collapse" data-target="#navbarCollapse"
-                aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
+            <a th:href="@{/transactions/new}" class="btn btn-success order-md-3 ml-auto">記録する</a>
+            <button class="navbar-toggler mr-2" type="button" data-toggle="collapse"
+                data-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false"
+                aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
             </button>
-            <div class="collapse navbar-collapse order-2 order-md-2 ml-md-3" id="navbarCollapse" sec:authorize="isAuthenticated()">
+            <div class="collapse navbar-collapse ml-md-3" id="navbarCollapse"
+                sec:authorize="isAuthenticated()">
                 <!-- Left navbar links -->
-                <ul class="navbar-nav">
+                <ul class="navbar-nav order-2 order-md-2 ">
                     <li class="nav-item">
                         <a th:href="@{/dashboard}" class="nav-link">ダッシュボード</a>
                     </li>
@@ -19,8 +22,9 @@
                         <a th:href="@{/transactions}" class="nav-link">明細一覧</a>
                     </li>
                 </ul>
+
                 <!-- Right navbar links -->
-                <ul class="navbar-nav ml-auto order-3 order-md-3">
+                <ul class="navbar-nav ml-auto order-4 order-md-4">
                     <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown4" role="button"
                             data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
