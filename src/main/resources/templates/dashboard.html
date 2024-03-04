@@ -40,7 +40,7 @@
                 </thead>
                 <tbody>
                   <tr>
-                    <td th:switch="${colorPreference}" class="h5">
+                    <td th:switch="${colorPreference}" class="h5-custom">
                       <span th:case="'greenPositive'"
                         th:text="${summary.netIncome < 100 ? #numbers.formatInteger(summary.netIncome, 1) : #numbers.formatInteger(summary.netIncome, 3, 'COMMA')} + '円'"
                         th:classappend="${summary.netIncome >= 0 ? 'text-success' : 'text-danger'}">
@@ -50,11 +50,11 @@
                         th:classappend="${summary.netIncome >= 0 ? 'text-danger' : 'text-success'}">
                         収入-支出</span>
                     </td>
-                    <td class="h5"
+                    <td class="h5-custom"
                       th:classappend="${colorPreference == 'greenPositive'} ? 'text-success' : 'text-danger'"
                       th:text="${summary.incomeTotal < 100 ? #numbers.formatInteger(summary.incomeTotal, 1) : #numbers.formatInteger(summary.incomeTotal, 3, 'COMMA')} + '円'">
                       収入</td>
-                    <td class="h5"
+                    <td class="h5-custom"
                       th:classappend="${colorPreference == 'greenPositive'} ? 'text-danger' : 'text-success'"
                       th:text="${summary.expenseTotal < 100 ? #numbers.formatInteger(summary.expenseTotal, 1) : #numbers.formatInteger(summary.expenseTotal, 3, 'COMMA')} + '円'">
                       支出</td>
