@@ -11,9 +11,9 @@
   <section class="content">
     <div class="container-fluid">
       <div class="row">
-        <div class="text-right mb-2">
+        <!-- <div class="ml-auto mb-2" style="margin-right: 7.5px;">
           <a th:href="@{/transactions/new}" class="btn btn-success">記録する</a>
-        </div>
+        </div> -->
         <div class="col-md-12">
           <div class="card">
             <div class="card-body table-responsive ">
@@ -80,8 +80,8 @@
         "zeroRecords": "一致するレコードがありません",
         "search": "検索:",
       },
-      "pageLength": 25,
-      "lengthChange": false,
+      "pageLength": 10,
+      "lengthChange": true,
       order: {
         idx: 1,
         dir: 'desc'

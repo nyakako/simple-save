@@ -150,7 +150,7 @@
 /* 画面幅が768px以上の場合に適用されるスタイル */
 @media (min-width: 768px) {
     .h5-custom {
-        font-size: 2rem;
+        font-size: 1.75rem;
     }
 }
 

@@ -5,7 +5,7 @@
       <a th:href="@{/dashboard}" class="navbar-brand">
         <span class="brand-text font-weight-light">simplesave</span>
       </a>
-      <a th:href="@{/transactions/new}" class="btn btn-success order-md-3 mr-2 ml-auto">記録する</a>
+      <a th:href="@{/transactions/new}" class="btn btn-success order-md-3 mr-2 mr-md-0 ml-auto">記録する</a>
       <button class="navbar-toggler mr-2" type="button" data-toggle="collapse" data-target="#navbarCollapse"
         aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
@@ -29,7 +29,8 @@
               <span sec:authentication="principal.actualUsername">username</span>
             </a>
             <div class="dropdown-menu" aria-labelledby="navbarDropdown4">
-              <a class="dropdown-item" th:href="@{/settings/categories-expense}">設定</a>
+              <a class="dropdown-item" th:href="@{/settings/categories-expense}"><i
+                  class="fa-solid fa-gear"></i>&nbsp;設定</a>
               <div class="dropdown-divider"></div>
               <form th:action="@{/logout}" method="post">
                 <input class="dropdown-item" type="submit" value="ログアウト" />
