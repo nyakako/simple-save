@@ -21,16 +21,16 @@
     </section>
     <section class="content px-2">
         <div class="container-fluid">
-            <div class="row mb-5">
+            <div class="row mb-4">
                 <div class="col-md">
                     <div class="card card-info">
                         <div class="card-header card-btn-header d-flex justify-content-between align-items-center">
-                            <a th:href="@{/dashboard(yearMonth=${previousMonth})}" class="btn btn-secondary">前の月へ</a>
+                            <a th:href="@{/dashboard(yearMonth=${previousMonth})}" class="btn btn-dark">前月</a>
                             <span class="h3 card-title" th:text="${currentDate} + の収支">当月の収支</span>
-                            <a th:href="@{/dashboard(yearMonth=${nextMonth})}" class="btn btn-secondary">次の月へ</a>
+                            <a th:href="@{/dashboard(yearMonth=${nextMonth})}" class="btn btn-dark">翌月</a>
                         </div>
                         <div class="card-body table-responsive p-0">
-                            <table class="table text-nowrap">
+                            <table id="dashboard-top-table" class="table table-sm text-nowrap text-center">
                                 <thead>
                                     <tr>
                                         <th>収入-支出</th>
@@ -40,7 +40,7 @@
                                 </thead>
                                 <tbody>
                                     <tr>
-                                        <td th:switch="${colorPreference}" class="h4">
+                                        <td th:switch="${colorPreference}" class="h5">
                                             <span th:case="'greenPositive'"
                                                 th:text="${summary.netIncome < 100 ? #numbers.formatInteger(summary.netIncome, 1) : #numbers.formatInteger(summary.netIncome, 3, 'COMMA')} + '円'"
                                                 th:classappend="${summary.netIncome >= 0 ? 'text-success' : 'text-danger'}">
@@ -50,11 +50,11 @@
                                                 th:classappend="${summary.netIncome >= 0 ? 'text-danger' : 'text-success'}">
                                                 収入-支出</span>
                                         </td>
-                                        <td class="h4"
+                                        <td class="h5"
                                             th:classappend="${colorPreference == 'greenPositive'} ? 'text-success' : 'text-danger'"
                                             th:text="${summary.incomeTotal < 100 ? #numbers.formatInteger(summary.incomeTotal, 1) : #numbers.formatInteger(summary.incomeTotal, 3, 'COMMA')} + '円'">
                                             収入</td>
-                                        <td class="h4"
+                                        <td class="h5"
                                             th:classappend="${colorPreference == 'greenPositive'} ? 'text-danger' : 'text-success'"
                                             th:text="${summary.expenseTotal < 100 ? #numbers.formatInteger(summary.expenseTotal, 1) : #numbers.formatInteger(summary.expenseTotal, 3, 'COMMA')} + '円'">
                                             支出</td>
@@ -65,29 +65,35 @@
                     </div>
                 </div>
             </div>
-            <div class="row mb-5">
+            <div class="row mb-4">
                 <div class="col-md">
-                    <div class="card card-success">
+                    <div class="card"
+                        th:classappend="${colorPreference == 'greenPositive'} ? 'card-success' : 'card-danger'">
                         <div class="card-header">
                             <h3 class="card-title">収入の内訳</h3>
                         </div>
                         <div class="card-body p-0" style="display: flex; justify-content: center; align-items: center;">
-                            <canvas id="incomesChart"></canvas>
+                            <div th:if="${#lists.isEmpty(categoryIncomes)}" class="p-3" role="alert">
+                                この月の収入データはありません</div>
+                            <canvas id="incomesChart" th:unless="${#lists.isEmpty(categoryIncomes)}"></canvas>
                         </div>
                     </div>
                 </div>
                 <div class="col-md">
-                    <div class="card card-danger">
+                    <div class="card"
+                        th:classappend="${colorPreference == 'greenPositive'} ? 'card-danger' : 'card-success'">
                         <div class="card-header">
                             <h3 class="card-title">支出の内訳</h3>
                         </div>
                         <div class="card-body p-0" style="display: flex; justify-content: center; align-items: center;">
-                            <canvas id="expensesChart"></canvas>
+                            <div th:if="${#lists.isEmpty(categoryExpenses)}" class="p-3" role="alert">
+                                この月の支出データはありません</div>
+                            <canvas id="expensesChart" th:unless="${#lists.isEmpty(categoryExpenses)}"></canvas>
                         </div>
                     </div>
                 </div>
             </div>
-            <div class="row mb-5">
+            <div class="row">
                 <div class="col-md-12">
                     <div class="col text-right mb-2">
                         <a th:href="@{/transactions/new}" class="btn btn-success">記録する</a>
@@ -97,27 +103,27 @@
                             <h3 class="card-title" th:text="${currentDate} + の明細">今月の明細</h3>
                         </div>
                         <div class="card-body table-responsive p-0">
-                            <table class="table text-nowrap">
+                            <table class="table table-sm text-nowrap">
                                 <thead>
                                     <tr>
-                                        <th>日付</th>
-                                        <th>タイプ</th>
+                                        <th class="text-center">日付</th>
+                                        <th class="text-center">タイプ</th>
                                         <th>カテゴリ</th>
                                         <th>内容</th>
-                                        <th>金額</th>
-                                        <th>編集</th>
+                                        <th class="text-right">金額</th>
+                                        <th class="text-center">編集</th>
                                     </tr>
                                 </thead>
                                 <tbody>
                                     <tr th:each="transaction : ${transactions}">
-                                        <td th:text="${transaction.date}">Date</td>
-                                        <td th:switch="${transaction.category.type}">
+                                        <td class="text-center" th:text="${transaction.date}">Date</td>
+                                        <td class="text-center" th:switch="${transaction.category.type}">
                                             <span th:case="'expense'" th:text="支出">支出</span>
                                             <span th:case="'income'" th:text="収入">収入</span>
                                         </td>
                                         <td th:text="${transaction.category.name}">Category</td>
                                         <td th:text="${transaction.description}">Description</td>
-                                        <td th:switch="${transaction.category.type}">
+                                        <td class="text-right" th:switch="${transaction.category.type}">
                                             <span th:case="'expense'"
                                                 th:classappend="${colorPreference == 'greenPositive'} ? 'text-danger' : 'text-success'"
                                                 th:text="${#numbers.formatInteger(transaction.amount, 3, 'COMMA')} + '円'">
@@ -127,7 +133,8 @@
                                                 th:text="${#numbers.formatInteger(transaction.amount, 3, 'COMMA')} + '円'">
                                                 Amount</span>
                                         </td>
-                                        <td><a th:href="@{/transactions/edit/{id}(id=${transaction.id})}"
+                                        <td class="text-center"><a
+                                                th:href="@{/transactions/edit/{id}(id=${transaction.id})}"
                                                 style="color: #212529;"><i class="fa-solid fa-pen-to-square"></i></a>
                                         </td>
                                     </tr>
@@ -148,99 +155,193 @@
 <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2.0.0"></script>
 
 <script th:inline="javascript">
-    /*<![CDATA[*/
-    var categoryExpenses = /*[[${categoryExpenses}]]*/[];
-    var categoryIncomes = /*[[${categoryIncomes}]]*/[];
-    var currentDate = /*[[${currentDate}]]*/[];
-    /*]]>*/
-
     document.addEventListener('DOMContentLoaded', function () {
-        const ctxExpense = document.getElementById('expensesChart').getContext('2d');
-        const ctxIncome = document.getElementById('incomesChart').getContext('2d');
+        const ctxExpense = document.getElementById('expensesChart');
+        const ctxIncome = document.getElementById('incomesChart');
 
-        const labelsExpense = categoryExpenses.map(expense => expense.categoryName);
-        const dataExpense = categoryExpenses.map(expense => expense.totalAmount);
+        const categoryExpenses = /*[[${categoryExpenses}]]*/[];
+        const categoryIncomes = /*[[${categoryIncomes}]]*/[];
+        const currentDate = /*[[${currentDate}]]*/[];
 
-        const labelsIncome = categoryIncomes.map(income => income.categoryName);
-        const dataIncome = categoryIncomes.map(income => income.totalAmount);
+        const colorPalette = [
+            "#a6cee3", "#1f78b4", "#a6d96a", "#33a02c",
+            "#fb9a99", "#e31a1c", "#fdbf6f", "#ff7f00",
+            "#cab2d6", "#6a3d9a", "#ffd92f", "#b15928"
+        ];
 
-        const chartExpense = new Chart(ctxExpense, {
-            type: 'doughnut',
-            data: {
-                labels: labelsExpense,
-                datasets: [{
-                    label: 'カテゴリ別支出',
-                    data: dataExpense,
-                    borderWidth: 1
-                }]
-            },
-            options: {
-                responsive: true,
-                plugins: {
-                    legend: {
-                        position: 'top',
-                    },
-                    title: {
-                        display: true,
-                        text: 'カテゴリ別支出 (' + currentDate + ')'
-                    },
-                    tooltip: {
-                        enabled: true
-                    },
-                    datalabels: {
-                        color: 'white',
-                        font: {
-                            size: 18
-                        },
-                        formatter: function (value, context) {
-                            return value.toString() + '円';
-                        }
-                    }
+        // 支出グラフを描画する処理。ctxExpense が null でない場合のみ実行。
+        if (ctxExpense && categoryExpenses.length > 0) {
+            const labelsExpense = categoryExpenses.map(expense => expense.categoryName);
+            const dataExpense = categoryExpenses.map(expense => expense.totalAmount);
+            // カテゴリ名に基づいて背景色を割り当てる
+            const backgroundColorsExpense = categoryExpenses.map(expense => colorPalette[expense.categoryId % colorPalette.length]);
+
+
+            const totalExpense = dataExpense.reduce((acc, val) => acc + val, 0);
+
+            new Chart(ctxExpense.getContext('2d'), {
+                type: 'doughnut',
+                data: {
+                    labels: labelsExpense,
+                    datasets: [{
+                        label: '支出',
+                        data: dataExpense,
+                        borderWidth: 1,
+                        backgroundColor: backgroundColorsExpense
+                    }],
                 },
 
-            },
-            plugins: [
-                ChartDataLabels,
-            ],
-        });
-        const chartIncome = new Chart(ctxIncome, {
-            type: 'doughnut',
-            data: {
-                labels: labelsIncome,
-                datasets: [{
-                    label: 'カテゴリ別収入',
-                    data: dataIncome,
-                    borderWidth: 1
-                }]
-            },
-            options: {
-                responsive: true,
-                plugins: {
-                    legend: {
-                        position: 'top',
+                options: {
+                    responsive: true,
+                    layout: {
+                        padding: 30
                     },
-                    title: {
-                        display: true,
-                        text: 'カテゴリ別収入(' + currentDate + ')'
-                    },
-                    tooltip: {
-                        enabled: true
-                    },
-                    datalabels: {
-                        color: 'white',
-                        font: {
-                            size: 18
+
+                    plugins: {
+                        legend: {
+                            display: false,
                         },
-                        formatter: function (value, context) {
-                            return value.toString() + '円';
-                        }
-                    }
+                        title: {
+                            display: true,
+                            text: 'カテゴリ別支出 (' + currentDate + ')',
+                            padding: {
+                                top: 0,
+                                bottom: 20
+                            }
+                        },
+                        tooltip: {
+                            enabled: true
+                        },
+                        datalabels: {
+                            display: function (ctxExpense) {
+                                return ctxExpense.dataset.data[ctxExpense.dataIndex] / totalExpense > 0.05;
+                            },
+                            offset: 0,
+                            // padding: 0,
+                            labels: {
+                                name: {
+                                    align: 'center',
+                                    color: 'white',
+                                    font: { size: 13 },
+                                    formatter: function (value, ctx) {
+                                        return ctx.chart.data.labels[ctx.dataIndex];
+                                    },
+                                },
+                                value: {
+                                    align: 'end',
+                                    anchor: 'end',
+                                    color: 'white',
+                                    backgroundColor: function (context) {
+                                        return context.dataset.backgroundColor;
+                                    },
+                                    borderColor: 'white',
+                                    borderWidth: 1,
+                                    borderRadius: 2,
+                                    font: {
+                                        size: 11
+                                    },
+                                    formatter: function (value, context) {
+                                        const percentage = ((value / totalExpense) * 100).toFixed(2) + '%';
+                                        return percentage;
+                                    },
+                                    padding: 4,
+                                },
+                            }
+                        },
+                    },
+                },
+                plugins: [
+                    ChartDataLabels,
+
+
+                ],
+            });
+        }
+
+        // 収入グラフを描画する処理。ctxIncome が null でない場合のみ実行。
+        if (ctxIncome && categoryIncomes.length > 0) {
+            const labelsIncome = categoryIncomes.map(income => income.categoryName);
+            const dataIncome = categoryIncomes.map(income => income.totalAmount);
+            // カテゴリ名に基づいて背景色を割り当てる
+            const backgroundColorsIncome = categoryIncomes.map(income => colorPalette[income.categoryId % colorPalette.length]);
+
+            const totalIncome = dataIncome.reduce((acc, val) => acc + val, 0);
+            new Chart(ctxIncome.getContext('2d'), {
+                type: 'doughnut',
+                data: {
+                    labels: labelsIncome,
+                    datasets: [{
+                        label: '収入',
+                        data: dataIncome,
+                        borderWidth: 1,
+                        backgroundColor: backgroundColorsIncome
+                    }],
                 },
 
-            },
-            plugins: [
-                ChartDataLabels,
-            ],
-        });
+                options: {
+                    responsive: true,
+                    layout: {
+                        padding: 30
+                    },
+
+                    plugins: {
+                        legend: {
+                            display: false,
+                        },
+                        title: {
+                            display: true,
+                            text: 'カテゴリ別収入 (' + currentDate + ')',
+                            padding: {
+                                top: 0,
+                                bottom: 20
+                            }
+                        },
+                        tooltip: {
+                            enabled: true
+                        },
+                        datalabels: {
+                            display: function (ctxIncome) {
+                                return ctxIncome.dataset.data[ctxIncome.dataIndex] / totalIncome > 0.1;
+                            },
+                            offset: 0,
+                            // padding: 0,
+                            labels: {
+                                name: {
+                                    align: 'center',
+                                    color: 'white',
+                                    font: { size: 13 },
+                                    formatter: function (value, ctx) {
+                                        return ctx.chart.data.labels[ctx.dataIndex];
+                                    },
+                                },
+                                value: {
+                                    align: 'end',
+                                    anchor: 'end',
+                                    color: 'white',
+                                    backgroundColor: function (context) {
+                                        return context.dataset.backgroundColor;
+                                    },
+                                    borderColor: 'white',
+                                    borderWidth: 1,
+                                    borderRadius: 2,
+                                    font: {
+                                        size: 11
+                                    },
+                                    formatter: function (value, context) {
+                                        const percentage = ((value / totalIncome) * 100).toFixed(2) + '%';
+                                        return percentage;
+                                    },
+                                    padding: 4,
+                                },
+                            }
+                        },
+                    },
+                },
+                plugins: [
+                    ChartDataLabels,
+                ],
+            });
+        }
     });
+
 </script>

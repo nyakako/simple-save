@@ -20,12 +20,12 @@ public interface TransactionRepository extends JpaRepository<Transaction, Long> 
         BigDecimal sumAmountByTypeAndDateRange(@Param("userId") Long userId, @Param("type") String type,
                         @Param("startDate") LocalDate startDate, @Param("endDate") LocalDate endDate);
 
-        @Query("SELECT t.category.name AS categoryName, SUM(t.amount) AS totalAmount " +
+        @Query("SELECT t.category.id AS categoryId, t.category.name AS categoryName, SUM(t.amount) AS totalAmount " +
                         "FROM Transaction t " +
                         "WHERE t.user.id = :userId " +
                         "AND t.category.type = :type " +
                         "AND t.date BETWEEN :startDate AND :endDate " +
-                        "GROUP BY t.category.name " +
+                        "GROUP BY t.category.id, t.category.name " +
                         "ORDER BY totalAmount DESC")
         List<CategorySum> findTotalAmountByCategoryForCurrentUser(@Param("userId") Long userId,
                         @Param("type") String type,
@@ -33,6 +33,8 @@ public interface TransactionRepository extends JpaRepository<Transaction, Long> 
                         @Param("endDate") LocalDate endDate);
 
         public interface CategorySum {
+                Long getCategoryId();
+
                 String getCategoryName();
 
                 BigDecimal getTotalAmount();

@@ -35,7 +35,7 @@ public class RecurringTransaction {
     private BigDecimal amount;
 
     @Column(name = "interval_value")
-    private int interval = 1; //interbalUnit=カスタムを未実装の為、常に1
+    private int interval = 1; //intervalUnit=カスタムを未実装の為、常に1
 
     private String intervalUnit;
 

@@ -2,7 +2,7 @@
     <section class="content-header">
         <div class="container-fluid">
             <div class="row mb-2">
-                <div class="col-sm-6">
+                <div class="col">
                     <h1>入出金明細一覧</h1>
                 </div>
             </div>
@@ -16,33 +16,55 @@
                 </div>
                 <div class="col-md-12">
                     <div class="card">
-                        <div class="card-body table-responsive p-0">
-                            <table class="table tablee-hover text-nowrap">
+                        <div class="card-body table-responsive ">
+                            <table id="transactionDataTable" class="table tablee-hover text-nowrap">
                                 <thead>
                                     <tr>
-                                        <th>日付</th>
-                                        <th>タイプ</th>
+                                        <th class="text-center">定期</th>
+                                        <th class="text-center">日付</th>
+                                        <th class="text-center">タイプ</th>
                                         <th>カテゴリ</th>
                                         <th>内容</th>
-                                        <th>金額</th>
-                                        <th>編集</th>
+                                        <th class="text-right">金額</th>
+                                        <th class="text-center">編集</th>
                                     </tr>
                                 </thead>
                                 <tbody>
                                     <tr th:each="transaction : ${transactions}">
+<<<<<<< HEAD
                                         <td th:text="${transaction.date}">Date</td>
                                         <td th:switch="${transaction.category.type}">
+=======
+                                        <td class="text-center"><input type="checkbox" name="isScheduled" id="isScheduled" th:checked="${transaction.isScheduled}"></td>
+                                        <td class="text-center" th:text="${transaction.date}">Date</td>
+                                        <td class="text-center" th:switch="${transaction.category.type}">
+>>>>>>> fd1791f80a28f3230dbeb357bbad4a4a86b355f7
                                             <span th:case="'expense'" th:text="支出">支出</span>
                                             <span th:case="'income'" th:text="収入">収入</span>
                                         </td>
                                         <td th:text="${transaction.category.name}">Category</td>
                                         <td th:text="${transaction.description}">Description</td>
+<<<<<<< HEAD
                                         <!-- <td th:text="${#numbers.formatInteger(transaction.amount, 3, 'COMMA')} + '円'">
                                             Amount</td> -->
                                         <td
                                             th:text="${transaction.amount < 100 ? #numbers.formatInteger(transaction.amount, 1) : #numbers.formatInteger(transaction.amount, 3, 'COMMA')} + '円'">
                                         </td>
                                         <td><a th:href="@{/transactions/edit/{id}(id=${transaction.id})}"
+=======
+                                        <td class="text-right" th:switch="${transaction.category.type}">
+                                            <span th:case="'expense'"
+                                                th:classappend="${colorPreference == 'greenPositive'} ? 'text-danger' : 'text-success'"
+                                                th:text="${#numbers.formatInteger(transaction.amount, 3, 'COMMA')} + '円'">
+                                                Amount</span>
+                                            <span th:case="'income'"
+                                                th:classappend="${colorPreference == 'greenPositive'} ? 'text-success' : 'text-danger'"
+                                                th:text="${#numbers.formatInteger(transaction.amount, 3, 'COMMA')} + '円'">
+                                                Amount</span>
+                                        </td>
+                                        <td class="text-center"><a
+                                                th:href="@{/transactions/edit/{id}(id=${transaction.id})}"
+>>>>>>> fd1791f80a28f3230dbeb357bbad4a4a86b355f7
                                                 style="color: #212529;"><i class="fa-solid fa-pen-to-square"></i></a>
                                         </td>
                                     </tr>
@@ -55,3 +77,30 @@
         </div>
     </section>
 </div>
+
+
+
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        var tableOptions = {
+            // ここに設定値を書いていく
+            language: {
+                "info": " _TOTAL_ 件中 _START_ から _END_ まで表示",
+                "infoEmpty": " 0 件中 0 から 0 まで表示",
+                "infoFiltered": "（全 _MAX_ 件より抽出）",
+                "lengthMenu": "_MENU_ 件表示",
+                "zeroRecords": "一致するレコードがありません",
+                "search": "検索:",
+            },
+            "pageLength": 25,
+            "lengthChange": false,
+            order: {
+                idx: 1,
+                dir: 'desc'
+            }
+        }
+
+        $('#transactionDataTable').DataTable(tableOptions);
+    });
+</script>
