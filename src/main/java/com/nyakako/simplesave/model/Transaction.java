@@ -10,6 +10,8 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.ManyToOne;
+import jakarta.validation.constraints.DecimalMin;
+import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 
 @Data
@@ -23,8 +25,12 @@ public class Transaction {
     @ManyToOne
     private User user;
 
+    @NotNull(message = "日付は必須です")
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     private LocalDate date;
+
+    @NotNull(message = "金額は必須です")
+    @DecimalMin(value = "0.01", message = "金額は0より大きい値を入力してください")
     private BigDecimal amount;
 
     @ManyToOne

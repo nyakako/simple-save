@@ -17,7 +17,7 @@
                 <div class="col-md-12">
                     <div class="card">
                         <div class="card-body table-responsive ">
-                            <table id="transactionDataTable" class="table tablee-hover text-nowrap">
+                            <table id="transactionDataTable" class="table table-hover text-nowrap">
                                 <thead>
                                     <tr>
                                         <th class="text-center">定期</th>
@@ -31,7 +31,8 @@
                                 </thead>
                                 <tbody>
                                     <tr th:each="transaction : ${transactions}">
-                                        <td class="text-center"><input type="checkbox" name="isScheduled" id="isScheduled" th:checked="${transaction.isScheduled}"></td>
+                                        <td class="text-center"><input type="checkbox" name="isScheduled"
+                                                id="isScheduled" th:checked="${transaction.isScheduled}"></td>
                                         <td class="text-center" th:text="${transaction.date}">Date</td>
                                         <td class="text-center" th:switch="${transaction.category.type}">
                                             <span th:case="'expense'" th:text="支出">支出</span>
@@ -39,19 +40,20 @@
                                         </td>
                                         <td th:text="${transaction.category.name}">Category</td>
                                         <td th:text="${transaction.description}">Description</td>
+
                                         <td class="text-right" th:switch="${transaction.category.type}">
                                             <span th:case="'expense'"
                                                 th:classappend="${colorPreference == 'greenPositive'} ? 'text-danger' : 'text-success'"
-                                                th:text="${#numbers.formatInteger(transaction.amount, 3, 'COMMA')} + '円'">
+                                                th:text="${transaction.amount < 100 ? #numbers.formatInteger(transaction.amount, 1) : #numbers.formatInteger(transaction.amount, 3, 'COMMA')} + '円'">
                                                 Amount</span>
                                             <span th:case="'income'"
                                                 th:classappend="${colorPreference == 'greenPositive'} ? 'text-success' : 'text-danger'"
-                                                th:text="${#numbers.formatInteger(transaction.amount, 3, 'COMMA')} + '円'">
+                                                th:text="${transaction.amount < 100 ? #numbers.formatInteger(transaction.amount, 1) : #numbers.formatInteger(transaction.amount, 3, 'COMMA')} + '円'">
                                                 Amount</span>
                                         </td>
-                                        <td class="text-center"><a
-                                                th:href="@{/transactions/edit/{id}(id=${transaction.id})}"
-                                                style="color: #212529;"><i class="fa-solid fa-pen-to-square"></i></a>
+                                        <td class="text-center>
+                                            <a th:href="@{/transactions/edit/{id}(id=${transaction.id})}" style="color: #212529;"><i
+                                                class="fa-solid fa-pen-to-square"></i></a>
                                         </td>
                                     </tr>
                                 </tbody>

@@ -20,11 +20,14 @@ import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 @Controller
 public class TransactionController {
@@ -66,6 +69,9 @@ public class TransactionController {
         LocalDate today = LocalDate.now();
         CustomUserDetails userDetails = (CustomUserDetails) authentication.getPrincipal();
         Long userId = userDetails.getUserId(); // ユーザーIDの取得
+        if (!model.containsAttribute("transaction")) {
+            model.addAttribute("transaction", new Transaction());
+        }
         model.addAttribute("today", today);
         model.addAttribute("categories", categoryService.findCategoriesByUserId(userId));
         model.addAttribute("title", "新規明細登録 - simplesave");
@@ -81,7 +87,8 @@ public class TransactionController {
     }
 
     @PostMapping("/transactions/new")
-    public String addTransaction(@NonNull @ModelAttribute Transaction transaction,
+    public String addTransaction(@NonNull @ModelAttribute @Validated Transaction transaction, BindingResult result,
+            RedirectAttributes redirectAttributes,
             @NonNull @RequestParam("categoryId") Long categoryId, Authentication authentication, HttpSession session) {
 
         CustomUserDetails userDetails = (CustomUserDetails) authentication.getPrincipal();
@@ -89,6 +96,13 @@ public class TransactionController {
         if (userId != null) {
             User user = userService.findUserById(userId).orElse(null);
             transaction.setUser(user);
+        }
+
+        if (result.hasErrors()) {
+            // エラーがある場合、フォームに戻る
+            redirectAttributes.addFlashAttribute("org.springframework.validation.BindingResult.transaction", result);
+            redirectAttributes.addFlashAttribute("transaction", transaction);
+            return "redirect://transactions/new";
         }
 
         // categoryIdを使用してCategoryオブジェクトを取得
@@ -136,7 +150,8 @@ public class TransactionController {
 
     @PostMapping("/transactions/edit/{id}")
     public String updateTransaction(@PathVariable @NonNull Long id, @NonNull @ModelAttribute Transaction transaction,
-            @NonNull @RequestParam("categoryId") Long categoryId, Authentication authentication, HttpSession session) {
+            @NonNull @RequestParam("categoryId") Long categoryId, Authentication authentication, HttpSession session,
+            BindingResult result, RedirectAttributes redirectAttributes) {
         CustomUserDetails userDetails = (CustomUserDetails) authentication.getPrincipal();
         Long userId = userDetails.getUserId(); // ユーザーIDの取得
         if (userId != null) {
@@ -152,6 +167,13 @@ public class TransactionController {
         }
         Category category = categoryService.findCategoryById(categoryId).orElse(null);
         transaction.setCategory(category);
+
+        if (result.hasErrors()) {
+            // エラーがある場合、フォームに戻る
+            redirectAttributes.addFlashAttribute("org.springframework.validation.BindingResult.transaction", result);
+            redirectAttributes.addFlashAttribute("transaction", transaction);
+            return "redirect://transactions/new";
+        }
 
         transactionService.saveTransaction(transaction);
         String redirectUrlTransaction = (String) session.getAttribute("redirectUrlTransaction");

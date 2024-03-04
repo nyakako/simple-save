@@ -123,3 +123,8 @@
 .container.form-container {
     max-width: 700px;
 }
+
+
+.was-validated .form-check-input:valid~.form-check-label {
+    color: #555e64;
+}
