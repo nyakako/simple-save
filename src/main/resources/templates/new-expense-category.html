@@ -1,32 +1,31 @@
 <div class="container" th:fragment="content" th:with="title='支出カテゴリ登録 - simplesave'">
-    <section class="content-header">
-        <div class="container form-container">
-            <div class="row mb-2">
-                <div class="col">
-                    <h1>支出カテゴリの登録</h1>
-                </div>
-            </div>
+  <section class="content-header">
+    <div class="container form-container">
+      <div class="row mb-2">
+        <div class="col">
+          <h1>支出カテゴリの登録</h1>
         </div>
-    </section>
-    <section class="content px-2">
-        <div class="container form-container">
-            <div class="row">
-                <div class="col-md-12">
-                    <div class="card card-success">
-                        <form th:action="@{/categories-expense/new}" method="post">
-                            <div class="card-body">
-                                <div class="form-group">
-                                    <label for="name">内容</label>
-                                    <input type="text" name="name" class="form-control" placeholder="カテゴリ名"
-                                        id="name" required>
-                                </div>
-                                <div class="card-footer">
-                                    <input type="submit" value="登録" class="btn btn-success">
-                                </div>
-                        </form>
-                    </div>
+      </div>
+    </div>
+  </section>
+  <section class="content px-2">
+    <div class="container form-container">
+      <div class="row">
+        <div class="col-md-12">
+          <div class="card card-success">
+            <form th:action="@{/categories-expense/new}" method="post">
+              <div class="card-body">
+                <div class="form-group">
+                  <label for="name">内容</label>
+                  <input type="text" name="name" class="form-control" placeholder="カテゴリ名" id="name" required>
                 </div>
-            </div>
+                <div class="card-footer">
+                  <input type="submit" value="登録" class="btn btn-success">
+                </div>
+            </form>
+          </div>
         </div>
-    </section>
+      </div>
+    </div>
+  </section>
 </div>

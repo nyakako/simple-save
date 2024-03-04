@@ -29,8 +29,8 @@
         <form th:action="@{/login}" method="post" class="needs-validation" novalidate>
           <input type="hidden" name="_csrf" value="${_csrf.token}" />
           <div class="mb-3">
-            <input type="email" class="form-control" placeholder="メールアドレス" name="email" th:value="${email}" autocomplete="email" required
-              autofocus>
+            <input type="email" class="form-control" placeholder="メールアドレス" name="email" th:value="${email}"
+              autocomplete="email" required autofocus>
             <div class="invalid-feedback">
               メールアドレスを正しく入力してください
             </div>

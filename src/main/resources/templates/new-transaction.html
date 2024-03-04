@@ -1,131 +1,128 @@
 <div class="container" th:fragment="content" th:with="title='新規履歴登録 - simplesave'">
-    <section class="content-header">
-        <div class="container form-container">
-            <div class="row mb-2">
-                <div class="col">
-                    <h1>新しい履歴の登録</h1>
-                </div>
-            </div>
+  <section class="content-header">
+    <div class="container form-container">
+      <div class="row mb-2">
+        <div class="col">
+          <h1>新しい履歴の登録</h1>
         </div>
-    </section>
-    <section class="content px-2">
-        <div class="container form-container">
-            <div class="row">
-                <div class="col align-self-center">
-                    <div class="card card-success">
-                        <form id="quickForm" th:action="@{/transactions/new}" th:object="${transaction}" method="post" class="needs-validation"
-                            novalidate>
-                            <div class="card-body">
-                                <div class="form-group">
-                                    <label>カテゴリタイプ</label>
-                                    <div class="category-type-radio">
-                                        <input class="form-check-input" type="radio" name="categoryType"
-                                            id="typeExpense" value="expense" checked required>
-                                        <label class="form-check-label labelExpense" for="typeExpense">支出</label>
-                                        <input class="form-check-input" type="radio" name="categoryType" id="typeIncome"
-                                            value="income">
-                                        <label class="form-check-label labelIncome" for="typeIncome">収入</label>
-                                    </div>
-                                </div>
-                                <div class="form-group">
-                                    <label for="date">日付</label>
-                                    <input type="date" name="date" id="date" class="form-control" placeholder="日付"
-                                        th:value="${today}" required>
-                                    <div class="invalid-feedback">
-                                        日付を正しく入力してください
-                                    </div>
-                                    <div th:if="${#fields.hasErrors('date')}">
-                                        <p class="error text-danger small mt-1" th:errors="*{date}">date Error</p>
-                                    </div>
-                                </div>
-
-                                <div class="form-group">
-                                    <label for="categoryId">カテゴリ</label>
-                                    <div class="form-row">
-                                        <select name="categoryId" id="categoryId" class="form-control col-8" required>
-                                            <option value="" th:each="category : ${categories}"
-                                                th:value="${category.id}" th:text="${category.name}">
-                                                カテゴリ名</option>
-                                        </select>
-                                        <a id="addCategoryButton" href="" class="btn btn-outline-dark ml-2 col-3"> 追加</a>
-                                    </div>
-                                    <div class="invalid-feedback">
-                                        カテゴリを選択してください
-                                    </div>
-                                </div>
-
-                                <div class="form-group">
-                                    <label for="description">内容</label>
-                                    <input type="text" name="description" class="form-control" placeholder="内容"
-                                        id="description">
-                                </div>
-                                <div class="form-group">
-                                    <label for="amount">金額</label>
-                                    <input type="number" name="amount" class="form-control" placeholder="金額" id="amount"
-                                        min="1" required>
-                                    <div class="invalid-feedback">
-                                        金額を正しく入力してください
-                                    </div>
-                                    <div th:if="${#fields.hasErrors('amount')}">
-                                        <p class="error text-danger small mt-1" th:errors="*{amount}">amount Error</p>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div class="card-footer">
-                                <input type="submit" value="登録" class="btn btn-success">
-                            </div>
-                        </form>
-                    </div>
+      </div>
+    </div>
+  </section>
+  <section class="content px-2">
+    <div class="container form-container">
+      <div class="row">
+        <div class="col align-self-center">
+          <div class="card card-success">
+            <form id="quickForm" th:action="@{/transactions/new}" th:object="${transaction}" method="post"
+              class="needs-validation" novalidate>
+              <div class="card-body">
+                <div class="form-group">
+                  <label>カテゴリタイプ</label>
+                  <div class="category-type-radio">
+                    <input class="form-check-input" type="radio" name="categoryType" id="typeExpense" value="expense"
+                      checked required>
+                    <label class="form-check-label labelExpense" for="typeExpense">支出</label>
+                    <input class="form-check-input" type="radio" name="categoryType" id="typeIncome" value="income">
+                    <label class="form-check-label labelIncome" for="typeIncome">収入</label>
+                  </div>
                 </div>
-            </div>
+                <div class="form-group">
+                  <label for="date">日付</label>
+                  <input type="date" name="date" id="date" class="form-control" placeholder="日付" th:value="${today}"
+                    required>
+                  <div class="invalid-feedback">
+                    日付を正しく入力してください
+                  </div>
+                  <div th:if="${#fields.hasErrors('date')}">
+                    <p class="error text-danger small mt-1" th:errors="*{date}">date Error</p>
+                  </div>
+                </div>
+
+                <div class="form-group">
+                  <label for="categoryId">カテゴリ</label>
+                  <div class="form-row">
+                    <select name="categoryId" id="categoryId" class="form-control col-8" required>
+                      <option value="" th:each="category : ${categories}" th:value="${category.id}"
+                        th:text="${category.name}">
+                        カテゴリ名</option>
+                    </select>
+                    <a id="addCategoryButton" href="" class="btn btn-outline-dark ml-2 col-3"> 追加</a>
+                  </div>
+                  <div class="invalid-feedback">
+                    カテゴリを選択してください
+                  </div>
+                </div>
+
+                <div class="form-group">
+                  <label for="description">内容</label>
+                  <input type="text" name="description" class="form-control" placeholder="内容" id="description">
+                </div>
+                <div class="form-group">
+                  <label for="amount">金額</label>
+                  <input type="number" name="amount" class="form-control" placeholder="金額" id="amount" min="1" required>
+                  <div class="invalid-feedback">
+                    金額を正しく入力してください
+                  </div>
+                  <div th:if="${#fields.hasErrors('amount')}">
+                    <p class="error text-danger small mt-1" th:errors="*{amount}">amount Error</p>
+                  </div>
+                </div>
+              </div>
+
+              <div class="card-footer">
+                <input type="submit" value="登録" class="btn btn-success">
+              </div>
+            </form>
+          </div>
         </div>
-    </section>
+      </div>
+    </div>
+  </section>
 </div>
 
 <script src="/js/form-validation.js"></script>
 <script th:inline="javascript">
-    /*<![CDATA[*/
-    var categories = /*[[${categories}]]*/[];
-    var expenseCategoryUrl = /*[[@{/categories-expense/new}]]*/'';
-    var incomeCategoryUrl = /*[[@{/categories-income/new}]]*/'';
-    /*]]>*/
+  /*<![CDATA[*/
+  var categories = /*[[${categories}]]*/[];
+  var expenseCategoryUrl = /*[[@{/categories-expense/new}]]*/'';
+  var incomeCategoryUrl = /*[[@{/categories-income/new}]]*/'';
+  /*]]>*/
 
-    document.addEventListener('DOMContentLoaded', function () {
-        var categoryTypeRadios = document.querySelectorAll('input[name="categoryType"]');
-        var categorySelect = document.getElementById('categoryId');
-        var initialCategoryType = document.querySelector('input[name="categoryType"]:checked').value;
-        var addCategoryButton = document.getElementById('addCategoryButton');
+  document.addEventListener('DOMContentLoaded', function () {
+    var categoryTypeRadios = document.querySelectorAll('input[name="categoryType"]');
+    var categorySelect = document.getElementById('categoryId');
+    var initialCategoryType = document.querySelector('input[name="categoryType"]:checked').value;
+    var addCategoryButton = document.getElementById('addCategoryButton');
 
-        updateCategoryOptions(categorySelect, initialCategoryType);
-        updateAddCategoryButton(initialCategoryType);
+    updateCategoryOptions(categorySelect, initialCategoryType);
+    updateAddCategoryButton(initialCategoryType);
 
-        categoryTypeRadios.forEach(function (radio) {
-            radio.addEventListener('change', function () {
-                updateCategoryOptions(categorySelect, this.value);
-                updateAddCategoryButton(this.value);
-            });
-        });
-
-        function updateCategoryOptions(select, type) {
-            var filteredCategories = categories.filter(function (category) {
-                return category.type === type;
-            });
-
-            select.innerHTML = '';
-
-            filteredCategories.forEach(function (category) {
-                var option = document.createElement('option');
-                option.value = category.id;
-                option.textContent = category.name;
-                select.appendChild(option);
-            });
-        }
-
-        function updateAddCategoryButton(type) {
-            var href = type === 'expense' ? expenseCategoryUrl : incomeCategoryUrl;
-            addCategoryButton.setAttribute('href', href);
-        }
-
+    categoryTypeRadios.forEach(function (radio) {
+      radio.addEventListener('change', function () {
+        updateCategoryOptions(categorySelect, this.value);
+        updateAddCategoryButton(this.value);
+      });
     });
+
+    function updateCategoryOptions(select, type) {
+      var filteredCategories = categories.filter(function (category) {
+        return category.type === type;
+      });
+
+      select.innerHTML = '';
+
+      filteredCategories.forEach(function (category) {
+        var option = document.createElement('option');
+        option.value = category.id;
+        option.textContent = category.name;
+        select.appendChild(option);
+      });
+    }
+
+    function updateAddCategoryButton(type) {
+      var href = type === 'expense' ? expenseCategoryUrl : incomeCategoryUrl;
+      addCategoryButton.setAttribute('href', href);
+    }
+
+  });
 </script>
