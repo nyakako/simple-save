@@ -16,18 +16,18 @@
       <div class="row mb-2">
         <div class="col-md-3">
         </div>
-        <div class="col-md-8">
+        <div class="col-md-9">
           <h1>定期入力一覧</h1>
         </div>
       </div>
     </div>
   </section>
-  <section class="content px-2">
+  <section class="content">
     <div class="container-fluid">
       <div class="row">
         <div class="col-md-3 mb-4">
           <div class="list-group">
-            <li class="list-group-item list-group-item-dark">設定</li>
+            <li class="list-group-item list-group-item-dark setting-menu-list">設定</li>
             <a th:href="@{/settings/categories-expense}" class="list-group-item list-group-item-action">支出カテゴリ設定</a>
             <a th:href="@{/settings/categories-income}" class="list-group-item list-group-item-action">収入カテゴリ設定</a>
             <a th:href="@{/settings/recurring-transactions}"
@@ -35,8 +35,8 @@
             <a th:href="@{/settings/color-setting}" class="list-group-item list-group-item-action">色設定</a>
           </div>
         </div>
-        <div class="col-md-8">
-          <div class="col text-right mb-2">
+        <div class="col-md-9">
+          <div class="text-right mb-2">
             <a th:href="@{/recurring-transactions/new}" class="btn btn-success"> 追加する</a>
           </div>
           <div class="card">

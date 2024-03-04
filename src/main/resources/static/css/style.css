@@ -96,6 +96,7 @@
 .card-btn-header {
     padding: 0.75rem 0.75rem;
 }
+
 .card-btn-header::after {
     content: none;
 }
@@ -104,19 +105,24 @@
     margin-left: 0px;
 }
 
-#dashboard-top-table .table-sm td, #dashboard-top-table .table-sm th {
-    padding: 0.75rem 0.3rem!important;
+#dashboard-top-table .table-sm td,
+#dashboard-top-table .table-sm th {
+    padding: 0.75rem 0.3rem !important;
 }
-.card-footer{
+
+.card-footer {
     text-align: center;
 }
-.btn-success{
+
+.btn-success {
     width: 100px;
 }
-.btn-danger{
+
+.btn-danger {
     width: 100px;
 }
-.card-footer .btn-danger{
+
+.card-footer .btn-danger {
     margin-left: 2.5rem;
 }
 
@@ -127,4 +133,31 @@
 
 .was-validated .form-check-input:valid~.form-check-label {
     color: #555e64;
+}
+
+
+/* 下記、レスポンシブ対応用 */
+.setting-menu-list~.list-group-item {
+    padding: 0.75rem 0.75rem;
+}
+
+/* スマートフォンや小さなデバイスでの基本スタイル */
+.h5-custom {
+    font-size: 1.25rem;
+    /* h5のデフォルトサイズ */
+}
+
+/* 画面幅が768px以上の場合に適用されるスタイル */
+@media (min-width: 768px) {
+    .h5-custom {
+        font-size: 2rem;
+    }
+}
+
+/* 画面幅が992px以上の場合に適用されるスタイル */
+@media (min-width: 992px) {
+
+    .setting-menu-list~.list-group-item {
+        padding: 0.75rem 1.25rem;
+    }
 }

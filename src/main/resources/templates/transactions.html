@@ -8,10 +8,10 @@
       </div>
     </div>
   </section>
-  <section class="content px-2">
+  <section class="content">
     <div class="container-fluid">
       <div class="row">
-        <div class="col text-right mb-2">
+        <div class="text-right mb-2">
           <a th:href="@{/transactions/new}" class="btn btn-success">記録する</a>
         </div>
         <div class="col-md-12">
@@ -51,9 +51,8 @@
                         th:text="${transaction.amount < 100 ? #numbers.formatInteger(transaction.amount, 1) : #numbers.formatInteger(transaction.amount, 3, 'COMMA')} + '円'">
                         Amount</span>
                     </td>
-                    <td class="text-center>
-                                            <a th:href=" @{/transactions/edit/{id}(id=${transaction.id})}"
-                      style="color: #212529;"><i class="fa-solid fa-pen-to-square"></i></a>
+                    <td class="text-center"><a th:href="@{/transactions/edit/{id}(id=${transaction.id})}"
+                        style="color: #212529;"><i class="fa-solid fa-pen-to-square"></i></a>
                     </td>
                   </tr>
                 </tbody>
