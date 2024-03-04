@@ -100,3 +100,7 @@
 .form-row {
     margin-left: 0px;
 }
+
+.was-validated .form-check-input:valid~.form-check-label {
+    color: #555e64;
+}

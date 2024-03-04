@@ -13,7 +13,8 @@
             <div class="row">
                 <div class="col-md-12">
                     <div class="card card-success">
-                        <form id="quickForm" th:action="@{/transactions/new}" method="post">
+                        <form id="quickForm" th:action="@{/transactions/new}" th:object="${transaction}" method="post" class="needs-validation"
+                            novalidate>
                             <div class="card-body">
                                 <div class="form-group">
                                     <label>カテゴリタイプ</label>
@@ -30,6 +31,12 @@
                                     <label for="date">日付</label>
                                     <input type="date" name="date" id="date" class="form-control" placeholder="日付"
                                         th:value="${today}" required>
+                                    <div class="invalid-feedback">
+                                        日付を正しく入力してください
+                                    </div>
+                                    <div th:if="${#fields.hasErrors('date')}">
+                                        <p class="error text-danger small mt-1" th:errors="*{date}">date Error</p>
+                                    </div>
                                 </div>
 
                                 <div class="form-group">
@@ -42,6 +49,9 @@
                                         </select>
                                         <a id="addCategoryButton" href="" class="btn btn-success ml-2 col-2"> 追加</a>
                                     </div>
+                                    <div class="invalid-feedback">
+                                        カテゴリを選択してください
+                                    </div>
                                 </div>
 
                                 <div class="form-group">
@@ -52,8 +62,13 @@
                                 <div class="form-group">
                                     <label for="amount">金額</label>
                                     <input type="number" name="amount" class="form-control" placeholder="金額" id="amount"
-                                        required>
-
+                                        min="1" required>
+                                    <div class="invalid-feedback">
+                                        金額を正しく入力してください
+                                    </div>
+                                    <div th:if="${#fields.hasErrors('amount')}">
+                                        <p class="error text-danger small mt-1" th:errors="*{amount}">amount Error</p>
+                                    </div>
                                 </div>
                             </div>
 
@@ -68,6 +83,7 @@
     </section>
 </div>
 
+<script src="/js/form-validation.js"></script>
 <script th:inline="javascript">
     /*<![CDATA[*/
     var categories = /*[[${categories}]]*/[];
