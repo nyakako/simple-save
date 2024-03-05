@@ -140,7 +140,7 @@
                                 onclick="return confirm('本当に削除しますか？')">
                         </form> -->
             <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#deleteConfirmationModal">
-              削除
+              <i class="fa-solid fa-trash-can"></i>&nbsp;&nbsp;削除
             </button>
           </div>
         </div>
@@ -165,7 +165,7 @@
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary" data-dismiss="modal">キャンセル</button>
         <form th:action="@{/recurring-transactions/delete/{id}(id=${transaction.id})}" method="post">
-          <button type="submit" class="btn btn-danger">削除</button>
+          <button type="submit" class="btn btn-danger"><i class="fa-solid fa-trash-can"></i>&nbsp;&nbsp;削除</button>
         </form>
       </div>
     </div>
