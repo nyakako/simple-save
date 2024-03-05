@@ -25,9 +25,11 @@
         <div class="col-md">
           <div class="card card-info">
             <div class="card-header card-btn-header d-flex justify-content-between align-items-center">
-              <a th:href="@{/dashboard(yearMonth=${previousMonth})}" class="btn btn-dark">前月</a>
+              <a th:href="@{/dashboard(yearMonth=${previousMonth})}" class="btn btn-dark"><i
+                  class="fa-solid fa-chevron-left"></i>&nbsp;前月</a>
               <span class="h3 card-title" th:text="${currentDate} + の収支">当月の収支</span>
-              <a th:href="@{/dashboard(yearMonth=${nextMonth})}" class="btn btn-dark">翌月</a>
+              <a th:href="@{/dashboard(yearMonth=${nextMonth})}" class="btn btn-dark">翌月&nbsp;<i
+                  class="fa-solid fa-chevron-right"></i></a>
             </div>
             <div class="card-body table-responsive p-0">
               <table id="dashboard-top-table" class="table table-sm text-nowrap text-center">
