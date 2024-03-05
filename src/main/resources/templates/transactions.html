@@ -20,6 +20,8 @@
               <table id="transactionDataTable" class="table table-hover text-nowrap">
                 <thead>
                   <tr>
+                    <!-- IDはデバック用 -->
+                    <!-- <th class="text-center">ID</th> -->
                     <th class="text-center">定期</th>
                     <th class="text-center">日付</th>
                     <th class="text-center">タイプ</th>
@@ -31,6 +33,7 @@
                 </thead>
                 <tbody>
                   <tr th:each="transaction : ${transactions}">
+                    <!-- <td th:text="${transaction.id}">Id</td> -->
                     <td class="text-center"><input type="checkbox" name="isScheduled" id="isScheduled"
                         th:checked="${transaction.isScheduled}"></td>
                     <td class="text-center" th:text="${transaction.date}">Date</td>
@@ -82,7 +85,7 @@
       },
       "columnDefs": [
         {
-          "targets": 1, // チェックボックス列のインデックス
+          "targets": 0, // チェックボックス列のインデックス
           "orderable": true,
           "render": function (data, type, row) {
             if (type === 'sort') {
@@ -96,7 +99,7 @@
       "lengthChange": true,
       order: {
         idx: 1,
-        dir: 'desc'
+        dir: 'asc'
       }
     }
 

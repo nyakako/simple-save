@@ -104,6 +104,8 @@
               <table class="table table-sm text-nowrap">
                 <thead>
                   <tr>
+                    <!-- IDはデバック用 -->
+                    <!-- <th class="text-center">ID</th> -->
                     <th class="text-center">日付</th>
                     <th class="text-center">タイプ</th>
                     <th>カテゴリ</th>
@@ -114,6 +116,7 @@
                 </thead>
                 <tbody>
                   <tr th:each="transaction : ${transactions}">
+                    <!-- <td class="text-center" th:text="${transaction.id}">Id</td> -->
                     <td class="text-center" th:text="${transaction.date}">Date</td>
                     <td class="text-center" th:switch="${transaction.category.type}">
                       <span th:case="'expense'" th:text="支出">支出</span>
@@ -147,7 +150,7 @@
 </div>
 
 
-
+<script src="/js/hashcode.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2.0.0"></script>
 
@@ -171,7 +174,8 @@
       const labelsExpense = categoryExpenses.map(expense => expense.categoryName);
       const dataExpense = categoryExpenses.map(expense => expense.totalAmount);
       // カテゴリ名に基づいて背景色を割り当てる
-      const backgroundColorsExpense = categoryExpenses.map(expense => colorPalette[expense.categoryId % colorPalette.length]);
+      const backgroundColorsExpense = categoryExpenses.map(expense => colorPalette[hashCode(expense.categoryName) % colorPalette.length]);
+      // const backgroundColorsExpense = categoryExpenses.map(expense => colorPalette[expense.categoryId % colorPalette.length]); //カテゴリID基準
 
 
       const totalExpense = dataExpense.reduce((acc, val) => acc + val, 0);
@@ -298,7 +302,7 @@
             },
             datalabels: {
               display: function (ctxIncome) {
-                return ctxIncome.dataset.data[ctxIncome.dataIndex] / totalIncome > 0.1;
+                return ctxIncome.dataset.data[ctxIncome.dataIndex] / totalIncome > 0.05;
               },
               offset: 0,
               // padding: 0,
