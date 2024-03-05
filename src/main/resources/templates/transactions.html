@@ -83,6 +83,10 @@
         "zeroRecords": "一致するレコードがありません",
         "search": "検索:",
       },
+      "order": {
+        idx: 1,
+        dir: 'desc'
+      },
       "columnDefs": [
         {
           "targets": 0, // チェックボックス列のインデックス
@@ -97,10 +101,6 @@
       ],
       "pageLength": 10,
       "lengthChange": true,
-      order: {
-        idx: 1,
-        dir: 'asc'
-      }
     }
 
     $('#transactionDataTable').DataTable(tableOptions);
