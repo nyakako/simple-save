@@ -80,6 +80,18 @@
         "zeroRecords": "一致するレコードがありません",
         "search": "検索:",
       },
+      "columnDefs": [
+        {
+          "targets": 1, // チェックボックス列のインデックス
+          "orderable": true,
+          "render": function (data, type, row) {
+            if (type === 'sort') {
+              return $(data).prop('checked') ? '1' : '0'; // ソートの基準を設定
+            }
+            return data;
+          }
+        }
+      ],
       "pageLength": 10,
       "lengthChange": true,
       order: {
