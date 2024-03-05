@@ -40,7 +40,7 @@ public interface TransactionRepository extends JpaRepository<Transaction, Long> 
                 BigDecimal getTotalAmount();
         }
 
-        @Query("SELECT t FROM Transaction t WHERE t.user.id = :userId AND t.date BETWEEN :startDate AND :endDate ORDER BY t.date DESC")
+        @Query("SELECT t FROM Transaction t WHERE t.user.id = :userId AND t.date BETWEEN :startDate AND :endDate ORDER BY t.date DESC, t.id DESC")
         List<Transaction> findTransactionsForCurrentUserInCurrentMonth(
                         @Param("userId") Long userId,
                         @Param("startDate") LocalDate startDate,

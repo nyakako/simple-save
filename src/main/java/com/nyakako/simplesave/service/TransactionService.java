@@ -23,7 +23,7 @@ public class TransactionService {
     }
 
     public Iterable<Transaction> findTransactionsByUserId(Long userId) {
-        Sort sort = Sort.by(Sort.Direction.DESC, "date");
+        Sort sort = Sort.by(Sort.Direction.DESC, "date").and(Sort.by(Sort.Direction.DESC, "id"));
         return transactionRepository.findByUserId(userId, sort);
     }
 
