@@ -1,18 +1,21 @@
-## Webアプリ名
-
-[simple-save](https://simplesave.onrender.com/)
-
-## Webアプリ概要
+# simplesave
 【収入】【支出】【カテゴリ毎の比率】を一目で確認できる
-シンプルな家計簿アプリです。
+シンプルな家計簿アプリです。<br />
+レスポンシブ対応しているのでスマホからもご確認いただけます。
 
 [![Image from Gyazo](https://i.gyazo.com/79713d560df4d38b2edc97d00a360c88.gif)](https://gyazo.com/79713d560df4d38b2edc97d00a360c88)
+
+
+## URL
+[https://simplesave.onrender.com/](https://simplesave.onrender.com/)
+
+
 
 <br />
 
 
-## テーマ選定理由
-Javaでのアプリ開発経験を積むために作成しました。
+## 制作背景
+Javaのアプリ開発経験を積むために作成しました。
 
 <br />
 
@@ -22,17 +25,20 @@ Javaでのアプリ開発経験を積むために作成しました。
 <br />
 
 ## 使用技術
+- Java 21
+- SpringBoot 3.2.3
+  - Spring Security 6.2.2
+  - Spring Data JPA 3.2.3
+  - Spring Web 6.1.4
+  - thymeleaf-spring6 3.1.2
+- HTML, CSS
+- bootstrap 4.6.2
+- JavaScript
+  - jQuery 3.5.1
+  - Chart.js 4.4.2
+  - datatables 2.0.0
+- PostgreSQL 16
 
-| Category          | Technology Stack                                     |
-| ----------------- | --------------------------------------------------   |
-| Frontend          | HTML,CSS,Javascript(Chart.js,DataTables),Thymeleaf|
-| Backend           | Java 21, Spring boot 3.2.2|
-| Infrastructure    | render.com|
-| Database          | PostgreSQL|
-| Monitoring        | UptimeRobot|
-| Environment setup | Docker|
-| Design            | Figma,Bootstrap|
-| etc.              | Git, GitHub |
 
 <br />
 
