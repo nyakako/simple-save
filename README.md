@@ -1,17 +1,15 @@
-# simple-save
-【収入】【支出】【収支】【カテゴリ毎の比率】を一目で確認できる
+## Webアプリ名
+
+[simple-save](https://simplesave.onrender.com/)
+
+## Webアプリ概要
+【収入】【支出】【カテゴリ毎の比率】を一目で確認できる
 シンプルな家計簿アプリです。
 
 [![Image from Gyazo](https://i.gyazo.com/79713d560df4d38b2edc97d00a360c88.gif)](https://gyazo.com/79713d560df4d38b2edc97d00a360c88)
 
 <br />
 
-## 開発環境
-言語：Java
-フレームワーク：Spring boot
-データベース：PostgreSQL
-
-<br />
 
 ## テーマ選定理由
 Javaでのアプリ開発経験を積むために作成しました。
@@ -27,13 +25,13 @@ Javaでのアプリ開発経験を積むために作成しました。
 
 | Category          | Technology Stack                                     |
 | ----------------- | --------------------------------------------------   |
-| Frontend          | Thymeleaf,|
-| Backend           | Java, Spring boot,|
+| Frontend          | HTML,CSS,Javascript(Chart.js,DataTables),Thymeleaf|
+| Backend           | Java 21, Spring boot 3.2.2|
 | Infrastructure    | render.com|
 | Database          | PostgreSQL|
 | Monitoring        | UptimeRobot|
 | Environment setup | Docker|
-| Design            | Figma|
+| Design            | Figma,Bootstrap|
 | etc.              | Git, GitHub |
 
 <br />
