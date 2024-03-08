@@ -1,6 +1,18 @@
 <div class="container" th:fragment="content" th:with="title='新規履歴登録 - simplesave'">
   <section class="content-header">
     <div class="container form-container">
+      <div th:if="${errorMessage}" class="alert alert-danger alert-dismissible fade show" role="alert">
+        <span th:text="${errorMessage}"></span>
+        <button type="button" class="close text-white" data-dismiss="alert" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div th:if="${successMessage}" class="alert alert-success alert-dismissible fade show" role="alert">
+        <span th:text="${successMessage}"></span>
+        <button type="button" class="close text-white" data-dismiss="alert" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
       <div class="row">
         <div class="col">
           <button type="button" class="btn btn-outline-secondary" onclick="history.back();"><i
