@@ -55,7 +55,8 @@ public class RecurringTransactionController {
 
     @PostMapping("/recurring-transactions/new")
     public String addRecurringTransaction(@ModelAttribute RecurringTransaction transaction,
-            @NonNull @RequestParam("categoryId") Long categoryId, Authentication authentication) {
+            @NonNull @RequestParam("categoryId") Long categoryId, Authentication authentication,
+            RedirectAttributes redirectAttributes) {
 
         CustomUserDetails userDetails = (CustomUserDetails) authentication.getPrincipal();
         Long userId = userDetails.getUserId(); // ユーザーIDの取得
@@ -101,7 +102,13 @@ public class RecurringTransactionController {
         LocalDate nextTransactionDate = recurringTransactionService.calculateNextTransactionDate(transaction);
         transaction.setNextTransactionDate(nextTransactionDate);
 
-        recurringTransactionService.saveRecurringTransaction(transaction);
+        try {
+            recurringTransactionService.saveRecurringTransaction(transaction);
+            redirectAttributes.addFlashAttribute("successMessage", "定期入力を追加しました");
+        } catch (Exception e) {
+            redirectAttributes.addFlashAttribute("errorMessage", "定期入力の追加に失敗しました。");
+        }
+
         return "redirect:/settings/recurring-transactions";
     }
 
@@ -128,7 +135,7 @@ public class RecurringTransactionController {
     @PostMapping("/recurring-transactions/edit/{id}")
     public String updateRecurringTransaction(@PathVariable @NonNull Long id,
             @ModelAttribute RecurringTransaction transaction,
-            @NonNull @RequestParam("categoryId") Long categoryId, Authentication authentication) {
+            @NonNull @RequestParam("categoryId") Long categoryId, Authentication authentication, RedirectAttributes redirectAttributes) {
         CustomUserDetails userDetails = (CustomUserDetails) authentication.getPrincipal();
         Long userId = userDetails.getUserId(); // ユーザーIDの取得
         if (userId != null) {
@@ -151,7 +158,14 @@ public class RecurringTransactionController {
         LocalDate nextTransactionDate = recurringTransactionService.calculateNextTransactionDate(transaction);
         transaction.setNextTransactionDate(nextTransactionDate);
 
-        recurringTransactionService.saveRecurringTransaction(transaction);
+        
+        try {
+            recurringTransactionService.saveRecurringTransaction(transaction);
+            redirectAttributes.addFlashAttribute("successMessage", "定期入力を更新しました");
+        } catch (Exception e) {
+            redirectAttributes.addFlashAttribute("errorMessage", "定期入力の更新に失敗しました。");
+        }
+
         return "redirect:/settings/recurring-transactions";
     }
 
@@ -167,7 +181,13 @@ public class RecurringTransactionController {
         if (transaction == null || !transaction.getUser().getId().equals(userId)) {
             throw new AccessDeniedException("このページにアクセスする権限がありません。");
         }
-        recurringTransactionService.deleteRecurringTransaction(id);
+        try {
+            recurringTransactionService.deleteRecurringTransaction(id);
+            redirectAttributes.addFlashAttribute("successMessage", "定期入力を削除しました");
+        } catch (Exception e) {
+            redirectAttributes.addFlashAttribute("errorMessage", "定期入力の削除に失敗しました。");
+        }
+
         return "redirect:/settings/recurring-transactions";
     }
 }

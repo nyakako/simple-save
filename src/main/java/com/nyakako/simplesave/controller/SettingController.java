@@ -82,17 +82,17 @@ public class SettingController {
 
     @PostMapping("/color-setting/edit")
     public String editColorSetting(@RequestParam("colorSetting") String colorSetting, Model model,
-            Authentication authentication, RedirectAttributes redirectAttribtes) {
+            Authentication authentication, RedirectAttributes redirectAttributes) {
         CustomUserDetails userDetails = (CustomUserDetails) authentication.getPrincipal();
         Long userId = userDetails.getUserId(); // ユーザーIDの取得
         if (userId != null) {
             try {
                 userService.updateColorPreference(userId, colorSetting);
-                // model.addAttribute("successMessage", "色設定が更新されました。");
-                redirectAttribtes.addFlashAttribute("successMessage", "色設定が更新されました。");
+                // model.addAttribute("successMessage", "色設定を更新しました。");
+                redirectAttributes.addFlashAttribute("successMessage", "色設定を更新しました");
             } catch (Exception e) {
                 // model.addAttribute("errorMessage", "色設定の更新に失敗しました。");
-                redirectAttribtes.addFlashAttribute("errorMessage", "色設定の更新に失敗しました。");
+                redirectAttributes.addFlashAttribute("errorMessage", "色設定の更新に失敗しました。");
             }
         }
 

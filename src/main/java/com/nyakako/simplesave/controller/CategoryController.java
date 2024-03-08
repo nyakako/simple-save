@@ -44,7 +44,7 @@ public class CategoryController {
 
     @PostMapping("/categories-expense/new")
     public String addExpenseCategory(@NonNull @ModelAttribute Category category, Authentication authentication,
-            HttpSession session) {
+            HttpSession session, RedirectAttributes redirectAttributes) {
         CustomUserDetails userDetails = (CustomUserDetails) authentication.getPrincipal();
         Long userId = userDetails.getUserId(); // ユーザーIDの取得
         if (userId != null) {
@@ -53,7 +53,13 @@ public class CategoryController {
         }
 
         category.setType("expense");
-        categoryService.saveCategory(category);
+        try {
+            categoryService.saveCategory(category);
+            redirectAttributes.addFlashAttribute("successMessage", "【 " + category.getName() + " 】が正常に登録されました");
+        } catch (Exception e) {
+            redirectAttributes.addFlashAttribute("errorMessage", "カテゴリの登録に失敗しました。");
+        }
+
         String redirectUrlCategory = (String) session.getAttribute("redirectUrlCategory");
         session.removeAttribute("redirectUrlCategory");
 
@@ -79,7 +85,7 @@ public class CategoryController {
 
     @PostMapping("/categories-expense/edit/{id}")
     public String updateExpenseCategory(@PathVariable @NonNull Long id, @NonNull @ModelAttribute Category category,
-            Authentication authentication) {
+            Authentication authentication, RedirectAttributes redirectAttributes) {
         CustomUserDetails userDetails = (CustomUserDetails) authentication.getPrincipal();
         Long userId = userDetails.getUserId(); // ログインユーザーのIDを取得
         if (userId != null) {
@@ -94,12 +100,18 @@ public class CategoryController {
         }
 
         category.setType("expense");
-        categoryService.saveCategory(category);
+        try {
+            categoryService.saveCategory(category);
+            redirectAttributes.addFlashAttribute("successMessage", "【 " + category.getName() + " 】が正常に更新されました");
+        } catch (Exception e) {
+            redirectAttributes.addFlashAttribute("errorMessage", "カテゴリの更新に失敗しました。");
+        }
+
         return "redirect:/settings/categories-expense";
     }
 
     @PostMapping("/categories-expense/delete/{id}")
-    public String deleteExpenseCategory(@NonNull @PathVariable Long id, RedirectAttributes redirectAttribtes,
+    public String deleteExpenseCategory(@NonNull @PathVariable Long id, RedirectAttributes redirectAttributes,
             Authentication authentication) {
         CustomUserDetails userDetails = (CustomUserDetails) authentication.getPrincipal();
         Long userId = userDetails.getUserId(); // ログインユーザーのIDを取得
@@ -111,9 +123,10 @@ public class CategoryController {
         }
         if (!categoryService.isCategoryUsed(id)) {
             categoryService.deleteCategory(id);
-            redirectAttribtes.addFlashAttribute("successMessage", "カテゴリが正常に削除されました");
+            redirectAttributes.addFlashAttribute("successMessage", "【 " + category.getName() + " 】が正常に削除されました");
         } else {
-            redirectAttribtes.addFlashAttribute("errorMessage", "このカテゴリは明細で使用されているため、削除できません。");
+            redirectAttributes.addFlashAttribute("errorMessage",
+                    "【 " + category.getName() + " 】は明細で使用されているため、削除できません。");
         }
         return "redirect:/settings/categories-expense";
     }
@@ -130,7 +143,7 @@ public class CategoryController {
 
     @PostMapping("/categories-income/new")
     public String addIncomeCategory(@NonNull @ModelAttribute Category category, Authentication authentication,
-            HttpSession session) {
+            HttpSession session, RedirectAttributes redirectAttributes) {
         CustomUserDetails userDetails = (CustomUserDetails) authentication.getPrincipal();
         Long userId = userDetails.getUserId(); // ユーザーIDの取得
         if (userId != null) {
@@ -138,7 +151,13 @@ public class CategoryController {
             category.setUser(user);
         }
         category.setType("income");
-        categoryService.saveCategory(category);
+        try {
+            categoryService.saveCategory(category);
+            redirectAttributes.addFlashAttribute("successMessage", "【 " + category.getName() + " 】が正常に登録されました");
+        } catch (Exception e) {
+            redirectAttributes.addFlashAttribute("errorMessage", "カテゴリの登録に失敗しました。");
+        }
+
         String redirectUrlCategory = (String) session.getAttribute("redirectUrlCategory");
         session.removeAttribute("redirectUrlCategory");
 
@@ -165,7 +184,7 @@ public class CategoryController {
 
     @PostMapping("/categories-income/edit/{id}")
     public String updateIncomeCategory(@PathVariable @NonNull Long id, @NonNull @ModelAttribute Category category,
-            Authentication authentication) {
+            Authentication authentication, RedirectAttributes redirectAttributes) {
         CustomUserDetails userDetails = (CustomUserDetails) authentication.getPrincipal();
         Long userId = userDetails.getUserId(); // ログインユーザーのIDを取得
         if (userId != null) {
@@ -179,12 +198,18 @@ public class CategoryController {
             throw new AccessDeniedException("このページにアクセスする権限がありません。");
         }
         category.setType("income");
-        categoryService.saveCategory(category);
+
+        try {
+            categoryService.saveCategory(category);
+            redirectAttributes.addFlashAttribute("successMessage", "【 " + category.getName() + " 】が正常に更新されました");
+        } catch (Exception e) {
+            redirectAttributes.addFlashAttribute("errorMessage", "カテゴリの更新に失敗しました。");
+        }
         return "redirect:/settings/categories-income";
     }
 
     @PostMapping("/categories-income/delete/{id}")
-    public String deleteIncomeCategory(@NonNull @PathVariable Long id, RedirectAttributes redirectAttribtes,
+    public String deleteIncomeCategory(@NonNull @PathVariable Long id, RedirectAttributes redirectAttributes,
             Authentication authentication) {
         CustomUserDetails userDetails = (CustomUserDetails) authentication.getPrincipal();
         Long userId = userDetails.getUserId(); // ログインユーザーのIDを取得
@@ -197,9 +222,10 @@ public class CategoryController {
         }
         if (!categoryService.isCategoryUsed(id)) {
             categoryService.deleteCategory(id);
-            redirectAttribtes.addFlashAttribute("successMessage", "カテゴリが正常に削除されました");
+            redirectAttributes.addFlashAttribute("successMessage", "【 " + category.getName() + " 】が正常に削除されました");
         } else {
-            redirectAttribtes.addFlashAttribute("errorMessage", "このカテゴリは明細で使用されているため、削除できません。");
+            redirectAttributes.addFlashAttribute("errorMessage",
+                    "【 " + category.getName() + " 】は明細で使用されているため、削除できません。");
         }
         return "redirect:/settings/categories-income";
     }

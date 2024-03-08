@@ -111,7 +111,12 @@ public class TransactionController {
         // TransactionオブジェクトにCategoryをセット
         transaction.setCategory(category);
 
-        transactionService.saveTransaction(transaction);
+        try {
+            transactionService.saveTransaction(transaction);
+            redirectAttributes.addFlashAttribute("successMessage", "明細を登録しました");
+        } catch (Exception e) {
+            redirectAttributes.addFlashAttribute("errorMessage", "明細の登録に失敗しました。");
+        }
         String redirectUrlTransaction = (String) session.getAttribute("redirectUrlTransaction");
         session.removeAttribute("redirectUrlTransaction");
 
@@ -175,7 +180,12 @@ public class TransactionController {
             return "redirect://transactions/new";
         }
 
-        transactionService.saveTransaction(transaction);
+        try {
+            transactionService.saveTransaction(transaction);
+            redirectAttributes.addFlashAttribute("successMessage", "明細を更新しました");
+        } catch (Exception e) {
+            redirectAttributes.addFlashAttribute("errorMessage", "明細の更新に失敗しました。");
+        }
         String redirectUrlTransaction = (String) session.getAttribute("redirectUrlTransaction");
         session.removeAttribute("redirectUrlTransaction");
 
@@ -184,7 +194,7 @@ public class TransactionController {
 
     @PostMapping("/transactions/delete/{id}")
     public String deleteTransaction(@NonNull @PathVariable Long id, Authentication authentication,
-            HttpSession session) {
+            HttpSession session, RedirectAttributes redirectAttributes) {
         CustomUserDetails userDetails = (CustomUserDetails) authentication.getPrincipal();
         Long userId = userDetails.getUserId(); // ユーザーIDの取得
 
@@ -194,7 +204,13 @@ public class TransactionController {
             // アクセス拒否の処理
             throw new AccessDeniedException("このページにアクセスする権限がありません。");
         }
-        transactionService.deleteTransaction(id);
+        
+        try {
+            transactionService.deleteTransaction(id);
+            redirectAttributes.addFlashAttribute("successMessage", "明細を削除しました");
+        } catch (Exception e) {
+            redirectAttributes.addFlashAttribute("errorMessage", "明細の削除に失敗しました。");
+        }
         String redirectUrlTransaction = (String) session.getAttribute("redirectUrlTransaction");
         session.removeAttribute("redirectUrlTransaction");
 
