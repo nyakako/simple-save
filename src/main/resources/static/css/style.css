@@ -135,6 +135,14 @@
     color: #555e64;
 }
 
+.error-page{
+    padding-top: 10px;
+}
+
+.error-content{
+    padding-top: 20px;
+}
+
 
 /* 下記、レスポンシブ対応用 */
 .setting-menu-list~.list-group-item {

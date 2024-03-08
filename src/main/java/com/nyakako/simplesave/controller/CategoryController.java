@@ -44,7 +44,7 @@ public class CategoryController {
 
     @PostMapping("/categories-expense/new")
     public String addExpenseCategory(@NonNull @ModelAttribute Category category, Authentication authentication,
-            HttpSession session) {
+            HttpSession session, RedirectAttributes redirectAttribtes) {
         CustomUserDetails userDetails = (CustomUserDetails) authentication.getPrincipal();
         Long userId = userDetails.getUserId(); // ユーザーIDの取得
         if (userId != null) {
@@ -54,6 +54,7 @@ public class CategoryController {
 
         category.setType("expense");
         categoryService.saveCategory(category);
+        redirectAttribtes.addFlashAttribute("successMessage", "【" + category.getName() + "】が正常に登録されました");
         String redirectUrlCategory = (String) session.getAttribute("redirectUrlCategory");
         session.removeAttribute("redirectUrlCategory");
 
@@ -111,9 +112,9 @@ public class CategoryController {
         }
         if (!categoryService.isCategoryUsed(id)) {
             categoryService.deleteCategory(id);
-            redirectAttribtes.addFlashAttribute("successMessage", "カテゴリが正常に削除されました");
+            redirectAttribtes.addFlashAttribute("successMessage",  "【" + category.getName() + "】が正常に削除されました");
         } else {
-            redirectAttribtes.addFlashAttribute("errorMessage", "このカテゴリは明細で使用されているため、削除できません。");
+            redirectAttribtes.addFlashAttribute("errorMessage",  "【" + category.getName() + "】は明細で使用されているため、削除できません。");
         }
         return "redirect:/settings/categories-expense";
     }
@@ -130,7 +131,7 @@ public class CategoryController {
 
     @PostMapping("/categories-income/new")
     public String addIncomeCategory(@NonNull @ModelAttribute Category category, Authentication authentication,
-            HttpSession session) {
+            HttpSession session, RedirectAttributes redirectAttribtes) {
         CustomUserDetails userDetails = (CustomUserDetails) authentication.getPrincipal();
         Long userId = userDetails.getUserId(); // ユーザーIDの取得
         if (userId != null) {
@@ -139,6 +140,7 @@ public class CategoryController {
         }
         category.setType("income");
         categoryService.saveCategory(category);
+        redirectAttribtes.addFlashAttribute("successMessage",  "【" + category.getName() + "】が正常に登録されました");
         String redirectUrlCategory = (String) session.getAttribute("redirectUrlCategory");
         session.removeAttribute("redirectUrlCategory");
 
@@ -197,9 +199,9 @@ public class CategoryController {
         }
         if (!categoryService.isCategoryUsed(id)) {
             categoryService.deleteCategory(id);
-            redirectAttribtes.addFlashAttribute("successMessage", "カテゴリが正常に削除されました");
+            redirectAttribtes.addFlashAttribute("successMessage",  "【" + category.getName() + "】が正常に削除されました");
         } else {
-            redirectAttribtes.addFlashAttribute("errorMessage", "このカテゴリは明細で使用されているため、削除できません。");
+            redirectAttribtes.addFlashAttribute("errorMessage",  "【" + category.getName() + "】は明細で使用されているため、削除できません。");
         }
         return "redirect:/settings/categories-income";
     }
