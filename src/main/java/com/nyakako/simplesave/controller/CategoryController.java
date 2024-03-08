@@ -54,7 +54,7 @@ public class CategoryController {
 
         category.setType("expense");
         categoryService.saveCategory(category);
-        redirectAttribtes.addFlashAttribute("successMessage", "【" + category.getName() + "】が正常に登録されました");
+        redirectAttribtes.addFlashAttribute("successMessage", "【 " + category.getName() + " 】が正常に登録されました");
         String redirectUrlCategory = (String) session.getAttribute("redirectUrlCategory");
         session.removeAttribute("redirectUrlCategory");
 
@@ -80,7 +80,7 @@ public class CategoryController {
 
     @PostMapping("/categories-expense/edit/{id}")
     public String updateExpenseCategory(@PathVariable @NonNull Long id, @NonNull @ModelAttribute Category category,
-            Authentication authentication) {
+            Authentication authentication, RedirectAttributes redirectAttribtes) {
         CustomUserDetails userDetails = (CustomUserDetails) authentication.getPrincipal();
         Long userId = userDetails.getUserId(); // ログインユーザーのIDを取得
         if (userId != null) {
@@ -96,6 +96,7 @@ public class CategoryController {
 
         category.setType("expense");
         categoryService.saveCategory(category);
+        redirectAttribtes.addFlashAttribute("successMessage",  "【 " + category.getName() + " 】が正常に更新されました");
         return "redirect:/settings/categories-expense";
     }
 
@@ -112,9 +113,9 @@ public class CategoryController {
         }
         if (!categoryService.isCategoryUsed(id)) {
             categoryService.deleteCategory(id);
-            redirectAttribtes.addFlashAttribute("successMessage",  "【" + category.getName() + "】が正常に削除されました");
+            redirectAttribtes.addFlashAttribute("successMessage",  "【 " + category.getName() + " 】が正常に削除されました");
         } else {
-            redirectAttribtes.addFlashAttribute("errorMessage",  "【" + category.getName() + "】は明細で使用されているため、削除できません。");
+            redirectAttribtes.addFlashAttribute("errorMessage",  "【 " + category.getName() + " 】は明細で使用されているため、削除できません。");
         }
         return "redirect:/settings/categories-expense";
     }
@@ -140,7 +141,7 @@ public class CategoryController {
         }
         category.setType("income");
         categoryService.saveCategory(category);
-        redirectAttribtes.addFlashAttribute("successMessage",  "【" + category.getName() + "】が正常に登録されました");
+        redirectAttribtes.addFlashAttribute("successMessage",  "【 " + category.getName() + " 】が正常に登録されました");
         String redirectUrlCategory = (String) session.getAttribute("redirectUrlCategory");
         session.removeAttribute("redirectUrlCategory");
 
@@ -167,7 +168,7 @@ public class CategoryController {
 
     @PostMapping("/categories-income/edit/{id}")
     public String updateIncomeCategory(@PathVariable @NonNull Long id, @NonNull @ModelAttribute Category category,
-            Authentication authentication) {
+            Authentication authentication, RedirectAttributes redirectAttribtes) {
         CustomUserDetails userDetails = (CustomUserDetails) authentication.getPrincipal();
         Long userId = userDetails.getUserId(); // ログインユーザーのIDを取得
         if (userId != null) {
@@ -182,6 +183,7 @@ public class CategoryController {
         }
         category.setType("income");
         categoryService.saveCategory(category);
+        redirectAttribtes.addFlashAttribute("successMessage",  "【 " + category.getName() + " 】が正常に更新されました");
         return "redirect:/settings/categories-income";
     }
 
@@ -199,9 +201,9 @@ public class CategoryController {
         }
         if (!categoryService.isCategoryUsed(id)) {
             categoryService.deleteCategory(id);
-            redirectAttribtes.addFlashAttribute("successMessage",  "【" + category.getName() + "】が正常に削除されました");
+            redirectAttribtes.addFlashAttribute("successMessage",  "【 " + category.getName() + " 】が正常に削除されました");
         } else {
-            redirectAttribtes.addFlashAttribute("errorMessage",  "【" + category.getName() + "】は明細で使用されているため、削除できません。");
+            redirectAttribtes.addFlashAttribute("errorMessage",  "【 " + category.getName() + " 】は明細で使用されているため、削除できません。");
         }
         return "redirect:/settings/categories-income";
     }
