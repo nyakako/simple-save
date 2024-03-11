@@ -1,6 +1,7 @@
 package com.nyakako.simplesave.service;
 
 import java.util.Optional;
+import java.util.UUID;
 
 import org.springframework.lang.NonNull;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -56,4 +57,22 @@ public class UserService {
             userRepository.save(user);
         });
     }
+
+    public User createGuestUser() {
+        User guestUser = new User();
+        String userName = "guestUser_" + UUID.randomUUID().toString();
+        guestUser.setUsername(userName);
+        guestUser.setEmail(userName + "@sample.com");
+        guestUser.setPassword(bCryptPasswordEncoder.encode(userName));
+
+        // デモデータをセットアップ
+        // setupDemoDataFor(guestUser);
+
+        userRepository.save(guestUser);
+        return guestUser;
+    }
+
+    // private void setupDemoDataFor(User user) {
+
+    // }
 }

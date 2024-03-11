@@ -1,5 +1,9 @@
 package com.nyakako.simplesave.controller;
 
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -19,9 +23,11 @@ import jakarta.servlet.http.HttpServletRequest;
 public class UserController {
 
     private final UserService userService;
+    private final AuthenticationManager authenticationManager;
 
-    public UserController(UserService userService) {
+    public UserController(UserService userService, AuthenticationManager authenticationManager) {
         this.userService = userService;
+        this.authenticationManager = authenticationManager;
     }
 
     @GetMapping("/register")
@@ -63,5 +69,18 @@ public class UserController {
             model.addAttribute("email", email);
         }
         return "login";
+    }
+
+    @GetMapping("/guestLogin")
+    public String guestLogin(HttpServletRequest request) {
+        User guestUser = userService.createGuestUser();
+
+        UsernamePasswordAuthenticationToken authReq = new UsernamePasswordAuthenticationToken(guestUser.getEmail(),
+                guestUser.getUsername());
+        Authentication auth = authenticationManager.authenticate(authReq);
+        SecurityContextHolder.getContext().setAuthentication(auth);
+
+        return "redirect:/dashboard";
+
     }
 }
