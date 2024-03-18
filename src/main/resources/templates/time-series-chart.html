@@ -1,0 +1,64 @@
+﻿<div class="container mx-auto" th:fragment="content">
+  <section class="content-header">
+    <div class="container-fluid">
+      <div th:if="${errorMessage}" class="alert alert-danger alert-dismissible fade show" role="alert">
+        <span th:text="${errorMessage}"></span>
+        <button type="button" class="close text-white" data-dismiss="alert" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div th:if="${successMessage}" class="alert alert-success alert-dismissible fade show" role="alert">
+        <span th:text="${successMessage}"></span>
+        <button type="button" class="close text-white" data-dismiss="alert" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="row mb-2">
+        <div class="col-md">
+          <h1>推移</h1>
+        </div>
+      </div>
+  </section>
+  <section class="content">
+    <div class="container-fluid">
+      <div class="row mb-4">
+        <div class="col-md">
+          <div class="card card-info">
+            <div>
+              <canvas id="myChart"></canvas>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+</div>
+</section>
+</div>
+
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2.0.0"></script>
+
+<script>
+  const ctx = document.getElementById('myChart');
+
+  new Chart(ctx, {
+    type: 'bar',
+    data: {
+      labels: ['Red', 'Blue', 'Yellow', 'Green', 'Purple', 'Orange'],
+      datasets: [{
+        label: '# of Votes',
+        data: [12, 19, 3, 5, 2, 3],
+        borderWidth: 1
+      }]
+    },
+    options: {
+      scales: {
+        y: {
+          beginAtZero: true
+        }
+      }
+    }
+  });
+</script>
